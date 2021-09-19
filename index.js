@@ -4,7 +4,7 @@ import colors from "colors"
 import morgan from 'morgan';
 
 // routes import
-import userRoutes from "./routes/userRoutes.js";
+import { userRouter } from "./routes/userRoutes.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
@@ -22,9 +22,11 @@ if (process.env.NODE_ENV === "dev") {
 }
 
 // all routes
-app.use("/api/users",userRoutes)
+app.use("/api/users",userRouter)
 app.get('/', (req, res) => res.send('No api service found'))
 
 // sets port and listener
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => console.log(`Server is listening on port: ${process.env.PORT}!`.yellow.bold))
+
+export default app
