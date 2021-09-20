@@ -4,7 +4,7 @@ This project contains the backend for our social management app (https://github.
 
 # Description
 
-- This project consists of a monolithic express server with PostgreSQL as its database server
+- This project consists of a monolithic express server with PostgreSQL as its database server and Redis as its caching layer and frontend session manager.
 - Link to learn more about express and Nodejs (https://www.youtube.com/watch?v=Oe421EPjeBE).
 - Link to learn more about postgresql (https://www.youtube.com/watch?v=-VO7YjQeG6Y).
 
@@ -18,4 +18,4 @@ This project contains the backend for our social management app (https://github.
 6. Use command 'npm run test:watch' to run all the test suites.
 7. Make sure to run server and postgres server on two different terminals for convenience
 
-# Tools used: Express, Nodejs, and Postgresql
+# Tools used: Express, Nodejs, Postgresql, and Redis
