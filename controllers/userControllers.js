@@ -5,6 +5,7 @@ import pool from "../db/dbConfig.js";
 import { checkCollegeEmail } from "../utilities/emailValidators.js";
 import generateToken from "../utilities/generateToken.js";
 import { Constants } from "../utilities/Constants.js";
+import redisClient from "../db/redisConfig.js";
 
 // @desc    Register a new user
 // @route   POST /api/users
@@ -62,7 +63,15 @@ export const getUserById = (request, response) => {
     if (error) {
       throw new Error(error.message);
     }
-    response.status(200).json(results.rows);
+    const userInfo = results.rows[0];
+    if (userInfo) {
+      // stores userInfo to the redis cache
+      redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
+
+      response.status(200).json(userInfo);
+    } else {
+      throw new Error("No user information found");
+    }
   });
 };
 
