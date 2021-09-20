@@ -1,13 +1,12 @@
 import supertest from "supertest";
-import faker from "faker"
-import app from "../../index.js"
+import faker from "faker";
+import app from "../../index.js";
 
-const request = supertest(app)
+const request = supertest(app);
 
 describe("Tests all CRUD functions for user signup service ", () => {
-
-// SECTION : POST API
-it("POST /api/users/signup with missing email -> 400 ", async () => {
+  // SECTION : POST API
+  it("POST /api/users/signup with missing email -> 400 ", async () => {
     // const email = faker.internet.email().toLowerCase();
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
@@ -16,7 +15,7 @@ it("POST /api/users/signup with missing email -> 400 ", async () => {
     const response = await request.post("/api/users/signup").send({
       firstName,
       lastName,
-    //   email,
+      //   email,
       password,
     });
     expect(response.status).toBe(400);
@@ -37,7 +36,6 @@ it("POST /api/users/signup with missing email -> 400 ", async () => {
     expect(response.status).toBe(400);
   });
 
-
   it("POST /api/users/signup with missing password -> 400 ", async () => {
     const email = faker.internet.email().toLowerCase();
     const firstName = faker.name.firstName();
@@ -48,7 +46,7 @@ it("POST /api/users/signup with missing email -> 400 ", async () => {
       firstName,
       lastName,
       email,
-    //   password,
+      //   password,
     });
     expect(response.status).toBe(400);
   });
@@ -68,24 +66,23 @@ it("POST /api/users/signup with missing email -> 400 ", async () => {
     expect(response.status).toBe(400);
   });
 
-
-it("POST /api/users/signup -->  registers new user", async () => {
+  it("POST /api/users/signup -->  registers new user", async () => {
     // we are using faker dev dependency for fake username, password, and name
     const email = "tuser@patriots.uttyler.edu";
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const password = faker.internet.password();
+    const password = "password";
 
     const response = await request
-    .post("/api/users/signup")
-    .send({
-    email,
-    firstName,
-    lastName,
-    password
-    })
-    .expect("Content-Type", /json/)
-    .expect(201);
+      .post("/api/users/signup")
+      .send({
+        email,
+        firstName,
+        lastName,
+        password,
+      })
+      .expect("Content-Type", /json/)
+      .expect(201);
     expect(response.body).toEqual(
       expect.objectContaining({
         email: expect.any(String),
@@ -93,4 +90,4 @@ it("POST /api/users/signup -->  registers new user", async () => {
       })
     );
   });
-})
+});
