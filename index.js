@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === "dev") {
 
 // all routes
 app.use("/api/users", userRouter);
+
 app.get("/", (req, res) => res.send("No api service found"));
 
 // middlewares

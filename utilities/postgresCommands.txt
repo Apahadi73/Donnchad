@@ -1,0 +1,19 @@
+// Create usersle
+DROP TABLE users;
+CREATE TABLE users (UID SERIAL PRIMARY KEY, firstName VARCHAR(50),lastName VARCHAR(50), email VARCHAR(30) NOT NULL, password VARCHAR(100) NOT NULL, phoneNumber VARCHAR(20));
+
+// Dummy Users
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (1, 'Sybila', 'Maylam', 'smaylam0@miibeian.gov.cn', 't1sadasdasdasda1212dsa2j1', '2012440753');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (2, 'Theressa', 'Hune', 'thune1@cnet.com', 'c2sadasdasdasda1212dsa2x2', '3528059629');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (3, 'Eal', 'Vanyukhin', 'evanyukhin2@prnewswire.com', 'a6sadasdasdasda1212dsa2g7', '4775339869');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (4, 'Fraze', 'De Blase', 'fdeblase3@acquirethisname.com', 'c6sadasdasdasda1212dsa2m7', '4442089544');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (5, 'Shaine', 'Tombling', 'stombling4@sphinn.com', 'w6sadasdasdasda1212dsa2d6', '9369759119');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (6, 'Gretna', 'Hackworth', 'ghackworth5@nhs.uk', 'k2sadasdasdasda1212dsa2i6', '4035410998');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (7, 'Everard', 'While', 'ewhile6@state.gov', 'm1sadasdasdasda1212dsa2f1', '3606221931');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (8, 'Shelley', 'Daskiewicz', 'sdaskiewicz7@jugem.jp', 'g3sadasdasdasda1212dsa2m4', '9462550917');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (9, 'Sauveur', 'Murphey', 'smurphey8@illinois.edu', 'v2sadasdasdasda1212dsa2l1', '1903095783');
+insert into users (UID, firstName, lastName, email, password, phoneNumber) values (10, 'Giff', 'Aldhouse', 'galdhouse9@arstechnica.com', 't7sadasdasdasda1212dsa2q9', '9398094622');
+
+
+// fetch all users
+select * from users;
