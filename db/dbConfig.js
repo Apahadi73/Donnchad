@@ -15,8 +15,4 @@ const pool = new Pool({
   port: process.env.DBPORT || 5432,
 });
 
-pool.on("connect", function () {
-  console.log("PostgreSql connected!".green.bold);
-});
-
 export default pool;
