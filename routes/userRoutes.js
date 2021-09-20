@@ -2,6 +2,7 @@ import express from "express";
 import { body } from "express-validator";
 
 import {
+  deleteUser,
   getUserById,
   getUsers,
   registerUser,
@@ -27,5 +28,6 @@ router.route("/signup").post(
 router.route("/").get(getUsers);
 router.route("/:id").get(getUserById);
 router.route("/:id").put(updateUser);
+router.route("/:id").delete(deleteUser);
 
 export { router as userRouter };

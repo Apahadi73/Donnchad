@@ -26,7 +26,6 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   brcypt.hash(password, Constants.saltRounds, function (err, hashedPassword) {
     password = hashedPassword;
-    console.log(password);
     pool.query(
       "INSERT INTO users (firstName, lastName, email, password, phoneNumber) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [firstName, lastName, email, password, phoneNumber],
@@ -50,7 +49,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const getUsers = (request, response) => {
   pool.query("SELECT * FROM users ORDER BY uid ASC", (error, results) => {
     if (error) {
-      throw error;
+      throw new Error(error.message);
     }
     response.status(200).json(results.rows);
   });
@@ -61,7 +60,7 @@ export const getUserById = (request, response) => {
 
   pool.query("SELECT * FROM users WHERE uid = $1", [uid], (error, results) => {
     if (error) {
-      throw error;
+      throw new Error(error.message);
     }
     response.status(200).json(results.rows);
   });
@@ -76,11 +75,22 @@ export const updateUser = (request, response) => {
     [firstName, lastName, email, password, phoneNumber, uid],
     (error, results) => {
       if (error) {
-        throw error;
+        throw new Error(error.message);
       }
       response
         .status(200)
         .json({ message: `User info updated for user ${uid}` });
     }
   );
+};
+
+export const deleteUser = (request, response) => {
+  const uid = parseInt(request.params.uid);
+
+  pool.query("DELETE FROM users WHERE uid = $1", [uid], (error, results) => {
+    if (error) {
+      throw new Error(error.message);
+    }
+    response.status(200).json({ message: `User deleted with uid: ${uid}` });
+  });
 };

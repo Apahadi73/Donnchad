@@ -68,10 +68,11 @@ describe("Tests all CRUD functions for user signup service ", () => {
 
   it("POST /api/users/signup -->  registers new user", async () => {
     // we are using faker dev dependency for fake username, password, and name
-    const email = "tuser@patriots.uttyler.edu";
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
+    const email = `${firstName[0]}${lastName}@patriots.uttyler.edu`;
     const password = "password";
+    const phoneNumber = faker.phone.phoneNumber();
 
     const response = await request
       .post("/api/users/signup")
@@ -80,6 +81,7 @@ describe("Tests all CRUD functions for user signup service ", () => {
         firstName,
         lastName,
         password,
+        phoneNumber,
       })
       .expect("Content-Type", /json/)
       .expect(201);
