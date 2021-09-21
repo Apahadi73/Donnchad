@@ -6,7 +6,7 @@ import { checkCollegeEmail } from "../utilities/emailValidators.js";
 import generateToken from "../utilities/generateToken.js";
 import { Constants } from "../utilities/Constants.js";
 import redisClient from "../db/redisConfig.js";
-import { response } from "express";
+import { deleteUserService } from "../services/UserServices.js";
 
 // @desc    Register a new user
 // @route   POST /api/users
@@ -27,12 +27,12 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 
   // checks whether the user already exists in the db or not
-  const dbResponse = await pool.query("SELECT * FROM users WHERE email = $1", [
+  const dbres = await pool.query("SELECT * FROM users WHERE email = $1", [
     email,
   ]);
 
   // if user exists in the db
-  if (dbResponse && dbResponse.rows.length > 0) {
+  if (dbres && dbres.rows.length > 0) {
     res.status(400);
     throw new Error("Account already exists! Please try to login instead!");
   }
@@ -48,8 +48,8 @@ export const registerUser = asyncHandler(async (req, res) => {
           throw new Error(error.message);
         }
 
-        const responseData = results.rows[0];
-        const { uid } = responseData;
+        const resData = results.rows[0];
+        const { uid } = resData;
         const token = generateToken(uid, email);
 
         res.status(201);
@@ -66,14 +66,14 @@ export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   // checks for the user in db using its email
-  const dbResponse = await pool.query("SELECT * FROM users WHERE email = $1", [
+  const dbres = await pool.query("SELECT * FROM users WHERE email = $1", [
     email,
   ]);
 
-  // if we get successful response
-  if (dbResponse) {
+  // if we get successful res
+  if (dbres) {
     // extracts user information
-    const userInfo = dbResponse.rows[0];
+    const userInfo = dbres.rows[0];
 
     // if we find valid user info
     if (userInfo) {
@@ -89,19 +89,19 @@ export const authUser = asyncHandler(async (req, res) => {
         // generates token for the frontend
         const token = generateToken(uid, email);
 
-        // sends response to the frontend
-        const responseData = {
+        // sends res to the frontend
+        const resData = {
           uid,
           email,
           token,
         };
-        res.status(200).json(responseData);
+        res.status(200).json(resData);
       } else {
-        response.status(404);
+        res.status(404);
         throw new Error("Invalid Password. Please try again!");
       }
     } else {
-      response.status(404);
+      res.status(404);
       throw new Error("User not found.");
     }
   } else {
@@ -114,12 +114,12 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 export const getUsers = asyncHandler(async (req, res) => {
-  const responseData = await pool.query("SELECT * FROM users ORDER BY uid ASC");
-  if (responseData) {
-    const users = responseData.rows;
+  const resData = await pool.query("SELECT * FROM users ORDER BY uid ASC");
+  if (resData) {
+    const users = resData.rows;
 
     if (users && users.length > 0) {
-      response.status(200).json(users);
+      res.status(200).json(users);
     } else {
       res.status(404);
       throw new Error("No users found in the database.");
@@ -130,7 +130,7 @@ export const getUsers = asyncHandler(async (req, res) => {
   }
 });
 
-export const getUserById = (req, response) => {
+export const getUserById = (req, res) => {
   const uid = parseInt(req.params.id);
 
   pool.query("SELECT * FROM users WHERE uid = $1", [uid], (error, results) => {
@@ -143,14 +143,14 @@ export const getUserById = (req, response) => {
       // stores userInfo to the redis cache
       redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
 
-      response.status(200).json(userInfo);
+      res.status(200).json(userInfo);
     } else {
       throw new Error("No user information found");
     }
   });
 };
 
-export const updateUser = (req, response) => {
+export const updateUser = (req, res) => {
   const uid = parseInt(req.params.id);
   const { firstName, lastName, email, password, phoneNumber } = req.body;
 
@@ -162,21 +162,18 @@ export const updateUser = (req, response) => {
         res.status(400);
         throw new Error(error.message);
       }
-      response
-        .status(200)
-        .json({ message: `User info updated for user ${uid}` });
+      res.status(200).json({ message: `User info updated for user ${uid}` });
     }
   );
 };
 
-export const deleteUser = (req, response) => {
-  const uid = parseInt(req.params.uid);
-
-  pool.query("DELETE FROM users WHERE uid = $1", [uid], (error, results) => {
-    if (error) {
-      res.status(400);
-      throw new Error(error.message);
-    }
-    response.status(200).json({ message: `User deleted with uid: ${uid}` });
-  });
-};
+export const deleteUser = asyncHandler(async (req, res) => {
+  const uid = parseInt(req.params.id);
+  const isDeleted = await deleteUserService(uid);
+  if (isDeleted) {
+    res.status(200).json({ message: `User deleted with uid: ${uid}` });
+  } else {
+    res.status(400);
+    throw new Error("Error while deleting the user.");
+  }
+});
