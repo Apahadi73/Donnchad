@@ -4,9 +4,12 @@ import brcypt from "bcrypt";
 import pool from "../db/dbConfig.js";
 import { checkCollegeEmail } from "../utilities/emailValidators.js";
 import generateToken from "../utilities/generateToken.js";
-import { Constants } from "../utilities/Constants.js";
+import { Constants, Result } from "../utilities/Constants.js";
 import redisClient from "../db/redisConfig.js";
-import { deleteUserService } from "../services/UserServices.js";
+import {
+  deleteUserService,
+  updateUserService,
+} from "../services/user_services/UserServices.js";
 
 // @desc    Register a new user
 // @route   POST /api/users
@@ -111,7 +114,7 @@ export const authUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get a list of user
-// @route   POST /api/users
+// @route   GET /api/users
 // @access  Public
 export const getUsers = asyncHandler(async (req, res) => {
   const resData = await pool.query("SELECT * FROM users ORDER BY uid ASC");
@@ -150,30 +153,38 @@ export const getUserById = (req, res) => {
   });
 };
 
-export const updateUser = (req, res) => {
+// @desc    Update user account
+// @route   PUT /api/users/:id
+// @access  Private
+export const updateUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
   const { firstName, lastName, email, password, phoneNumber } = req.body;
 
-  pool.query(
-    "UPDATE users SET firstName = $1, lastName = $2,email = $3, password = $4,phoneNumber = $5 WHERE uid = $6",
-    [firstName, lastName, email, password, phoneNumber, uid],
-    (error, results) => {
-      if (error) {
-        res.status(400);
-        throw new Error(error.message);
-      }
-      res.status(200).json({ message: `User info updated for user ${uid}` });
-    }
+  // updates user information in the db
+  const responseData = await updateUserService(
+    firstName,
+    lastName,
+    email,
+    password,
+    phoneNumber,
+    uid
   );
-};
 
+  // response handling
+  res.status(responseData.status);
+  res.json(responseData);
+});
+
+// @desc    Delete user account
+// @route   DELETE /api/users/:id
+// @access  Private
 export const deleteUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
-  const isDeleted = await deleteUserService(uid);
-  if (isDeleted) {
-    res.status(200).json({ message: `User deleted with uid: ${uid}` });
-  } else {
-    res.status(400);
-    throw new Error("Error while deleting the user.");
-  }
+
+  // deletes user from the db
+  const responseData = await deleteUserService(uid);
+
+  // response handling
+  res.status(responseData.status);
+  res.json(responseData);
 });
