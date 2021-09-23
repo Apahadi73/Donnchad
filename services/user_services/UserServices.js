@@ -19,14 +19,49 @@ let successResponse = {
 // @input: nothing
 // @return: list of users in the db
 export const getUsersService = async () => {
+  try {
+    const responseData = await pool.query("SELECT * from users;");
+    const userslist = responseData.rows;
+    if (userslist.length > 0) {
+      successResponse.message = responseData.rows;
+      return successResponse;
+    } else {
+      errorResponse.message = "No users found!";
+      errorResponse.status = 404;
+      return errorResponse;
+    }
+  } catch (error) {
+    errorResponse.status = 500;
+    errorResponse.message = error;
+    return errorResponse;
+  }
+
   // fetches list of users from the db
 };
 
-// @desc    Get a list of user from the db
+// @desc    Get a user from the db
 // @input:  User id - uid
-// @return: list of users in the db
+// @return: return user in the db
 export const getUserService = async (uid) => {
-  // fetches user from the db
+  try {
+    const responseData = await pool.query(
+      "SELECT * FROM users WHERE uid = $1;",
+      [uid]
+    );
+    if (responseData.rows.length > 0) {
+      successResponse.message = responseData.rows[0];
+      return successResponse;
+    } else {
+      errorResponse.message = "No user found!";
+      errorResponse.status = 404;
+      return errorResponse;
+    }
+  } catch (error) {
+    errorResponse.status = 500;
+    errorResponse.message = error;
+    return errorResponse;
+  }
+  // fetches user fom the db
 };
 
 // @description: update the user with given user information
@@ -91,6 +126,7 @@ export const deleteUserService = async (uid) => {
       return errorResponse;
     }
   } catch (error) {
+    // else throw error
     errorResponse.message = error;
     return errorResponse;
   }

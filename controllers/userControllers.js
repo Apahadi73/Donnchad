@@ -8,6 +8,8 @@ import { Constants, Result } from "../utilities/Constants.js";
 import redisClient from "../db/redisConfig.js";
 import {
   deleteUserService,
+  getUserService,
+  getUsersService,
   updateUserService,
 } from "../services/user_services/UserServices.js";
 
@@ -117,41 +119,20 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users
 // @access  Public
 export const getUsers = asyncHandler(async (req, res) => {
-  const resData = await pool.query("SELECT * FROM users ORDER BY uid ASC");
-  if (resData) {
-    const users = resData.rows;
+  const responseData = await getUsersService();
 
-    if (users && users.length > 0) {
-      res.status(200).json(users);
-    } else {
-      res.status(404);
-      throw new Error("No users found in the database.");
-    }
-  } else {
-    res.status(404);
-    throw new Error("Users not found.");
-  }
+  // response handling
+  res.status(responseData.status);
+  res.json(responseData);
 });
 
-export const getUserById = (req, res) => {
+export const getUserById = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
+  const responseData = await getUserService(uid);
 
-  pool.query("SELECT * FROM users WHERE uid = $1", [uid], (error, results) => {
-    if (error) {
-      res.status(400);
-      throw new Error(error.message);
-    }
-    const userInfo = results.rows[0];
-    if (userInfo) {
-      // stores userInfo to the redis cache
-      redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
-
-      res.status(200).json(userInfo);
-    } else {
-      throw new Error("No user information found");
-    }
-  });
-};
+  res.status(responseData.status);
+  res.json(responseData);
+});
 
 // @desc    Update user account
 // @route   PUT /api/users/:id
