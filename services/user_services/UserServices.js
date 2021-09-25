@@ -1,5 +1,9 @@
 import pool from "../../db/dbConfig.js";
-import { Result } from "../../utilities/Constants.js";
+import {
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+} from "../../types/Errors.js";
 
 // @desc    Get a list of user from the db
 // @input: nothing
@@ -11,10 +15,10 @@ export const getUsersService = async () => {
     if (userslist.length > 0) {
       return responseData.rows;
     } else {
-      throw NotFoundError("No users found!");
+      throw new NotFoundError("No users found!");
     }
   } else {
-    throw InternalServerError(
+    throw new InternalServerError(
       "Something went wrong while fetching the users from the db"
     );
   }
@@ -31,10 +35,10 @@ export const getUserService = async (uid) => {
     if (responseData.rows.length > 0) {
       return responseData.rows[0];
     } else {
-      throw NotFoundError("No account found!");
+      throw new NotFoundError("No account found!");
     }
   } else {
-    throw InternalServerError(
+    throw new InternalServerError(
       "Something went wrong while fetching the users from the db"
     );
   }
@@ -56,7 +60,7 @@ export const updateUserService = async (
 
   // if user does not exists in the db
   if (!userExists) {
-    throw NotFoundError("Account does not exist.");
+    throw new NotFoundError("Account does not exist.");
   }
 
   const responseData = await pool.query(
@@ -75,12 +79,12 @@ export const updateUserService = async (
         uid,
       };
     } else {
-      throw InternalServerError(
+      throw new InternalServerError(
         "Something went wrong while fetching the users from the db"
       );
     }
   } else {
-    throw InternalServerError(
+    throw new InternalServerError(
       "Something went wrong while fetching the users from the db"
     );
   }
@@ -95,7 +99,7 @@ export const deleteUserService = async (uid) => {
 
   // if user does not exists in the db
   if (!userExists) {
-    throw Error("Account does not exist.");
+    throw new BadRequestError("Account does not exist.");
   }
 
   // deletes user from the db
@@ -109,12 +113,12 @@ export const deleteUserService = async (uid) => {
         message: `Successfully deleted user ${uid}.`,
       };
     } else {
-      throw InternalServerError(
+      throw new InternalServerError(
         "Something went wrong while deleting the user from the db"
       );
     }
   } else {
-    throw InternalServerError(
+    throw new InternalServerError(
       "Something went wrong while deleting the user from the db"
     );
   }
@@ -127,6 +131,17 @@ export const deleteUserService = async (uid) => {
 export const checkUserInDB = async (uid) => {
   const responseData = await pool.query("SELECT FROM users WHERE uid = $1", [
     uid,
+  ]);
+  return responseData.rowCount >= 1;
+};
+
+// @description: check whether email already exists in the database or not
+// @input: uid - user id
+// @access  private
+// @return: True or False
+export const checkEmailInDB = async (email) => {
+  const responseData = await pool.query("SELECT FROM users WHERE email = $1", [
+    email,
   ]);
   return responseData.rowCount >= 1;
 };
