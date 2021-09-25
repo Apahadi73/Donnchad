@@ -1,67 +1,43 @@
 import pool from "../../db/dbConfig.js";
 import { Result } from "../../utilities/Constants.js";
 
-// our local response object
-let errorResponse = {
-  type: Result.FAILED,
-  status: 404,
-  message: "Error!",
-};
-
-// success response
-let successResponse = {
-  type: Result.SUCCESS,
-  status: 200,
-  message: "Success",
-};
-
 // @desc    Get a list of user from the db
 // @input: nothing
 // @return: list of users in the db
 export const getUsersService = async () => {
-  try {
-    const responseData = await pool.query("SELECT * from users;");
+  const responseData = await pool.query("SELECT * from users;");
+  if (responseData) {
     const userslist = responseData.rows;
     if (userslist.length > 0) {
-      successResponse.message = responseData.rows;
-      return successResponse;
+      return responseData.rows;
     } else {
-      errorResponse.message = "No users found!";
-      errorResponse.status = 404;
-      return errorResponse;
+      throw NotFoundError("No users found!");
     }
-  } catch (error) {
-    errorResponse.status = 500;
-    errorResponse.message = error;
-    return errorResponse;
+  } else {
+    throw InternalServerError(
+      "Something went wrong while fetching the users from the db"
+    );
   }
-
-  // fetches list of users from the db
 };
 
 // @desc    Get a user from the db
 // @input:  User id - uid
-// @return: return user in the db
+// @return: return user in the db matching the unique user id
 export const getUserService = async (uid) => {
-  try {
-    const responseData = await pool.query(
-      "SELECT * FROM users WHERE uid = $1;",
-      [uid]
-    );
+  const responseData = await pool.query("SELECT * FROM users WHERE uid = $1;", [
+    uid,
+  ]);
+  if (responseData) {
     if (responseData.rows.length > 0) {
-      successResponse.message = responseData.rows[0];
-      return successResponse;
+      return responseData.rows[0];
     } else {
-      errorResponse.message = "No user found!";
-      errorResponse.status = 404;
-      return errorResponse;
+      throw NotFoundError("No account found!");
     }
-  } catch (error) {
-    errorResponse.status = 500;
-    errorResponse.message = error;
-    return errorResponse;
+  } else {
+    throw InternalServerError(
+      "Something went wrong while fetching the users from the db"
+    );
   }
-  // fetches user fom the db
 };
 
 // @description: update the user with given user information
@@ -76,39 +52,37 @@ export const updateUserService = async (
   uid
 ) => {
   // checks whether the user exists in the db or not
-  try {
-    const userExists = await checkUserInDB(uid);
+  const userExists = await checkUserInDB(uid);
 
-    // if user does not exists in the db
-    if (!userExists) {
-      errorResponse.message = "User does not exist in the database";
-      return errorResponse;
-    }
-  } catch (error) {
-    errorResponse.message = error;
-    return errorResponse;
+  // if user does not exists in the db
+  if (!userExists) {
+    throw NotFoundError("Account does not exist.");
   }
-  try {
-    // updates user in the db
-    await pool.query(
-      "UPDATE users SET firstName = $1, lastName = $2,email = $3, password = $4,phoneNumber = $5 WHERE uid = $6",
-      [firstName, lastName, email, password, phoneNumber, uid]
-    );
 
-    // if no error observed, send positive response
-    successResponse.message = {
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-      uid,
-    };
-    return successResponse;
-  } catch (error) {
-    // else throw error
-    errorResponse.message = error;
-    return errorResponse;
+  const responseData = await pool.query(
+    "UPDATE users SET firstName = $1, lastName = $2,email = $3, password = $4,phoneNumber = $5 WHERE uid = $6",
+    [firstName, lastName, email, password, phoneNumber, uid]
+  );
+
+  if (responseData) {
+    if (responseData.rowCount > 0) {
+      return {
+        firstName,
+        lastName,
+        email,
+        password,
+        phoneNumber,
+        uid,
+      };
+    } else {
+      throw InternalServerError(
+        "Something went wrong while fetching the users from the db"
+      );
+    }
+  } else {
+    throw InternalServerError(
+      "Something went wrong while fetching the users from the db"
+    );
   }
 };
 
@@ -117,27 +91,32 @@ export const updateUserService = async (
 // @return: response object
 export const deleteUserService = async (uid) => {
   // checks whether the user exists in the db or not
-  try {
-    const userExists = await checkUserInDB(uid);
+  const userExists = await checkUserInDB(uid);
 
-    // if user does not exists in the db
-    if (!userExists) {
-      errorResponse.message = "User does not exist in the database";
-      return errorResponse;
-    }
-  } catch (error) {
-    // else throw error
-    errorResponse.message = error;
-    return errorResponse;
+  // if user does not exists in the db
+  if (!userExists) {
+    throw Error("Account does not exist.");
   }
-  try {
-    // deletes user from the db
-    await pool.query("DELETE FROM users WHERE uid = $1", [uid]);
-    successResponse.message = `Successfully deleted user ${uid}`;
-    return successResponse;
-  } catch (error) {
-    errorResponse.message = error;
-    return errorResponse;
+
+  // deletes user from the db
+  const responseData = await pool.query("DELETE FROM users WHERE uid = $1", [
+    uid,
+  ]);
+
+  if (responseData) {
+    if (responseData.rowCount > 0) {
+      return {
+        message: `Successfully deleted user ${uid}.`,
+      };
+    } else {
+      throw InternalServerError(
+        "Something went wrong while deleting the user from the db"
+      );
+    }
+  } else {
+    throw InternalServerError(
+      "Something went wrong while deleting the user from the db"
+    );
   }
 };
 

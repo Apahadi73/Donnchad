@@ -12,6 +12,7 @@ import {
   getUsersService,
   updateUserService,
 } from "../services/user_services/UserServices.js";
+import { BadRequestError } from "../types/Errors.js";
 
 // @desc    Register a new user
 // @route   POST /api/users
@@ -22,13 +23,13 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   if (!email) {
     res.status(400);
-    throw new Error("Invalid email address!");
+    throw new BadRequestError("Email Missing");
   }
 
   const isValidCollegeEmail = checkCollegeEmail(email);
   if (!isValidCollegeEmail) {
     res.status(400);
-    throw new Error("Invalid College Email Address!");
+    throw new BadRequestError("Invalid College Email Address!");
   }
 
   // checks whether the user already exists in the db or not
@@ -39,7 +40,9 @@ export const registerUser = asyncHandler(async (req, res) => {
   // if user exists in the db
   if (dbres && dbres.rows.length > 0) {
     res.status(400);
-    throw new Error("Account already exists! Please try to login instead!");
+    throw new BadRequestError(
+      "Account with this email already exists. Please try to login instead!"
+    );
   }
 
   brcypt.hash(password, Constants.saltRounds, function (err, hashedPassword) {
@@ -103,15 +106,15 @@ export const authUser = asyncHandler(async (req, res) => {
         res.status(200).json(resData);
       } else {
         res.status(404);
-        throw new Error("Invalid Password. Please try again!");
+        throw new BadRequestError("Invalid Password. Please try again!");
       }
     } else {
       res.status(404);
-      throw new Error("User not found.");
+      throw new NotFoundError("User not found.");
     }
   } else {
     res.status(404);
-    throw new Error("User not found.");
+    throw new NotFoundError("User not found.");
   }
 });
 
@@ -130,8 +133,7 @@ export const getUserById = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
   const responseData = await getUserService(uid);
 
-  res.status(responseData.status);
-  res.json(responseData);
+  res.status(200).json({ responseData });
 });
 
 // @desc    Update user account
@@ -152,8 +154,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   );
 
   // response handling
-  res.status(responseData.status);
-  res.json(responseData);
+  res.status(200).json({ responseData });
 });
 
 // @desc    Delete user account
@@ -166,6 +167,5 @@ export const deleteUser = asyncHandler(async (req, res) => {
   const responseData = await deleteUserService(uid);
 
   // response handling
-  res.status(responseData.status);
-  res.json(responseData);
+  res.status(200).json({ responseData });
 });
