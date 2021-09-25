@@ -7,8 +7,9 @@ import brcypt from "bcrypt";
 import { Constants } from "../../utilities/Constants.js";
 import pool from "../../Configs/dbConfig.js";
 import generateToken from "../../utilities/generateToken.js";
-import { checkEmailInDB } from "../user_services/UserServices.js";
 import redisClient from "../../Configs/redisConfig.js";
+import DBUser from "../../db/dbUser.js";
+import DBAuthentication from "../../db/dbAuthentication.js";
 
 // @description: register new user
 // @input: firstName, lastName, email,  phoneNumber,  password,
@@ -22,7 +23,7 @@ export const registerUserService = async ({
   password,
 }) => {
   // checks whether the user exists in the db or not
-  const userExists = await checkEmailInDB(email);
+  const userExists = await DBUser.checkEmailInDB(email);
 
   // if user exists in the db
   if (userExists) {
@@ -33,14 +34,17 @@ export const registerUserService = async ({
 
   const hashedPassword = await brcypt.hash(password, Constants.saltRounds);
 
-  const responseData = await pool.query(
-    "INSERT INTO users (firstName, lastName, email, password, phoneNumber) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [firstName, lastName, email, hashedPassword, phoneNumber]
+  // registers new user in the database
+  const responseData = await DBAuthentication.registerUser(
+    firstName,
+    lastName,
+    email,
+    hashedPassword,
+    phoneNumber
   );
 
   if (responseData) {
-    const resData = responseData.rows[0];
-    const { uid } = resData;
+    const { uid } = responseData;
     const token = generateToken(uid, email);
     return { uid, email, token };
   } else {
@@ -50,45 +54,35 @@ export const registerUserService = async ({
   }
 };
 
-// @description: register new user
+// @description: authenticates the user
 // @input: firstName, lastName, email,  phoneNumber,  password,
 // @access  public
 // @return: uid, email, token
 export const authUserService = async ({ email, password }) => {
   // checks for the user in db using its email
-  const dbres = await pool.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
+  const userInfo = await DBAuthentication.authUserService({ email, password });
 
-  // if we get successful res
-  if (dbres) {
-    // extracts user information
-    const userInfo = dbres.rows[0];
+  // if we find valid user info
+  if (userInfo) {
+    const uid = userInfo.uid;
+    // checks for password matchs
+    const passwordMatched = await brcypt.compare(password, userInfo.password);
 
-    // if we find valid user info
-    if (userInfo) {
-      const uid = userInfo.uid;
-      // checks for password matchs
-      const passwordMatched = await brcypt.compare(password, userInfo.password);
+    // if password matches
+    if (passwordMatched) {
+      // stores userInfo to the redis cache
+      redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
 
-      // if password matches
-      if (passwordMatched) {
-        // stores userInfo to the redis cache
-        redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
+      // generates token for the frontend
+      const token = generateToken(uid, email);
 
-        // generates token for the frontend
-        const token = generateToken(uid, email);
-
-        return {
-          uid,
-          email,
-          token,
-        };
-      } else {
-        throw new BadRequestError("Invalid Password. Please try again!");
-      }
+      return {
+        uid,
+        email,
+        token,
+      };
     } else {
-      throw new NotFoundError("User not found.");
+      throw new BadRequestError("Invalid Password. Please try again!");
     }
   } else {
     throw new NotFoundError("User not found.");
