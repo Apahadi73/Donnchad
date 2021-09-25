@@ -5,10 +5,10 @@ import {
 } from "../../types/Errors.js";
 import brcypt from "bcrypt";
 import { Constants } from "../../utilities/Constants.js";
-import pool from "../../db/dbConfig.js";
+import pool from "../../Configs/dbConfig.js";
 import generateToken from "../../utilities/generateToken.js";
-import redisClient from "../../db/redisConfig.js";
 import { checkEmailInDB } from "../user_services/UserServices.js";
+import redisClient from "../../Configs/redisConfig.js";
 
 // @description: register new user
 // @input: firstName, lastName, email,  phoneNumber,  password,

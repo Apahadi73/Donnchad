@@ -6,8 +6,7 @@ import morgan from "morgan";
 // routes import
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
-import pool from "./db/dbConfig.js";
-import redisClient from "./db/redisConfig.js";
+import pool from "./Configs/dbConfig.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application

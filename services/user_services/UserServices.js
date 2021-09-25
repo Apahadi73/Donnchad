@@ -1,4 +1,4 @@
-import pool from "../../db/dbConfig.js";
+import pool from "../../Configs/dbConfig.js";
 import {
   BadRequestError,
   InternalServerError,
