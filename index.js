@@ -6,12 +6,11 @@ import morgan from "morgan";
 // routes import
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
-import pool from "./Configs/dbConfig.js";
+import db from "./db/db.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
 dotenv.config();
-pool.connect();
 
 // creates a server application
 const app = express();

@@ -1,5 +1,7 @@
 import pool from "../Configs/dbConfig.js";
 
+import db from "../db/db.js";
+
 const DBUser = {
   // check whether email already exists in the database or not
   checkEmailInDB: async (email) => {
@@ -20,8 +22,9 @@ const DBUser = {
 
   // gets all the users from the db
   getUsers: async () => {
-    const responseData = await pool.query("SELECT * from users;");
-    return responseData.rows;
+    const responseData = await db("users").select();
+    console.log(responseData);
+    return responseData;
   },
 
   // gets required user from the db
