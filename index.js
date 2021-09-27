@@ -20,9 +20,7 @@ const app = express();
 app.use(express.json());
 
 // we use morgan to log all the incoming request
-if (process.env.NODE_ENV === "dev") {
-  app.use(morgan("dev"));
-}
+app.use(morgan("dev"));
 
 // all routes
 app.use("/api/users", userRouter);

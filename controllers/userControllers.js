@@ -20,13 +20,11 @@ export const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, phoneNumber, password } = req.body;
 
   if (!email) {
-    res.status(400);
     throw new BadRequestError("Email Missing");
   }
 
   const isValidCollegeEmail = checkCollegeEmail(email);
   if (!isValidCollegeEmail) {
-    res.status(400);
     throw new BadRequestError("Invalid College Email Address!");
   }
 
