@@ -8,11 +8,10 @@ const Pool = pg.Pool;
 
 // creates a pool object
 const pool = new Pool({
-  user: process.env.DBUSER,
-  host: process.env.DBHOST,
-  database: process.env.DBNAME,
-  password: process.env.DBPASSWORD,
-  port: process.env.DBPORT || 5432,
+  host: "db",
+  user: "donnchad",
+  password: "password",
+  database: "donnchad",
 });
 
 export default pool;
