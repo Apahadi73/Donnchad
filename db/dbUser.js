@@ -31,7 +31,6 @@ const DBUser = {
   // gets required user from the db
   getUser: async (uid) => {
     const user = await db("users").where({ uid: uid }).select();
-    console.log(user);
     return user;
   },
 
@@ -56,7 +55,6 @@ const DBUser = {
     //   phoneNumber,
     //   uid,
     // };
-    console.log("reached here in updateUser");
     const user = await db("users").where({ uid: uid }).update({
       firstname,
       lastname,
@@ -64,16 +62,17 @@ const DBUser = {
       password,
       phonenumber,
     });
-    console.log(user);
     return user;
   },
 
   // deletes the user from the db
   deleteUser: async (uid) => {
-    const responseData = await pool.query("DELETE FROM users WHERE uid = $1", [
-      uid,
-    ]);
-    return responseData.rowCount > 0;
+    // const responseData = await pool.query("DELETE FROM users WHERE uid = $1", [
+    //   uid,
+    // ]);
+    // return responseData.rowCount > 0;
+    const user = await db("users").where({ uid: uid }).del();
+    return user;
   },
 };
 export default DBUser;

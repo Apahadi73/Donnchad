@@ -53,14 +53,12 @@ export const updateUserService = async (
   phonenumber,
   uid
 ) => {
-  console.log("reached here in updateUserService");
   // checks whether the user exists in the db or not
   const userExists = await DBUser.getUser(uid);
   console.log(userExists);
-  console.log("reached here in updateUserService");
 
   // if user does not exists in the db
-  if (!userExists) {
+  if (!userExists.length > 0) {
     throw new NotFoundError("Account does not exist.");
   }
 
@@ -72,8 +70,8 @@ export const updateUserService = async (
     phonenumber,
     uid,
   });
-  if (responseData) {
-    return responseData;
+  if (responseData > 0) {
+    `Successfully deleted user ${uid}.`;
   } else {
     throw new InternalServerError(
       "Something went wrong while updating the users from the db"
@@ -86,7 +84,7 @@ export const updateUserService = async (
 // @return: response object
 export const deleteUserService = async (uid) => {
   // checks whether the user exists in the db or not
-  const userExists = await DBUser.checkUserInDB(uid);
+  const userExists = await DBUser.getUser(uid);
 
   // if user does not exists in the db
   if (!userExists) {

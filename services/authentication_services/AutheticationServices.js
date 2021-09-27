@@ -60,7 +60,7 @@ export const registerUserService = async ({
 // @return: uid, email, token
 export const authUserService = async ({ email, password }) => {
   // checks for the user in db using its email
-  const userInfo = await DBAuthentication.authUserService({ email, password });
+  const userInfo = await DBAuthentication.authUser({ email, password });
 
   // if we find valid user info
   if (userInfo) {

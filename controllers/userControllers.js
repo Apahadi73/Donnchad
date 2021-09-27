@@ -75,7 +75,8 @@ export const updateUser = asyncHandler(async (req, res) => {
     lastname,
     email,
     password,
-    phonenumber
+    phonenumber,
+    uid
   );
 
   // response handling
