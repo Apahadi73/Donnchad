@@ -46,15 +46,18 @@ export const getUserService = async (uid) => {
 // @input: firstName, lastName, email, password, phoneNumber, uid
 // @return: response object
 export const updateUserService = async (
-  firstName,
-  lastName,
+  firstname,
+  lastname,
   email,
   password,
-  phoneNumber,
+  phonenumber,
   uid
 ) => {
+  console.log("reached here in updateUserService");
   // checks whether the user exists in the db or not
-  const userExists = await DBUser.checkUserInDB(uid);
+  const userExists = await DBUser.getUser(uid);
+  console.log(userExists);
+  console.log("reached here in updateUserService");
 
   // if user does not exists in the db
   if (!userExists) {
@@ -62,11 +65,11 @@ export const updateUserService = async (
   }
 
   const responseData = await DBUser.updateUser({
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     email,
     password,
-    phoneNumber,
+    phonenumber,
     uid,
   });
   if (responseData) {

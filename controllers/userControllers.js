@@ -67,16 +67,15 @@ export const getUserById = asyncHandler(async (req, res) => {
 // @access  Private
 export const updateUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
-  const { firstName, lastName, email, password, phoneNumber } = req.body;
+  const { firstname, lastname, email, password, phonenumber } = req.body;
 
   // updates user information in the db
   const responseData = await updateUserService(
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     email,
     password,
-    phoneNumber,
-    uid
+    phonenumber
   );
 
   // response handling
