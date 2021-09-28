@@ -1,3 +1,5 @@
+import db from "../db/db.js";
+
 const DBAuthentication = {
   // register new user
   registerUser: async (firstname, lastname, email, password, phonenumber) => {

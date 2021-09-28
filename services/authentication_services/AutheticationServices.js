@@ -23,10 +23,10 @@ export const registerUserService = async ({
   password,
 }) => {
   // checks whether the user exists in the db or not
-  const userExists = await DBUser.checkEmailInDB(email);
+  const user = await DBUser.checkEmailInDB(email);
 
   // if user exists in the db
-  if (userExists) {
+  if (user.length > 0) {
     throw new BadRequestError(
       "Account with this email already exists. Please try to login instead!"
     );
@@ -60,18 +60,19 @@ export const registerUserService = async ({
 // @return: uid, email, token
 export const authUserService = async ({ email, password }) => {
   // checks for the user in db using its email
-  const userInfo = await DBAuthentication.authUser({ email, password });
+  const userInfo = await DBUser.checkEmailInDB(email);
+  console.log(userInfo);
 
   // if we find valid user info
-  if (userInfo) {
+  if (userInfo.length > 0) {
     const uid = userInfo.uid;
-    // checks for password matchs
+    // checks for password match
     const passwordMatched = await brcypt.compare(password, userInfo.password);
 
     // if password matches
     if (passwordMatched) {
       // stores userInfo to the redis cache
-      redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
+      // redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
 
       // generates token for the frontend
       const token = generateToken(uid, email);

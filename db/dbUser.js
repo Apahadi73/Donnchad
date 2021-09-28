@@ -10,6 +10,8 @@ const DBUser = {
     //   [email]
     // );
     // return responseData.rowCount >= 1;
+    const user = await db("users").where({ email: email }).select();
+    return user;
   },
 
   // check whether user already exists in the database or not

@@ -12,6 +12,7 @@ const pool = new Pool({
   user: "postgres",
   password: "secret",
   database: "database",
+  port: "5431",
 });
 
 export default pool;
