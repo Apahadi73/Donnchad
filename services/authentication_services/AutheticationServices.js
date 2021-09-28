@@ -68,6 +68,7 @@ export const authUserService = async ({ email, password }) => {
     const uid = userInfo.uid;
     // checks for password match
     const passwordMatched = await brcypt.compare(password, userInfo.password);
+    console.log(passwordMatched);
 
     // if password matches
     if (passwordMatched) {
