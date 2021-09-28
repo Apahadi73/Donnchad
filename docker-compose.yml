@@ -5,6 +5,10 @@ services:
     build: .
     ports:
       - "5000:5000"
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_USER: "donnchad"
+      JWT_SECRET: "SanskarRandiHo"
   db:
     image: "postgres"
     ports:

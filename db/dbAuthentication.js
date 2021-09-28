@@ -8,13 +8,15 @@ const DBAuthentication = {
     //   [firstName, lastName, email, hashedPassword, phoneNumber]
     // );
     // return responseData.rows[0];
-    const user = await db("users").insert({
+    await db("users").insert({
       firstname: firstname,
       lastname: lastname,
       email: email,
       password: password,
       phonenumber: phonenumber,
     });
+
+    const user = db("users").where({ email: email }).select();
     return user;
   },
   //  authenticates the user

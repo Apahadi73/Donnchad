@@ -24,9 +24,9 @@ export const registerUserService = async ({
 }) => {
   // checks whether the user exists in the db or not
   const user = await DBUser.checkEmailInDB(email);
-
+  const userExists = user.length > 0;
   // if user exists in the db
-  if (user.length > 0) {
+  if (userExists) {
     throw new BadRequestError(
       "Account with this email already exists. Please try to login instead!"
     );
@@ -44,7 +44,7 @@ export const registerUserService = async ({
   );
 
   if (responseData) {
-    const { uid } = responseData;
+    const { uid } = responseData[0];
     const token = generateToken(uid, email);
     return { uid, email, token };
   } else {

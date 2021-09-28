@@ -8,7 +8,9 @@ import {
   getUsers,
   registerUser,
   updateUser,
+  resetPassword,
 } from "../controllers/userControllers.js";
+import { protect } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
@@ -41,5 +43,8 @@ router.route("/").get(getUsers);
 router.route("/:id").get(getUserById);
 router.route("/:id").put(updateUser);
 router.route("/:id").delete(deleteUser);
+
+// update password route
+router.route("/:id/forgot-password").post([protect], resetPassword);
 
 export { router as userRouter };

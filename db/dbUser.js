@@ -10,7 +10,7 @@ const DBUser = {
     //   [email]
     // );
     // return responseData.rowCount >= 1;
-    const user = await db("users").where({ email: email }).select();
+    const user = await db("users").where({ email: email }).select()[0];
     return user;
   },
 
@@ -74,6 +74,14 @@ const DBUser = {
     // ]);
     // return responseData.rowCount > 0;
     const user = await db("users").where({ uid: uid }).del();
+    return user;
+  },
+
+  // reset current user's password from db
+  resetPassword: async (uid, newpassword) => {
+    const user = await db("users").where({ uid: uid }).update({
+      password: newpassword,
+    });
     return user;
   },
 };

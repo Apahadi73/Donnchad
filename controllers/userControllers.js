@@ -6,6 +6,7 @@ import {
   getUserService,
   getUsersService,
   updateUserService,
+  resetPasswordService,
 } from "../services/user_services/UserServices.js";
 import { BadRequestError } from "../types/Errors.js";
 import {
@@ -91,6 +92,20 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   // deletes user from the db
   const responseData = await deleteUserService(uid);
+
+  // response handling
+  res.status(200).json({ responseData });
+});
+
+// @desc    reset password for the current user
+// @route   POST /api/users/:id/forgot-password
+// @access  Public
+export const resetPassword = asyncHandler(async (req, res) => {
+  const uid = parseInt(req.params.id);
+  const { newpassword } = req.body;
+
+  // reset password for the current user
+  const responseData = await resetPasswordService(uid, newpassword);
 
   // response handling
   res.status(200).json({ responseData });
