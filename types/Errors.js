@@ -6,6 +6,14 @@ export class BadRequestError extends Error {
   }
 }
 
+export class NotAuthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "BadRequestError";
+    this.statusCode = 401;
+  }
+}
+
 export class InternalServerError extends Error {
   constructor(message) {
     super(message);

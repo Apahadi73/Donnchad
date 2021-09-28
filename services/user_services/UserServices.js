@@ -55,7 +55,6 @@ export const updateUserService = async (
 ) => {
   // checks whether the user exists in the db or not
   const userExists = await DBUser.getUser(uid);
-  console.log(userExists);
 
   // if user does not exists in the db
   if (!userExists.length > 0) {
@@ -117,7 +116,6 @@ export const resetPasswordService = async (uid, newpassword) => {
 
   // deletes user from the db
   const responseData = await DBUser.resetPassword(uid, newpassword);
-  console.log(responseData);
 
   if (responseData) {
     return `Password changed successfully for user ${uid}.`;

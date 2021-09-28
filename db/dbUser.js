@@ -10,7 +10,7 @@ const DBUser = {
     //   [email]
     // );
     // return responseData.rowCount >= 1;
-    const user = await db("users").where({ email: email }).select()[0];
+    const user = await db("users").where({ email: email }).select();
     return user;
   },
 
