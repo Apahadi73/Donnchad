@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import db from "./db/db.js";
+import { eventRouter } from "./routes/eventRoutes.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
@@ -23,6 +24,7 @@ app.use(morgan("dev"));
 
 // all routes
 app.use("/api/users", userRouter);
+app.use("/api/events", eventRouter);
 
 app.get("/", (req, res) => res.send("No api service found"));
 
