@@ -1,10 +1,9 @@
-import pool from "../../Configs/dbConfig.js";
-import DBUser from "../../db/dbUser.js";
+import DBUser from "../db/dbUser.js";
 import {
   BadRequestError,
   InternalServerError,
   NotFoundError,
-} from "../../types/Errors.js";
+} from "../types/Errors.js";
 
 // @desc    Get a list of user from the db
 // @input: nothing

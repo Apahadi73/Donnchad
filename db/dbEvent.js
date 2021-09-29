@@ -1,5 +1,3 @@
-import db from "../db/db.js";
-
 const DBEvent = {
   createEvent: async ({
     name,

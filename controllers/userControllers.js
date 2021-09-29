@@ -7,12 +7,12 @@ import {
   getUsersService,
   updateUserService,
   resetPasswordService,
-} from "../services/user_services/UserServices.js";
+} from "../services/UserServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import {
   authUserService,
   registerUserService,
-} from "../services/authentication_services/AutheticationServices.js";
+} from "../services/AutheticationServices.js";
 
 // @desc    Register a new user
 // @route   POST /api/users

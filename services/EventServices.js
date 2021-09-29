@@ -1,9 +1,9 @@
-import DBEvent from "../../db/dbEvent.js";
+import DBEvent from "../db/dbEvent.js";
 import {
   BadRequestError,
   InternalServerError,
   NotFoundError,
-} from "../../types/Errors.js";
+} from "../types/Errors.js";
 export const createEventService = async (
   name,
   description,

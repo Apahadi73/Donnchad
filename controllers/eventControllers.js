@@ -1,6 +1,6 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
-import { createEventService } from "../services/user_services/EventServices.js";
+import { createEventService } from "../services/EventServices.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
   const { name, description, location, phone, startDate, endDate, host, type } =

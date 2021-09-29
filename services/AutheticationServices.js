@@ -2,14 +2,13 @@ import {
   BadRequestError,
   NotFoundError,
   InternalServerError,
-} from "../../types/Errors.js";
+} from "../types/Errors.js";
 import brcypt from "bcrypt";
-import { Constants } from "../../utilities/Constants.js";
-import pool from "../../Configs/dbConfig.js";
-import generateToken from "../../utilities/generateToken.js";
-import redisClient from "../../Configs/redisConfig.js";
-import DBUser from "../../db/dbUser.js";
-import DBAuthentication from "../../db/dbAuthentication.js";
+import { Constants } from "../utilities/Constants.js";
+import generateToken from "../utilities/generateToken.js";
+import redisClient from "../Configs/redisConfig.js";
+import DBUser from "../db/dbUser.js";
+import DBAuthentication from "../db/dbAuthentication.js";
 
 // @description: register new user
 // @input: firstName, lastName, email,  phoneNumber,  password,
@@ -63,15 +62,13 @@ export const authUserService = async ({ email, password }) => {
 
   // if we find valid user info
   if (userInfo.length > 0) {
-    const uid = userInfo.uid;
+    const uid = userInfo[0].uid;
+    const hashedPassword = userInfo[0].password;
     // checks for password match
-    const passwordMatched = await brcypt.compare(password, userInfo.password);
+    const passwordMatched = await brcypt.compare(password, hashedPassword);
 
     // if password matches
     if (passwordMatched) {
-      // stores userInfo to the redis cache
-      // redisClient.setex("currentUser", 3600, JSON.stringify(userInfo));
-
       // generates token for the frontend
       const token = generateToken(uid, email);
 
