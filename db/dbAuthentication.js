@@ -1,5 +1,4 @@
-import db from "../db/db.js";
-import db1 from "./db1.js";
+import db from "./db.js";
 
 const DBAuthentication = {
   // register new user
@@ -32,7 +31,7 @@ const DBAuthentication = {
     host,
     type
   ) => {
-    await db1("events").insert({
+    await db("events").insert({
       name: name,
       description: description,
       location: location,
@@ -43,7 +42,7 @@ const DBAuthentication = {
       type: type,
     });
 
-    const event = db1("events").where({ name: name }).select();
+    const event = db("events").where({ name: name }).select();
     return event;
   },
   //  authenticates the user

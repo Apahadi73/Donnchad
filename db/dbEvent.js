@@ -1,11 +1,10 @@
 import pool from "../Configs/dbConfig.js";
-
-import db from "../db/db1.js";
+import db from "./db.js";
 
 const DBEvent = {
   // gets required user from the db
   getEvent: async (uid) => {
-    const event = await db1("events").where({ uid: uid }).select();
+    const event = await db("events").where({ uid: uid }).select();
     return event;
   },
 
@@ -46,7 +45,7 @@ const DBEvent = {
     type,
     uid,
   }) => {
-    const event = await db1("events").where({ uid: uid }).update({
+    const event = await db("events").where({ uid: uid }).update({
       name,
       description,
       location,

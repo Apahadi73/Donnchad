@@ -6,8 +6,6 @@ import morgan from "morgan";
 // routes import
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
-import db from "./db/db.js";
-import db1 from "./db/db1.js";
 import { eventRouter } from "./routes/eventRoutes.js";
 
 // configures environment variables
