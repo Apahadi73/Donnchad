@@ -8,10 +8,11 @@ const Pool = pg.Pool;
 
 // creates a pool object
 const pool = new Pool({
-  host: "db",
-  user: "donnchad",
-  password: "password",
-  database: "donnchad",
+  host: "localhost",
+  user: "postgres",
+  password: "secret",
+  database: "database",
+  port: "5431",
 });
 
 export default pool;

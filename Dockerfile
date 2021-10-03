@@ -5,4 +5,5 @@ COPY package.json .
 RUN npm install --force
 COPY . .
 
-CMD ["npm","start"]
+RUN npm install -g concurrently
+CMD ["concurrently","npm:start", "npm:migrate"]
