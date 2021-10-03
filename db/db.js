@@ -14,7 +14,13 @@ const devConfig = {
 };
 
 const proConfig = {
-  connectionString: process.env.DATABASE_URL, // heroku add ons
+  client: "postgres",
+  connection: process.env.DATABASE_URL,
+  ssl: {
+    /* <----- Add SSL option */
+    require: true,
+    rejectUnauthorized: false,
+  }, // heroku add ons
 };
 
 const db = knex(process.env.NODE_ENV == "production" ? proConfig : devConfig);
