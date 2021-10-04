@@ -12,10 +12,7 @@ This project contains the backend for our social management app (https://github.
 
 1. run ' git clone https://github.com/Apahadi73/Donnchad.git'
 2. Go to the terminal and install all required npm packages using command 'npm i'
-3. Create a .env file and create all the required key-value pairs. Note: Team member will find them in our database work channel.
-4. Setup postgres local server by following steps described in https://blog.logrocket.com/nodejs-expressjs-postgresql-crud-rest-api-example/.
-5. After initial setup, run command 'npm run start' to start the express server.
-6. Use command 'npm run test:watch' to run all the test suites.
-7. Make sure to run server and postgres server on two different terminals for convenience
+3. Run command "docker-compose up" to start the containers.
+4. remote api: https://donnchad-server.herokuapp.com/
 
-# Tools used: Express, Nodejs, Postgresql, and Redis
+# Tools used: Express, Nodejs, Postgresql, Docker, and Redis
