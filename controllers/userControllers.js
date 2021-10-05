@@ -15,7 +15,7 @@ import {
 } from "../services/AutheticationServices.js";
 
 // @desc    Register a new user
-// @route   POST /api/users
+// @route   POST /api/users/signup
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password } = req.body;
@@ -57,17 +57,20 @@ export const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json({ responseData });
 });
 
+// @desc    Get an user by id
+// @route   GET /api/users/:uid
+// @access  Public
 export const getUserById = asyncHandler(async (req, res) => {
-  const uid = parseInt(req.params.id);
+  const uid = parseInt(req.params.uid);
   const responseData = await getUserService(uid);
   res.status(200).json({ responseData });
 });
 
 // @desc    Update user account
-// @route   PUT /api/users/:id
+// @route   PUT /api/users/:uid
 // @access  Private
 export const updateUser = asyncHandler(async (req, res) => {
-  const uid = parseInt(req.params.id);
+  const uid = parseInt(req.params.uid);
   const { firstname, lastname, email, password, phonenumber } = req.body;
 
   // updates user information in the db
@@ -85,10 +88,10 @@ export const updateUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Delete user account
-// @route   DELETE /api/users/:id
+// @route   DELETE /api/users/:uid
 // @access  Public
 export const deleteUser = asyncHandler(async (req, res) => {
-  const uid = parseInt(req.params.id);
+  const uid = parseInt(req.params.uid);
 
   // deletes user from the db
   const responseData = await deleteUserService(uid);
@@ -98,10 +101,10 @@ export const deleteUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    reset password for the current user
-// @route   POST /api/users/:id/forgot-password
+// @route   POST /api/users/:uid/forgot-password
 // @access  Public
 export const resetPassword = asyncHandler(async (req, res) => {
-  const paramId = parseInt(req.params.id);
+  const paramId = parseInt(req.params.uid);
 
   const { uid, email } = req.userInfo;
 

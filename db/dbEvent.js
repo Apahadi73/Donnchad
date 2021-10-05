@@ -3,8 +3,8 @@ import db from "./db.js";
 
 const DBEvent = {
   // gets required user from the db
-  getEvent: async (uid) => {
-    const event = await db("events").where({ uid: uid }).select();
+  getEvent: async (eid) => {
+    const event = await db("events").where({ eid: eid }).select();
     return event;
   },
 
@@ -27,7 +27,7 @@ const DBEvent = {
       endDate,
       host,
       type,
-      uid: 12,
+      eid: 12,
     };
 
     return data;
@@ -43,9 +43,9 @@ const DBEvent = {
     endDate,
     host,
     type,
-    uid,
+    eid,
   }) => {
-    const event = await db("events").where({ uid: uid }).update({
+    const event = await db("events").where({ eid: eid }).update({
       name,
       description,
       location,

@@ -40,11 +40,11 @@ router.route("/login").post(
 
 // for testing purpose
 router.route("/").get(getUsers);
-router.route("/:id").get(getUserById);
-router.route("/:id").put(updateUser);
-router.route("/:id").delete(deleteUser);
+router.route("/:uid").get(getUserById);
+router.route("/:uid").put(updateUser);
+router.route("/:uid").delete(deleteUser);
 
 // update password route
-router.route("/:id/forgot-password").post([protect], resetPassword);
+router.route("/:uid/forgot-password").post([protect], resetPassword);
 
 export { router as userRouter };

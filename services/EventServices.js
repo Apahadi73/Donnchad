@@ -42,9 +42,9 @@ export const createEventService = async (
 export const getUsersService = async () => {};
 
 // @desc    Get a event by id from the db
-// @input:  User id - uid
+// @input:  Event id - eid
 // @return: return user in the db matching the unique user id
-export const getUserService = async (uid) => {};
+export const getUserService = async (eid) => {};
 
 export const updateEventService = async (
   name,
@@ -55,10 +55,10 @@ export const updateEventService = async (
   endDate,
   host,
   type,
-  uid
+  eid
 ) => {
   //checks whether the event exists in the database
-  const eventExists = await DBEvent.getEvent(uid);
+  const eventExists = await DBEvent.getEvent(eid);
 
   //if event does not exists
   if (!eventExists.length > 0) {
@@ -74,11 +74,11 @@ export const updateEventService = async (
     endDate,
     host,
     type,
-    uid
+    eid
   );
 
   if (responseData > 0) {
-    `Successfully deleted event ${uid}.`;
+    `Successfully deleted event ${eid}.`;
   } else {
     throw new InternalServerError(
       "Something went wrong while updating the event from the database"
@@ -87,6 +87,6 @@ export const updateEventService = async (
 };
 
 // @description: delete the event from the db
-// @input: uid - user id
+// @input: eid - event id
 // @return: response object
-export const deleteUserService = async (uid) => {};
+export const deleteUserService = async (eid) => {};

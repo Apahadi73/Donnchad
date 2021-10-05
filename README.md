@@ -15,4 +15,24 @@ This project contains the backend for our social management app (https://github.
 3. Run command "docker-compose up" to start the containers.
 4. remote api: https://donnchad-server.herokuapp.com/
 
+# Description
+
+- Users:
+
+  - Register new user: `POST /api/users/signup`
+  - Login existing user: `POST /api/users/login`
+  - Get a list of users: `GET /api/users`
+  - Get an user by id: `GET /api/users/:uid`
+  - Update user info: `PUT /api/users/:uid`
+  - Delete a user: `DELETE /api/users/:uid`
+  - Reset Password: `POST /api/users/:uid/forgot-password`
+
+- Events:
+
+  - Create a new event: `POST /api/events/`
+  - Get a list of evenets: `GET /api/events`
+  - Get an event by id: `GET /api/events/:eid`
+  - Update user info: `PUT /api/events/:eid`
+  - Delete a user: `DELETE /api/events/:eid`
+
 # Tools used: Express, Nodejs, Postgresql, Docker, and Redis
