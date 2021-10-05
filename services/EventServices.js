@@ -36,6 +36,16 @@ export const createEventService = async (
   }
 };
 
+// @desc    Get a list of events from the db
+// @input: nothing
+// @return: list of events
+export const getUsersService = async () => {};
+
+// @desc    Get a event by id from the db
+// @input:  User id - uid
+// @return: return user in the db matching the unique user id
+export const getUserService = async (uid) => {};
+
 export const updateEventService = async (
   name,
   description,
@@ -75,3 +85,8 @@ export const updateEventService = async (
     );
   }
 };
+
+// @description: delete the event from the db
+// @input: uid - user id
+// @return: response object
+export const deleteUserService = async (uid) => {};

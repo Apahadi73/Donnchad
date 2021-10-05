@@ -86,7 +86,7 @@ export const updateUser = asyncHandler(async (req, res) => {
 
 // @desc    Delete user account
 // @route   DELETE /api/users/:id
-// @access  Private
+// @access  Public
 export const deleteUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
 
