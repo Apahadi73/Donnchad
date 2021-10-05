@@ -6,18 +6,19 @@ import {
   getUserService,
   getUsersService,
   updateUserService,
-} from "../services/user_services/UserServices.js";
-import { BadRequestError } from "../types/Errors.js";
+  resetPasswordService,
+} from "../services/UserServices.js";
+import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import {
   authUserService,
   registerUserService,
-} from "../services/authentication_services/AutheticationServices.js";
+} from "../services/AutheticationServices.js";
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, phoneNumber, password } = req.body;
+  const { firstname, lastname, email, phoneNumber, password } = req.body;
 
   if (!email) {
     throw new BadRequestError("Email Missing");
@@ -29,8 +30,8 @@ export const registerUser = asyncHandler(async (req, res) => {
   }
 
   const responseData = await registerUserService({
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     email,
     phoneNumber,
     password,
@@ -67,15 +68,15 @@ export const getUserById = asyncHandler(async (req, res) => {
 // @access  Private
 export const updateUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
-  const { firstName, lastName, email, password, phoneNumber } = req.body;
+  const { firstname, lastname, email, password, phonenumber } = req.body;
 
   // updates user information in the db
   const responseData = await updateUserService(
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     email,
     password,
-    phoneNumber,
+    phonenumber,
     uid
   );
 
@@ -85,7 +86,7 @@ export const updateUser = asyncHandler(async (req, res) => {
 
 // @desc    Delete user account
 // @route   DELETE /api/users/:id
-// @access  Private
+// @access  Public
 export const deleteUser = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.id);
 
@@ -94,4 +95,25 @@ export const deleteUser = asyncHandler(async (req, res) => {
 
   // response handling
   res.status(200).json({ responseData });
+});
+
+// @desc    reset password for the current user
+// @route   POST /api/users/:id/forgot-password
+// @access  Public
+export const resetPassword = asyncHandler(async (req, res) => {
+  const paramId = parseInt(req.params.id);
+
+  const { uid, email } = req.userInfo;
+
+  if (paramId == uid) {
+    const { newpassword } = req.body;
+
+    // reset password for the current user
+    const responseData = await resetPasswordService(uid, newpassword);
+
+    // response handling
+    res.status(200).json({ responseData });
+  } else {
+    throw new NotAuthorizedError("Account not authorized to change password");
+  }
 });

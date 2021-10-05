@@ -1,10 +1,9 @@
-import pool from "../../Configs/dbConfig.js";
-import DBUser from "../../db/dbUser.js";
+import DBUser from "../db/dbUser.js";
 import {
   BadRequestError,
   InternalServerError,
   NotFoundError,
-} from "../../types/Errors.js";
+} from "../types/Errors.js";
 
 // @desc    Get a list of user from the db
 // @input: nothing
@@ -46,31 +45,31 @@ export const getUserService = async (uid) => {
 // @input: firstName, lastName, email, password, phoneNumber, uid
 // @return: response object
 export const updateUserService = async (
-  firstName,
-  lastName,
+  firstname,
+  lastname,
   email,
   password,
-  phoneNumber,
+  phonenumber,
   uid
 ) => {
   // checks whether the user exists in the db or not
-  const userExists = await DBUser.checkUserInDB(uid);
+  const userExists = await DBUser.getUser(uid);
 
   // if user does not exists in the db
-  if (!userExists) {
+  if (!userExists.length > 0) {
     throw new NotFoundError("Account does not exist.");
   }
 
   const responseData = await DBUser.updateUser({
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     email,
     password,
-    phoneNumber,
+    phonenumber,
     uid,
   });
-  if (responseData) {
-    return responseData;
+  if (responseData > 0) {
+    `Successfully deleted user ${uid}.`;
   } else {
     throw new InternalServerError(
       "Something went wrong while updating the users from the db"
@@ -83,7 +82,7 @@ export const updateUserService = async (
 // @return: response object
 export const deleteUserService = async (uid) => {
   // checks whether the user exists in the db or not
-  const userExists = await DBUser.checkUserInDB(uid);
+  const userExists = await DBUser.getUser(uid);
 
   // if user does not exists in the db
   if (!userExists) {
@@ -98,6 +97,30 @@ export const deleteUserService = async (uid) => {
   } else {
     throw new InternalServerError(
       "Something went wrong while deleting the user from the db"
+    );
+  }
+};
+
+// @description: reset current user's password
+// @input: uid - user id, email - user email
+// @return: `password changed successfully`
+export const resetPasswordService = async (uid, newpassword) => {
+  // checks whether the user exists in the db or not
+  const userExists = await DBUser.getUser(uid);
+
+  // if user does not exists in the db
+  if (!userExists) {
+    throw new BadRequestError("Account does not exist.");
+  }
+
+  // deletes user from the db
+  const responseData = await DBUser.resetPassword(uid, newpassword);
+
+  if (responseData) {
+    return `Password changed successfully for user ${uid}.`;
+  } else {
+    throw new InternalServerError(
+      "Something went wrong while reseting the user's password from the db"
     );
   }
 };
