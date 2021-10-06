@@ -6,12 +6,19 @@ dotenv.config();
 const devConfig = {
   client: "postgres",
   connection: {
-    host: "db",
-    user: "donnchad",
-    password: "password",
-    database: "donnchad",
+    host: "localhost",
+    user: "postgres",
+    password: "postgres",
+    database: "postgres",
   },
 };
+
+// const DATABASE_URL = `postgres://donnchad:password@db:5431`;
+
+// const devConfig = {
+//   client: "postgres",
+//   connection: DATABASE_URL,
+// };
 
 const proConfig = {
   client: "postgres",

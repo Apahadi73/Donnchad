@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import { eventRouter } from "./routes/eventRoutes.js";
+import { migrate } from "./scripts/migrate.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
@@ -25,14 +26,17 @@ app.use(morgan("dev"));
 app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
 
-app.get("/", (req, res) => res.send("No api service found"));
+app.get("/", async (req, res) => {
+  await migrate();
+  res.send("Welcome to the donnchad world.");
+});
 
 // middlewares
 app.use(notFound);
 app.use(errorHandler);
 
 // sets port and listener
-const PORT = process.env.PORT || 2000;
+const PORT = process.env.PORT || 5000;
 // only listen if not in test environment
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () =>

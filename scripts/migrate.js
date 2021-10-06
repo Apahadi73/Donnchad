@@ -1,5 +1,5 @@
 import db from "../db/db.js";
-(async () => {
+export const migrate = async () => {
   try {
     await db.schema.dropTableIfExists("users");
     await db.schema.withSchema("public").createTable("users", (table) => {
@@ -24,9 +24,7 @@ import db from "../db/db.js";
       password: "password",
     });
     console.log("Added dummy users!");
-    process.exit(0);
   } catch (err) {
     console.log(err);
-    process.exit(1);
   }
-})();
+};

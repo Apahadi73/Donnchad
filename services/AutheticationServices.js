@@ -6,7 +6,7 @@ import {
 import brcypt from "bcrypt";
 import { Constants } from "../utilities/Constants.js";
 import generateToken from "../utilities/generateToken.js";
-import redisClient from "../Configs/redisConfig.js";
+// import redisClient from "../Configs/redisConfig.js";
 import DBUser from "../db/dbUser.js";
 import DBAuthentication from "../db/dbAuthentication.js";
 
