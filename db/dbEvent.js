@@ -36,27 +36,22 @@ const DBEvent = {
   },
 
   // updates required event from the db
-  updateEvent: async ({
-    name,
-    description,
+  updateEvent: async (eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
-    host,
-    type,
-    eid,
-  }) => {
-    const event = await db("events").where({ eid: eid }).update({
-      name,
-      description,
-      location,
-      phone,
-      startDate,
-      endDate,
-      host,
-      type,
-    });
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host,eid) => {
+    const event = await db("events").where({ eid: eid }).update({eventname:eventname,
+      eventtype:eventtype,
+      location:location,
+      startdate:startdate,
+      enddate:enddate,
+      description:description,
+      contactnumber:contactnumber,
+      host:host,eid:eid}).returning("*");
     return event;
   },
 

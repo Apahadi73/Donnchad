@@ -57,22 +57,30 @@ export const getEventById = asyncHandler(async (req, res) => {
 
 export const updateEventController = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
-  const { name, description, location, phone, startDate, endDate, host, type } =
+  const { eventname,
+    eventtype,
+    location,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host
+   } =
     req.body;
   //Event name missing added
-  if (!name) {
+  if (!eventname) {
     throw new BadRequestError("Event Name Missing");
   }
 
   const responseData = await updateEventService(
-    name,
-    description,
+    eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
     host,
-    type,
     eid
   );
 

@@ -76,15 +76,15 @@ export const getEventByIdService = async (eid) => {
 };
 
 export const updateEventService = async (
-  name,
-  description,
-  location,
-  phone,
-  startDate,
-  endDate,
-  host,
-  type,
-  eid
+  eventname,
+    eventtype,
+    location,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host,
+    eid
 ) => {
   // checks whether the event exists in the database
   const eventExists = await DBEvent.getEvent(eid);
@@ -95,19 +95,18 @@ export const updateEventService = async (
   }
 
   const responseData = await DBEvent.updateEvent(
-    name,
-    description,
+    eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
     host,
-    type,
     eid
   );
-
-  if (responseData > 0) {
-    `Successfully deleted event ${eid}.`;
+  if (responseData) {
+    return responseData;
   } else {
     throw new InternalServerError(
       "Something went wrong while updating the event from the database"
