@@ -1,6 +1,13 @@
 // Create usersle
 DROP TABLE users;
-CREATE TABLE users (UID SERIAL PRIMARY KEY, firstName VARCHAR(50),lastName VARCHAR(50), email VARCHAR(80) NOT NULL UNIQUE, password VARCHAR(100) NOT NULL, phoneNumber VARCHAR(20));
+CREATE TABLE users (
+UID SERIAL PRIMARY KEY,
+firstName VARCHAR(50),
+lastName VARCHAR(50),
+email VARCHAR(80) NOT NULL UNIQUE,
+password VARCHAR(100) NOT NULL,
+phoneNumber VARCHAR(20)
+);
 
 // sets email as index since it satisfies unique constraints
 CREATE INDEX idx_email ON users(email);

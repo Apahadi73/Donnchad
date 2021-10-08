@@ -1,9 +1,9 @@
-FROM node:alpine
+# FROM node:alpine
 
-WORKDIR /app
-COPY package.json .
-RUN npm install --force
-COPY . .
+# WORKDIR /app
+# COPY package.json .
+# RUN npm install --force
+# COPY . .
 
-RUN npm install -g concurrently
-CMD ["concurrently","npm:start", "npm:migrate"]
+# RUN npm install -g concurrently
+# CMD ["concurrently","npm:start", "npm:migrate"]

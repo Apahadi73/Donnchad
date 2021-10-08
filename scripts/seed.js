@@ -1,6 +1,6 @@
 import db from "../db/db.js";
 
-(async () => {
+export const seed = async () => {
   try {
     await db("users").insert({
       firstname: "John",
@@ -15,9 +15,7 @@ import db from "../db/db.js";
       password: "password",
     });
     console.log("Added dummy users!");
-    process.exit(0);
   } catch (err) {
     console.log(err);
-    process.exit(1);
   }
-})();
+}

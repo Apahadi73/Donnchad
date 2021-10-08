@@ -16,7 +16,5 @@ VALUES
   (3,'Berk','Heather Mason','aliquam@tristiqueac.ca','et risus. Quisque libero lacus,','(542) 619-6844'),
   (4,'Beck','Amir Lane','ut.sem.nulla@tellus.edu','sollicitudin commodo ipsum. Suspendisse non','1-525-462-9363'),
   (5,'Helen','Preston Blake','purus.nullam.scelerisque@utnisi.org','quis massa. Mauris vestibulum, neque','1-249-454-1175');
-
-
 -- our database migration script for heroku
 -- cat db/dbSetup/userScript.sql | heroku pg:psql -a donnchad-server 
