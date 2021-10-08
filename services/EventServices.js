@@ -58,7 +58,7 @@ export const updateEventService = async (
   type,
   eid
 ) => {
-  //checks whether the event exists in the database
+  // checks whether the event exists in the database
   const eventExists = await DBEvent.getEvent(eid);
 
   //if event does not exists
@@ -66,7 +66,7 @@ export const updateEventService = async (
     throw new NotFoundError("Event does not exist.");
   }
 
-  const responseData = await DBEvent.updateEventController(
+  const responseData = await DBEvent.updateEvent(
     name,
     description,
     location,
@@ -92,11 +92,10 @@ export const updateEventService = async (
 // @return: response object
 export const deleteUserService = async (eid) => {};
 
-export const jointEventServices = async (uid) => {
+export const jointEventService = async (uid, eid) => {
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
-  const eid = req.params.eid;
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }

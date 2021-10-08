@@ -2,6 +2,7 @@ import express from "express";
 import asyncHandler from "express-async-handler";
 import {
   createEventService,
+  jointEventService,
   updateEventService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
@@ -84,15 +85,18 @@ export const deleteEvent = asyncHandler(async (req, res) => {
 
 export const jointEventController = asyncHandler(async (req, res) => {
   const { uid } = req.body;
+  console.log(uid);
   //Event name missing added
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
   const eid = req.params.eid;
+  console.log(eid);
+
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await jointEventServices(uid, eid);
+  const responseData = await jointEventService(uid, eid);
 
   res.status(201).json(responseData);
 });
