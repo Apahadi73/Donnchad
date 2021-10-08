@@ -2,6 +2,7 @@ import db from "../db/db.js";
 export const migrate = async () => {
   try {
     await db.schema.dropTableIfExists("users");
+    console.log("Table users dropped if it existed before");
     await db.schema.withSchema("public").createTable("users", (table) => {
       table.increments("uid").primary();
       table.string("firstname", 100);
