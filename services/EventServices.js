@@ -40,12 +40,36 @@ export const createEventService = async (
 // @desc    Get a list of events from the db
 // @input: nothing
 // @return: list of events
-export const getUsersService = async () => {};
+export const getEventsService = async () => {
+  const responseData = await DBEvent.getEvents();
+  if (responseData) {
+    if (responseData.length > 0) {
+      return responseData;
+    } else {
+      throw new NotFoundError("No events found!");
+    }
+  } else {
+    throw new InternalServerError(
+      "Something went wrong while fetching the events from the db"
+    );
+  }
+};
 
 // @desc    Get a event by id from the db
 // @input:  Event id - eid
 // @return: return user in the db matching the unique user id
-export const getUserService = async (eid) => {};
+export const getEventByIdService = async (eid) => {
+  if (!eid) {
+    throw new BadRequestError("Invalid Event ID");
+  }
+  const event = await DBEvent.getEvent(eid);
+
+  //if event does not exists
+  if (!event.length > 0) {
+    throw new NotFoundError("Event does not exist.");
+  }
+  return event;
+};
 
 export const updateEventService = async (
   name,

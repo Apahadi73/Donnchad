@@ -1,6 +1,8 @@
 import express from "express";
 import asyncHandler from "express-async-handler";
 import {
+  getEventByIdService,
+  getEventsService,
   createEventService,
   jointEventService,
   updateEventService,
@@ -42,7 +44,7 @@ export const getEvents = asyncHandler(async (req, res) => {
 // @access  Public
 export const getEventById = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
-  const responseData = await fetEventByIdService(eid);
+  const responseData = await getEventByIdService(eid);
   res.status(200).json({ responseData });
 });
 
@@ -85,13 +87,11 @@ export const deleteEvent = asyncHandler(async (req, res) => {
 
 export const jointEventController = asyncHandler(async (req, res) => {
   const { uid } = req.body;
-  console.log(uid);
   //Event name missing added
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
   const eid = req.params.eid;
-  console.log(eid);
 
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
