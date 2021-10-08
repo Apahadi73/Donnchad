@@ -23,10 +23,11 @@ export const seed = async () => {
       startdate: "immediately",
       enddate: "never",
       description: "Everyone has to be takla",
-      contactnumber: "ek-char-chha-dui-char-chhaina"
+      contactnumber: "ek-char-chha-dui-char-chhaina",
+      host:"1"
     });
     console.log("Added dummy events!");
-    
+
   } catch (err) {
     console.log(err);
   }

@@ -10,23 +10,30 @@ import {
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
-  const { name, description, location, phone, startDate, endDate, host, type } =
+  const { eventname,
+    eventtype,
+    location,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host } =
     req.body;
   //Event name missing added
-  if (!name) {
+  if (!eventname) {
     throw new BadRequestError("Event Name Missing");
   }
 
-  const responseData = await createEventService({
-    name,
-    description,
+  const responseData = await createEventService(
+    eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
-    host,
-    type,
-  });
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host
+  );
 
   res.status(201).json(responseData);
 });

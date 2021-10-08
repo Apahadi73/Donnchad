@@ -6,28 +6,32 @@ import {
 } from "../types/Errors.js";
 
 export const createEventService = async (
-  name,
-  description,
-  location,
-  phone,
-  startDate,
-  endDate,
-  host,
-  type
+  eventname,
+    eventtype,
+    location,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host
 ) => {
-  if (!name) {
+  if (!eventname) {
     throw new BadRequestError("Event name missing");
+  }
+ 
+  if (!host) {
+    throw new BadRequestError("Host name missing");
   }
 
   const responseData = await DBEvent.createEvent(
-    name,
-    description,
+    eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
-    host,
-    type
+    startdate,
+    enddate,
+    description,
+    contactnumber,
+    host
   );
 
   if (responseData) {

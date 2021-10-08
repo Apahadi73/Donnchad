@@ -24,7 +24,8 @@ export const migrate = async () => {
       table.string("startdate", 100);
       table.string("enddate", 100);
       table.string("description", 100);
-      table.string("contactnumber", 100).notNullable();
+      table.string("contactnumber", 100);
+      table.string("host", 100).notNullable();
 
     });
     console.log("Created events table!");
