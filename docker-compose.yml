@@ -4,11 +4,11 @@ services:
   db:
     image: "postgres"
     ports:
-      - "4321:5432"
+      - "5432:5432"
     environment:
-      POSTGRES_USER: "donnchad"
+      POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
-      POSTGRES_DATABASE: "donnchadDB"
+      POSTGRES_DATABASE: "postgres"
 
   # server:
   #   build: .

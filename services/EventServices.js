@@ -4,6 +4,7 @@ import {
   InternalServerError,
   NotFoundError,
 } from "../types/Errors.js";
+
 export const createEventService = async (
   name,
   description,
@@ -90,3 +91,20 @@ export const updateEventService = async (
 // @input: eid - event id
 // @return: response object
 export const deleteUserService = async (eid) => {};
+
+export const jointEventServices = async (uid) => {
+  if (!uid) {
+    throw new BadRequestError("User ID Missing");
+  }
+  const eid = req.params.eid;
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+  const responseData = await DBEvent.joinEvent(uid, eid);
+
+  if (responseData) {
+    return responseData;
+  } else {
+    throw new InternalServerError("Something went wrong while joining event");
+  }
+};
