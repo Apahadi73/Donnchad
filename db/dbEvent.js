@@ -34,7 +34,7 @@ const DBEvent = {
   },
 
   // updates required event from the db
-  updateEventController: async ({
+  updateEvent: async ({
     name,
     description,
     location,
