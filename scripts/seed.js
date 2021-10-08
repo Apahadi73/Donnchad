@@ -2,6 +2,7 @@ import db from "../db/db.js";
 
 export const seed = async () => {
   try {
+    // Inserting dummy on Users
     await db("users").insert({
       firstname: "John",
       lastname: "Doe",
@@ -14,7 +15,18 @@ export const seed = async () => {
       email: "jdoe2@patriots.uttyler.edu",
       password: "password",
     });
-    console.log("Added dummy users!");
+    // Inserting dummy on Events
+    await db("events").insert({
+      eventname: "Takla Party",
+      eventtype: "universal",
+      location: "everywhere",
+      startdate: "immediately",
+      enddate: "never",
+      description: "Everyone has to be takla",
+      contactnumber: "ek-char-chha-dui-char-chhaina"
+    });
+    console.log("Added dummy events!");
+    
   } catch (err) {
     console.log(err);
   }

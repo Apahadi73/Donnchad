@@ -18,7 +18,7 @@ CREATE TABLE events (
   INSERT INTO events (eid,eventtype,location,host,startdate,enddate,contactnumber,description)
 VALUES
   (1,'Party','Liberty Landing','Chhavi Subedi','10/7/2021','10/10/2021','9846049152','Chhavi sponsonser party'),
-  (2,'Marriage','Liberty Landing','Chhavi Subedi and Sanskar Aryal','10/7/2021','10/10/2021','9037367482','Happy Married Life');
+  (2,'Partty 2','Liberty Landing','Chhavi Subedi and Sanskar Aryal','10/7/2021','10/10/2021','9037367482','Happy Married Life');
   
 
   CREATE TABLE participates (
