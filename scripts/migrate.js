@@ -7,3 +7,4 @@ export const migrate = async () => {
     console.log(err);
   }
 };
+// whats up
