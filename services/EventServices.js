@@ -45,7 +45,18 @@ export const getUsersService = async () => {};
 // @desc    Get a event by id from the db
 // @input:  Event id - eid
 // @return: return user in the db matching the unique user id
-export const getUserService = async (eid) => {};
+export const getEventByIdService = async (eid) => {
+  if (!eid) {
+    throw new BadRequestError("Invalid Event ID");
+  }
+  const event = await DBEvent.getEvent(eid);
+
+  //if event does not exists
+  if (!event.length > 0) {
+    throw new NotFoundError("Event does not exist.");
+  }
+  return event;
+};
 
 export const updateEventService = async (
   name,
