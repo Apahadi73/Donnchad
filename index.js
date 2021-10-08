@@ -27,7 +27,11 @@ app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
 
 app.get("/", async (req, res) => {
-  await migrate();
+  try {
+    await migrate();
+  } catch (err) {
+    console.log(err);
+  }
   res.send("Welcome to the donnchad world.");
 });
 

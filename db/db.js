@@ -8,12 +8,12 @@ const devConfig = {
   connection: {
     host: "localhost",
     user: "postgres",
-    password: "postgres",
+    password: "password",
     database: "postgres",
   },
 };
 
-// const DATABASE_URL = `postgres://donnchad:password@db:5431`;
+// const DATABASE_URL = `postgres://postgres:password@postgres:5431`;
 
 // const devConfig = {
 //   client: "postgres",

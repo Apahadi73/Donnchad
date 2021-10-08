@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "watch":"nodemon index.js",
+    "watch": "nodemon index.js",
     "dev": "$ npm-run-all --parallel start migrate seed",
     "migrate": "node scripts/migrate.js",
     "seed": "node scripts/seed.js",
