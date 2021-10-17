@@ -8,7 +8,7 @@ import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import { eventRouter } from "./routes/eventRoutes.js";
 import { migrate } from "./scripts/migrate.js";
-import { seed } from './scripts/seed.js';
+import { seed } from "./scripts/seed.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application

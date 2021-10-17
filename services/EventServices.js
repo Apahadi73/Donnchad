@@ -1,4 +1,5 @@
 import DBEvent from "../db/dbEvent.js";
+import DBEventParticipant from "../db/dbParticipants.js";
 import {
   BadRequestError,
   InternalServerError,
@@ -7,18 +8,18 @@ import {
 
 export const createEventService = async (
   eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host
+  eventtype,
+  location,
+  startdate,
+  enddate,
+  description,
+  contactnumber,
+  host
 ) => {
   if (!eventname) {
     throw new BadRequestError("Event name missing");
   }
- 
+
   if (!host) {
     throw new BadRequestError("Host name missing");
   }
@@ -77,14 +78,14 @@ export const getEventByIdService = async (eid) => {
 
 export const updateEventService = async (
   eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host,
-    eid
+  eventtype,
+  location,
+  startdate,
+  enddate,
+  description,
+  contactnumber,
+  host,
+  eid
 ) => {
   // checks whether the event exists in the database
   const eventExists = await DBEvent.getEvent(eid);
@@ -132,5 +133,20 @@ export const jointEventService = async (uid, eid) => {
     return responseData;
   } else {
     throw new InternalServerError("Something went wrong while joining event");
+  }
+};
+
+export const seeEventParticipantsService = async (eid) => {
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+  const responseData = await DBEventParticipant.seeEventParticipants(eid);
+
+  if (responseData) {
+    return responseData;
+  } else {
+    throw new InternalServerError(
+      "Something went wrong while fetching event participants"
+    );
   }
 };

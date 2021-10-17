@@ -6,19 +6,21 @@ import {
   createEventService,
   jointEventService,
   updateEventService,
+  seeEventParticipantsService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
-  const { eventname,
+  const {
+    eventname,
     eventtype,
     location,
     startdate,
     enddate,
     description,
     contactnumber,
-    host } =
-    req.body;
+    host,
+  } = req.body;
   //Event name missing added
   if (!eventname) {
     throw new BadRequestError("Event Name Missing");
@@ -57,16 +59,16 @@ export const getEventById = asyncHandler(async (req, res) => {
 
 export const updateEventController = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
-  const { eventname,
+  const {
+    eventname,
     eventtype,
     location,
     startdate,
     enddate,
     description,
     contactnumber,
-    host
-   } =
-    req.body;
+    host,
+  } = req.body;
   //Event name missing added
   if (!eventname) {
     throw new BadRequestError("Event Name Missing");
@@ -114,4 +116,16 @@ export const jointEventController = asyncHandler(async (req, res) => {
   const responseData = await jointEventService(uid, eid);
 
   res.status(201).json(responseData);
+});
+
+export const seeEventParticipantsController = asyncHandler(async (req, res) => {
+  const eid = req.params.eid;
+  console.log(eid);
+
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+  const responseData = await seeEventParticipantsService(eid);
+
+  res.status(200).json(responseData);
 });
