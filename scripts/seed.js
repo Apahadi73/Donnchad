@@ -35,6 +35,7 @@ export const seed = async () => {
       description: "Everyone has to be takla",
       contactnumber: "ek-char-chha-dui-char-chhaina",
       host: "1",
+      cid: "1",
     });
     console.log("Added dummy events");
 
@@ -50,6 +51,10 @@ export const seed = async () => {
     });
 
     console.log("Added dummy participants for event!");
+
+    await db(tables.CHATS).insert({});
+
+    console.log("Added dummy chats!");
   } catch (err) {
     console.log(err);
   }

@@ -1,14 +1,15 @@
+import { tables } from "../types/Tables.js";
 import db from "./db.js";
 
 const DBEvent = {
   // gets required event from the db using eid
   getEvent: async (eid) => {
-    const event = await db("events").where({ eid: eid }).select();
+    const event = await db(tables.EVENTS).where({ eid: eid }).select();
     return event;
   },
   // gets events from the db
   getEvents: async () => {
-    const event = await db("events").select();
+    const event = await db(tables.EVENTS).select();
     return event;
   },
 
@@ -22,7 +23,7 @@ const DBEvent = {
     contactnumber,
     host
   ) => {
-    const event = await db("events")
+    const event = await db(tables.EVENTS)
       .insert({
         eventname: eventname,
         eventtype: eventtype,
@@ -49,7 +50,7 @@ const DBEvent = {
     host,
     eid
   ) => {
-    const event = await db("events")
+    const event = await db(tables.EVENTS)
       .where({ eid: eid })
       .update({
         eventname: eventname,
@@ -61,6 +62,7 @@ const DBEvent = {
         contactnumber: contactnumber,
         host: host,
         eid: eid,
+        cid: cid,
       })
       .returning("*");
     return event;

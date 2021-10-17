@@ -1,4 +1,7 @@
+import db from "../db/db.js";
+import { DBChats } from "../db/dbChats.js";
 import DBEvent from "../db/dbEvent.js";
+import DBEventChatRelation from "../db/dbEventChatRelation.js";
 import DBEventParticipant from "../db/dbParticipants.js";
 import {
   BadRequestError,
@@ -24,6 +27,18 @@ export const createEventService = async (
     throw new BadRequestError("Host name missing");
   }
 
+  let cid;
+  try {
+    cid = await DBChats.createChat();
+  } catch (e) {
+    console.log(e);
+    throw new InternalServerError(
+      "Something went wrong while creating the chat"
+    );
+  }
+
+  await DBEventChatRelation.addChat(eid, cid);
+
   const responseData = await DBEvent.createEvent(
     eventname,
     eventtype,
@@ -38,7 +53,9 @@ export const createEventService = async (
   if (responseData) {
     return responseData;
   } else {
-    throw new InternalServerError("Something went wrong while creating the");
+    throw new InternalServerError(
+      "Something went wrong while creating the event"
+    );
   }
 };
 
