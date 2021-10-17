@@ -16,6 +16,12 @@ export const seed = async () => {
       email: "jdoe2@patriots.uttyler.edu",
       password: "password",
     });
+    await db(tables.USERS).insert({
+      firstname: "John Jr.",
+      lastname: "Doe",
+      email: "jdoe2@patriots.uttyler.edu",
+      password: "password",
+    });
 
     console.log("Added dummy users");
 

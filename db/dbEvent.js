@@ -1,4 +1,3 @@
-import pool from "../Configs/dbConfig.js";
 import db from "./db.js";
 
 const DBEvent = {
@@ -65,16 +64,6 @@ const DBEvent = {
       })
       .returning("*");
     return event;
-  },
-
-  joinEvent: async (uid, eid) => {
-    const event = await db("events").where({ eid: eid }).update(uid, eid);
-    return `User ${uid} joined event ${eid}`;
-  },
-
-  seeEventParticipants: async (uid, eid) => {
-    const event = await db("events").where({ eid: eid }).update(uid, eid);
-    return `User ${uid} joined event ${eid}`;
   },
 };
 

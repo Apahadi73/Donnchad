@@ -103,8 +103,7 @@ export const deleteEvent = asyncHandler(async (req, res) => {
 });
 
 export const jointEventController = asyncHandler(async (req, res) => {
-  const { uid } = req.body;
-  //Event name missing added
+  const { uid, accessRole } = req.body;
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
@@ -113,14 +112,13 @@ export const jointEventController = asyncHandler(async (req, res) => {
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await jointEventService(uid, eid);
+  const responseData = await jointEventService(uid, eid, accessRole);
 
   res.status(201).json(responseData);
 });
 
 export const seeEventParticipantsController = asyncHandler(async (req, res) => {
   const eid = req.params.eid;
-  console.log(eid);
 
   if (!eid) {
     throw new BadRequestError("Event ID Missing");

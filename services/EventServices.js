@@ -120,14 +120,14 @@ export const updateEventService = async (
 // @return: response object
 export const deleteUserService = async (eid) => {};
 
-export const jointEventService = async (uid, eid) => {
+export const jointEventService = async (uid, eid, accessRole) => {
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await DBEvent.joinEvent(uid, eid);
+  const responseData = await DBEventParticipant.joinEvent(uid, eid, accessRole);
 
   if (responseData) {
     return responseData;
