@@ -55,6 +55,15 @@ if (dateTime) {
       console.log("Events data polished");
       await updateEventDB(polishedEvents);
       console.log("Crawled events inserted into DB");
+      console.log(
+        "------------------------------------------------------------------------------"
+      );
+      console.log(
+        "------------------------Worker Job Finished-----------------------------------"
+      );
+      console.log(
+        "------------------------------------------------------------------------------"
+      );
     }
   } else {
     parentPort.postMessage("Failed to crawl events from patriots engage");

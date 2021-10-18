@@ -2,6 +2,15 @@ import db from "../db/db.js";
 import { tables } from "../types/Tables.js";
 export const migrate = async () => {
   try {
+    console.log(
+      "------------------------------------------------------------------------------"
+    );
+    console.log(
+      "------------------------Bootstrapping Database--------------------------------"
+    );
+    console.log(
+      "------------------------------------------------------------------------------"
+    );
     // User Table
     await db.raw(`DROP TABLE IF EXISTS ${tables.USERS} CASCADE;`);
     console.log("Table users dropped if it existed before");
@@ -14,6 +23,7 @@ export const migrate = async () => {
         table.string("email", 100).notNullable();
         table.string("password", 100).notNullable();
         table.string("phonenumber", 100);
+        table.timestamps(true, true);
       });
     console.log("Created users relation.");
 
