@@ -1,9 +1,6 @@
 import requests
-# import the connect library from psycopg2
 from psycopg2 import connect
 from html.parser import HTMLParser
-
-
 
 event_url = "https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=2021-10-17T18%3A55%3A17-05%3A00&orderByField=endsOn&orderByDirection=ascending&status=Approved&take=15&query="
 
@@ -17,7 +14,6 @@ else:
     print("------request operation failed----------")
 
 events = []
-
 
 event_dict = {}
 
@@ -43,6 +39,7 @@ if (eventJSON["value"]) != None:
         event_dict={}
 
 print("--------event list fetched-----------")
+
 # declare connection instance
 conn = connect(
     dbname = "postgres",
@@ -64,7 +61,6 @@ for event in events:
 
 print("--------data entered in events-----------")
 conn.commit()
-
 
 # close the cursor object to avoid memory leaks
 cursor.close()
