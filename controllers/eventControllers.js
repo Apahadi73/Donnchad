@@ -45,7 +45,7 @@ export const createEventController = asyncHandler(async (req, res) => {
 // @access  Public
 export const getEvents = asyncHandler(async (req, res) => {
   const responseData = await getEventsService();
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    Get a event by id
@@ -54,7 +54,7 @@ export const getEvents = asyncHandler(async (req, res) => {
 export const getEventById = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
   const responseData = await getEventByIdService(eid);
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 export const updateEventController = asyncHandler(async (req, res) => {
@@ -99,7 +99,7 @@ export const deleteEvent = asyncHandler(async (req, res) => {
   const responseData = await deleteEventService(eid);
 
   // response handling
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 export const jointEventController = asyncHandler(async (req, res) => {

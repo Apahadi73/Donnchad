@@ -54,7 +54,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @access  Public
 export const getUsers = asyncHandler(async (req, res) => {
   const responseData = await getUsersService();
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    Get an user by id
@@ -63,7 +63,7 @@ export const getUsers = asyncHandler(async (req, res) => {
 export const getUserById = asyncHandler(async (req, res) => {
   const uid = parseInt(req.params.uid);
   const responseData = await getUserService(uid);
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    Update user account
@@ -84,7 +84,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   );
 
   // response handling
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    Delete user account
@@ -97,7 +97,7 @@ export const deleteUser = asyncHandler(async (req, res) => {
   const responseData = await deleteUserService(uid);
 
   // response handling
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    reset password for the current user
@@ -115,7 +115,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
     const responseData = await resetPasswordService(uid, newpassword);
 
     // response handling
-    res.status(200).json({ responseData });
+    res.status(200).json(responseData);
   } else {
     throw new NotAuthorizedError("Account not authorized to change password");
   }
