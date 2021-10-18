@@ -1,4 +1,8 @@
+import db from "../db/db.js";
+import { DBChats } from "../db/dbChats.js";
 import DBEvent from "../db/dbEvent.js";
+import DBEventChatRelation from "../db/dbEventChatRelation.js";
+import DBEventParticipant from "../db/dbParticipants.js";
 import {
   BadRequestError,
   InternalServerError,
@@ -6,38 +10,58 @@ import {
 } from "../types/Errors.js";
 
 export const createEventService = async (
-  eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host
+  name,
+  hostname,
+  eventtype,
+  location,
+  starttime,
+  endtime,
+  description,
+  contactnumber,
+  imageurl
 ) => {
-  if (!eventname) {
+  if (!name) {
     throw new BadRequestError("Event name missing");
   }
- 
-  if (!host) {
+
+  if (!hostname) {
     throw new BadRequestError("Host name missing");
   }
 
-  const responseData = await DBEvent.createEvent(
-    eventname,
+  let cid;
+  try {
+    cid = await DBChats.createChat();
+  } catch (e) {
+    console.log(e);
+    throw new InternalServerError(
+      "Something went wrong while creating the chat"
+    );
+  }
+
+  const event = {
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host
-  );
+    imageurl,
+    cid,
+  };
 
-  if (responseData) {
-    return responseData;
+  const createdEvent = await DBEvent.createEvent(event);
+  if (createdEvent && createdEvent.eid && cid) {
+    await DBEventChatRelation.addChat(createdEvent.eid, cid);
+  }
+
+  if (createdEvent) {
+    return createdEvent;
   } else {
-    throw new InternalServerError("Something went wrong while creating the");
+    throw new InternalServerError(
+      "Something went wrong while creating the event"
+    );
   }
 };
 
@@ -69,7 +93,7 @@ export const getEventByIdService = async (eid) => {
   const event = await DBEvent.getEvent(eid);
 
   //if event does not exists
-  if (!event.length > 0) {
+  if (!event) {
     throw new NotFoundError("Event does not exist.");
   }
   return event;
@@ -77,14 +101,14 @@ export const getEventByIdService = async (eid) => {
 
 export const updateEventService = async (
   eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host,
-    eid
+  eventtype,
+  location,
+  startdate,
+  enddate,
+  description,
+  contactnumber,
+  host,
+  eid
 ) => {
   // checks whether the event exists in the database
   const eventExists = await DBEvent.getEvent(eid);
@@ -117,20 +141,35 @@ export const updateEventService = async (
 // @description: delete the event from the db
 // @input: eid - event id
 // @return: response object
-export const deleteUserService = async (eid) => {};
+export const deleteEvent = async (eid) => {};
 
-export const jointEventService = async (uid, eid) => {
+export const jointEventService = async (uid, eid, accessRole) => {
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await DBEvent.joinEvent(uid, eid);
+  const responseData = await DBEventParticipant.joinEvent(uid, eid, accessRole);
 
   if (responseData) {
     return responseData;
   } else {
     throw new InternalServerError("Something went wrong while joining event");
+  }
+};
+
+export const seeEventParticipantsService = async (eid) => {
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+  const responseData = await DBEventParticipant.seeEventParticipants(eid);
+
+  if (responseData) {
+    return responseData;
+  } else {
+    throw new InternalServerError(
+      "Something went wrong while fetching event participants"
+    );
   }
 };
