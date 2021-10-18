@@ -42,9 +42,20 @@ if (dateTime) {
     return events;
   };
 
+  // updates event db with the latest scraped data
   const updateEventDB = async (events) => {
     for (let event of events) {
-      await DBEvent.createEvent(event);
+      const eventExists = await DBEvent.checkEvent(
+        event.name,
+        event.hostname,
+        event.starttime,
+        event.endtime
+      );
+
+      // only add newly added events
+      if (!eventExists) {
+        await DBEvent.createEvent(event);
+      }
     }
   };
 

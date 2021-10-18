@@ -8,6 +8,14 @@ const DBEvent = {
     return event;
   },
 
+  // checks whether event exists in the events relation or not
+  checkEvent: async (name, hostname, starttime, endtime) => {
+    const event = await db(tables.EVENTS)
+      .where({ name, hostname, starttime, endtime })
+      .first();
+    return event;
+  },
+
   // gets events from the db
   getEvents: async () => {
     const event = await db(tables.EVENTS).select();

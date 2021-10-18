@@ -57,7 +57,7 @@ if (process.env.NODE_ENV !== "test") {
     }`;
     await crawlEvents(scheduleTime);
 
-    const job = nodeCron.schedule("30 20 * * * *", async () => {
+    const job = nodeCron.schedule("0 12 * * *", async () => {
       await crawlEvents(scheduleTime);
     });
     job.start();
