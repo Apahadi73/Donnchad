@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 
 const crawlEvents = async () => {
-  const eventCrawler = spawn("python", ["scripts/cenv/eventCrawler.py"]);
+  const eventCrawler = spawn("node", ["scripts/eventsCrawler.js"]);
 
   eventCrawler.stdout.on("data", (data) => {
     console.log(`stdout: ${data}`);
@@ -12,7 +12,6 @@ const crawlEvents = async () => {
   });
 
   eventCrawler.on("close", (code) => {
-    console.log("event scrapping operation completed");
     console.log(`child process exited with code ${code}`);
   });
 };
