@@ -87,7 +87,7 @@ export const getEventByIdService = async (eid) => {
   const event = await DBEvent.getEvent(eid);
 
   //if event does not exists
-  if (!event.length > 0) {
+  if (!event) {
     throw new NotFoundError("Event does not exist.");
   }
   return event;

@@ -9,6 +9,7 @@ import {
   seeEventParticipantsService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
+import { EventAccessRoles } from "../types/EventAccessRoles.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
   const {
@@ -103,7 +104,8 @@ export const deleteEvent = asyncHandler(async (req, res) => {
 });
 
 export const jointEventController = asyncHandler(async (req, res) => {
-  const { uid, accessRole } = req.body;
+  const { uid } = req.body;
+  const accessRole = EventAccessRoles.READ;
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }

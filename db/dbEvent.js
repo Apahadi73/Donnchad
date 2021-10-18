@@ -5,7 +5,7 @@ import db from "./db.js";
 const DBEvent = {
   // gets required event from the db using eid
   getEvent: async (eid) => {
-    const event = await db(tables.EVENTS).where({ eid: eid }).select();
+    const event = await db(tables.EVENTS).where({ eid: eid }).first();
     return event;
   },
 
