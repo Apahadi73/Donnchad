@@ -6,7 +6,7 @@ import DBEvent from "./db/dbEvent.js";
 
 console.log("crawler worker started");
 const event_url =
-  "https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=2021-10-17T18%3A55%3A17-05%3A00&orderByField=endsOn&orderByDirection=ascending&status=Approved&take=15&query=";
+  "https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=2010-10-17T18%3A55%3A17-05%3A00&orderByField=endsOn&orderByDirection=descending&status=Approved&take=30&query=";
 
 const response = await axios.get(event_url);
 let responseData;
