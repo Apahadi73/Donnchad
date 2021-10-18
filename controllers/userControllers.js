@@ -46,7 +46,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const responseData = await authUserService({ email, password });
-  res.status(201).json({ responseData });
+  res.status(201).json(responseData);
 });
 
 // @desc    Get a list of user

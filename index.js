@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
 import morgan from "morgan";
+import nodeCron from "node-cron";
 
 // routes import
 import { userRouter } from "./routes/userRoutes.js";
@@ -29,14 +30,10 @@ app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
 
 app.get("/", async (req, res) => {
-  try {
-    // our db initialization script
-    await migrate();
-    await crawlEvents();
-    await seed();
-  } catch (err) {
-    console.log(err);
-  }
+  // try {
+  // } catch (err) {
+  //   console.log(err);
+  // }
   res.status(200).send("Welcome to the donnchad world.");
 });
 
@@ -48,9 +45,18 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 // only listen if not in test environment
 if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () =>
-    console.log(`Server is listening on port: ${process.env.PORT}!`.yellow.bold)
-  );
+  app.listen(PORT, async () => {
+    console.log(
+      `Server is listening on port: ${process.env.PORT}!`.yellow.bold
+    );
+    await migrate();
+    await seed();
+    console.log(new Date().toLocaleString());
+    const job = nodeCron.schedule("30 20 * * * *", async () => {
+      await crawlEvents();
+    });
+    job.start();
+  });
 }
 
 export default app;

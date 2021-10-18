@@ -1,5 +1,3 @@
-import pool from "../Configs/dbConfig.js";
-
 import db from "../db/db.js";
 
 const DBUser = {
