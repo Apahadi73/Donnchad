@@ -16,7 +16,6 @@ const crawlEvent = async (scheduleTime) => {
   console.log(
     "------------------------------------------------------------------------------"
   );
-  let num = 40;
 
   //Create new worker
   const worker = new Worker("./worker.js", {
