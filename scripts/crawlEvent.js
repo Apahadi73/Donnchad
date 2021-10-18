@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 let workDir = __dirname + "/eventsCrawler.js";
 
-const crawlEvent = async () => {
+const crawlEvent = async (scheduleTime) => {
   console.log(
     "------------------------------------------------------------------------------"
   );
@@ -19,7 +19,9 @@ const crawlEvent = async () => {
   let num = 40;
 
   //Create new worker
-  const worker = new Worker("./worker.js", { workerData: { num: num } });
+  const worker = new Worker("./worker.js", {
+    workerData: { scheduleTime: scheduleTime },
+  });
 
   //Listen for a message from worker
   worker.once("message", (result) => {
