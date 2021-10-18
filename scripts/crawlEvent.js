@@ -2,8 +2,6 @@ import { Worker, isMainThread, workerData, parentPort } from "worker_threads";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
-import eventsCrawler from "./eventsCrawler.js";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 let workDir = __dirname + "/eventsCrawler.js";
