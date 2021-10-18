@@ -135,7 +135,7 @@ export const updateEventService = async (
 // @description: delete the event from the db
 // @input: eid - event id
 // @return: response object
-export const deleteUserService = async (eid) => {};
+export const deleteEvent = async (eid) => {};
 
 export const jointEventService = async (uid, eid, accessRole) => {
   if (!uid) {

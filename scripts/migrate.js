@@ -23,15 +23,16 @@ export const migrate = async () => {
       .withSchema("public")
       .createTable(`${tables.EVENTS}`, (table) => {
         table.increments("eid").primary();
-        table.string("eventname", 100).notNullable();
+        table.string("name", 100).notNullable();
+        table.string("hostname", 100).notNullable();
         table.string("eventtype", 100);
         table.string("location", 100);
-        table.string("startdate", 100);
-        table.string("enddate", 100);
-        table.string("description", 100);
+        table.string("starttime", 100);
+        table.string("endtime", 100);
+        table.string("description", 10000);
         table.string("contactnumber", 100);
+        table.string("imageurl", 200);
         table.string("cid", 100);
-        table.string("host", 100).notNullable();
       });
     console.log("Created events relation.");
 

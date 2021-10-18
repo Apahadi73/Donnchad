@@ -25,32 +25,18 @@ export const seed = async () => {
 
     console.log("Added dummy users");
 
-    // Inserting dummy on Events
-    await db(tables.EVENTS).insert({
-      eventname: "Takla Party",
-      eventtype: "universal",
-      location: "everywhere",
-      startdate: "immediately",
-      enddate: "never",
-      description: "Everyone has to be takla",
-      contactnumber: "ek-char-chha-dui-char-chhaina",
-      host: "1",
-      cid: "1",
-    });
-    console.log("Added dummy events");
+    // await db(tables.PARTICIPANTS).insert({
+    //   accessrole: EventAccessRoles.HOST,
+    //   eid: "1",
+    //   uid: "1",
+    // });
+    // await db(tables.PARTICIPANTS).insert({
+    //   accessrole: EventAccessRoles.READ,
+    //   eid: "1",
+    //   uid: "2",
+    // });
 
-    await db(tables.PARTICIPANTS).insert({
-      accessrole: EventAccessRoles.HOST,
-      eid: "1",
-      uid: "1",
-    });
-    await db(tables.PARTICIPANTS).insert({
-      accessrole: EventAccessRoles.READ,
-      eid: "1",
-      uid: "2",
-    });
-
-    console.log("Added dummy participants for event!");
+    // console.log("Added dummy participants for event!");
 
     await db(tables.CHATS).insert({});
 

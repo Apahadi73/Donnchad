@@ -9,6 +9,7 @@ import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import { eventRouter } from "./routes/eventRoutes.js";
 import { migrate } from "./scripts/migrate.js";
 import { seed } from "./scripts/seed.js";
+import crawlEvents from "./scripts/crawlEvent.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
@@ -31,6 +32,7 @@ app.get("/", async (req, res) => {
   try {
     // our db initialization script
     await migrate();
+    await crawlEvents();
     await seed();
   } catch (err) {
     console.log(err);
