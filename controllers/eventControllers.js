@@ -41,7 +41,7 @@ export const createEventController = asyncHandler(async (req, res) => {
     imageurl
   );
 
-  res.status(201).json(responseData);
+  res.status(200).json(responseData);
 });
 
 // @desc    Get a list of events

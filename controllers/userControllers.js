@@ -21,7 +21,6 @@ export const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password } = req.body;
 
   if (!email) {
-    console.log("invalid email received");
     throw new BadRequestError("Email Missing");
   }
 
@@ -110,10 +109,9 @@ export const resetPassword = asyncHandler(async (req, res) => {
   const { uid, email } = req.userInfo;
 
   if (paramId == uid) {
-    const { newpassword } = req.body;
-
+    const { newPassword } = req.body;
     // reset password for the current user
-    const responseData = await resetPasswordService(uid, newpassword);
+    const responseData = await resetPasswordService(uid, newPassword);
 
     // response handling
     res.status(200).json(responseData);

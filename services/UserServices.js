@@ -104,7 +104,7 @@ export const deleteUserService = async (uid) => {
 // @description: reset current user's password
 // @input: uid - user id, email - user email
 // @return: `password changed successfully`
-export const resetPasswordService = async (uid, newpassword) => {
+export const resetPasswordService = async (uid, newPassword) => {
   // checks whether the user exists in the db or not
   const userExists = await DBUser.getUser(uid);
 
@@ -114,7 +114,7 @@ export const resetPasswordService = async (uid, newpassword) => {
   }
 
   // deletes user from the db
-  const responseData = await DBUser.resetPassword(uid, newpassword);
+  const responseData = await DBUser.resetPassword(uid, newPassword);
 
   if (responseData) {
     return `Password changed successfully for user ${uid}.`;
