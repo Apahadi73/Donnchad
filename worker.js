@@ -11,7 +11,7 @@ if (workerData.scheduleTime) {
   dateTime = workerData.scheduleTime;
 }
 if (dateTime) {
-  const event_url = `https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=${dateTime}&orderByField=endsOn&orderByDirection=descending&status=Approved&take=100&query=`;
+  const event_url = `https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=${dateTime}&orderByField=endsOn&orderByDirection=ascending&status=Approved&take=100&query=`;
 
   const response = await axios.get(event_url);
   let responseData;
