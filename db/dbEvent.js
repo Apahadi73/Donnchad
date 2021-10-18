@@ -13,29 +13,9 @@ const DBEvent = {
     return event;
   },
 
-  createEvent: async (
-    eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host
-  ) => {
-    const event = await db(tables.EVENTS)
-      .insert({
-        eventname: eventname,
-        eventtype: eventtype,
-        location: location,
-        startdate: startdate,
-        enddate: enddate,
-        description: description,
-        contactnumber: contactnumber,
-        host: host,
-      })
-      .returning("*");
-    return event;
+  createEvent: async (event) => {
+    const response = await db(tables.EVENTS).insert(event).returning("*");
+    return response;
   },
 
   // updates required event from the db

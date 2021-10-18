@@ -1,19 +1,45 @@
-import { spawn } from "child_process";
+import { Worker, isMainThread, workerData, parentPort } from "worker_threads";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-const crawlEvents = async () => {
-  const eventCrawler = spawn("node", ["scripts/eventsCrawler.js"]);
+import eventsCrawler from "./eventsCrawler.js";
 
-  eventCrawler.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+let workDir = __dirname + "/eventsCrawler.js";
+
+const crawlEvent = async () => {
+  console.log(
+    "------------------------------------------------------------------------------"
+  );
+  console.log(
+    "------------------------------------------------------------------------------"
+  );
+  console.log(
+    "------------------------------------------------------------------------------"
+  );
+  let num = 40;
+
+  //Create new worker
+  const worker = new Worker("./worker.js", { workerData: { num: num } });
+
+  //Listen for a message from worker
+  worker.once("message", (result) => {
+    console.log(result);
   });
 
-  eventCrawler.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
+  worker.on("error", (error) => {
+    console.log(error);
   });
 
-  eventCrawler.on("close", (code) => {
-    console.log(`child process exited with code ${code}`);
+  worker.on("exit", (exitCode) => {
+    console.log(
+      "------------------------crawler message---------------------------------"
+    );
+    console.log(`worker thread exited with code ${exitCode}`);
   });
+
+  console.log("Executed in the parent thread");
 };
 
-export default crawlEvents;
+export default crawlEvent;

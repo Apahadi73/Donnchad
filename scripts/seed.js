@@ -23,7 +23,7 @@ export const seed = async () => {
       password: "password",
     });
 
-    console.log("Added dummy users");
+    // console.log("Added dummy users");
 
     // await db(tables.PARTICIPANTS).insert({
     //   accessrole: EventAccessRoles.HOST,
@@ -40,7 +40,7 @@ export const seed = async () => {
 
     await db(tables.CHATS).insert({});
 
-    console.log("Added dummy chats!");
+    // console.log("Added dummy chats!");
   } catch (err) {
     console.log(err);
   }
