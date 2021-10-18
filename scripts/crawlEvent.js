@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 
 const crawlEvents = async () => {
-  const eventCrawler = spawn("python", ["scripts/eventCrawler.py"]);
+  const eventCrawler = spawn("python", ["scripts/cenv/eventCrawler.py"]);
 
   eventCrawler.stdout.on("data", (data) => {
     console.log(`stdout: ${data}`);
