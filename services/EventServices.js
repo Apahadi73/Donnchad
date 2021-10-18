@@ -10,20 +10,21 @@ import {
 } from "../types/Errors.js";
 
 export const createEventService = async (
-  eventname,
+  name,
+  hostname,
   eventtype,
   location,
-  startdate,
-  enddate,
+  starttime,
+  endtime,
   description,
   contactnumber,
-  host
+  imageurl
 ) => {
-  if (!eventname) {
+  if (!name) {
     throw new BadRequestError("Event name missing");
   }
 
-  if (!host) {
+  if (!hostname) {
     throw new BadRequestError("Host name missing");
   }
 
@@ -37,21 +38,26 @@ export const createEventService = async (
     );
   }
 
-  await DBEventChatRelation.addChat(eid, cid);
-
-  const responseData = await DBEvent.createEvent(
-    eventname,
+  const event = {
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host
-  );
+    imageurl,
+    cid,
+  };
 
-  if (responseData) {
-    return responseData;
+  const createdEvent = await DBEvent.createEvent(event);
+  if (createdEvent && createdEvent.eid && cid) {
+    await DBEventChatRelation.addChat(createdEvent.eid, cid);
+  }
+
+  if (createdEvent) {
+    return createdEvent;
   } else {
     throw new InternalServerError(
       "Something went wrong while creating the event"

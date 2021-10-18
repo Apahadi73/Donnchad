@@ -33,6 +33,7 @@ export const migrate = async () => {
         table.string("contactnumber", 100);
         table.string("imageurl", 200);
         table.integer("cid");
+        table.timestamps(true, true);
       });
     console.log("Created events relation.");
 

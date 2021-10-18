@@ -1,4 +1,3 @@
-import { check } from "express-validator";
 import { tables } from "../types/Tables.js";
 import db from "./db.js";
 

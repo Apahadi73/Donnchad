@@ -13,29 +13,32 @@ import { EventAccessRoles } from "../types/EventAccessRoles.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
   const {
-    eventname,
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host,
+    imageurl,
   } = req.body;
+
   //Event name missing added
-  if (!eventname) {
+  if (!name) {
     throw new BadRequestError("Event Name Missing");
   }
 
   const responseData = await createEventService(
-    eventname,
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host
+    imageurl
   );
 
   res.status(201).json(responseData);
