@@ -21,6 +21,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const { firstname, lastname, email, phoneNumber, password } = req.body;
 
   if (!email) {
+    console.log("invalid email received");
     throw new BadRequestError("Email Missing");
   }
 

@@ -1,24 +1,18 @@
 import supertest from "supertest";
 import faker from "faker";
-import app from "../../index.js";
+import app from "../../app.js";
 
 const request = supertest(app);
 
 describe("Tests all CRUD functions for user signup service ", () => {
   // SECTION : POST API
   it("POST /api/users/signup with missing email -> 400 ", async () => {
-    // const email = faker.internet.email().toLowerCase();
+    // we are using faker dev dependency for fake username, password, and name
     const firstName = faker.name.firstName();
     const lastName = faker.name.lastName();
-    const password = faker.internet.password();
-
-    const response = await request.post("/api/users/signup").send({
-      firstName,
-      lastName,
-      //   email,
-      password,
-    });
-    expect(response.status).toBe(400);
+    // const email = `${firstName[0]}${lastName}@patriots.uttyler.edu`;
+    const password = "password";
+    const phoneNumber = faker.phone.phoneNumber();
   });
 
   it("POST /api/users/signup with wrong email address -> 400 ", async () => {
