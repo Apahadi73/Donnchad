@@ -1,3 +1,4 @@
+import { check } from "express-validator";
 import { tables } from "../types/Tables.js";
 import db from "./db.js";
 
@@ -7,6 +8,7 @@ const DBEvent = {
     const event = await db(tables.EVENTS).where({ eid: eid }).select();
     return event;
   },
+
   // gets events from the db
   getEvents: async () => {
     const event = await db(tables.EVENTS).select();

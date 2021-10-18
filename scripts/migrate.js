@@ -32,7 +32,7 @@ export const migrate = async () => {
         table.string("description", 10000);
         table.string("contactnumber", 100);
         table.string("imageurl", 200);
-        table.string("cid", 100);
+        table.integer("cid");
       });
     console.log("Created events relation.");
 
