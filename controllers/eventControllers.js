@@ -6,36 +6,42 @@ import {
   createEventService,
   jointEventService,
   updateEventService,
+  seeEventParticipantsService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
+import { EventAccessRoles } from "../types/EventAccessRoles.js";
 
 export const createEventController = asyncHandler(async (req, res) => {
-  const { eventname,
+  const {
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host } =
-    req.body;
+    imageurl,
+  } = req.body;
+
   //Event name missing added
-  if (!eventname) {
+  if (!name) {
     throw new BadRequestError("Event Name Missing");
   }
 
   const responseData = await createEventService(
-    eventname,
+    name,
+    hostname,
     eventtype,
     location,
-    startdate,
-    enddate,
+    starttime,
+    endtime,
     description,
     contactnumber,
-    host
+    imageurl
   );
 
-  res.status(201).json(responseData);
+  res.status(200).json(responseData);
 });
 
 // @desc    Get a list of events
@@ -43,7 +49,7 @@ export const createEventController = asyncHandler(async (req, res) => {
 // @access  Public
 export const getEvents = asyncHandler(async (req, res) => {
   const responseData = await getEventsService();
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 // @desc    Get a event by id
@@ -52,21 +58,21 @@ export const getEvents = asyncHandler(async (req, res) => {
 export const getEventById = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
   const responseData = await getEventByIdService(eid);
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 export const updateEventController = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
-  const { eventname,
+  const {
+    eventname,
     eventtype,
     location,
     startdate,
     enddate,
     description,
     contactnumber,
-    host
-   } =
-    req.body;
+    host,
+  } = req.body;
   //Event name missing added
   if (!eventname) {
     throw new BadRequestError("Event Name Missing");
@@ -97,12 +103,12 @@ export const deleteEvent = asyncHandler(async (req, res) => {
   const responseData = await deleteEventService(eid);
 
   // response handling
-  res.status(200).json({ responseData });
+  res.status(200).json(responseData);
 });
 
 export const jointEventController = asyncHandler(async (req, res) => {
   const { uid } = req.body;
-  //Event name missing added
+  const accessRole = EventAccessRoles.READ;
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
@@ -111,7 +117,18 @@ export const jointEventController = asyncHandler(async (req, res) => {
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await jointEventService(uid, eid);
+  const responseData = await jointEventService(uid, eid, accessRole);
 
   res.status(201).json(responseData);
+});
+
+export const seeEventParticipantsController = asyncHandler(async (req, res) => {
+  const eid = req.params.eid;
+
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+  const responseData = await seeEventParticipantsService(eid);
+
+  res.status(200).json(responseData);
 });

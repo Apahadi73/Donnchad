@@ -1,5 +1,3 @@
-import pool from "../Configs/dbConfig.js";
-
 import db from "../db/db.js";
 
 const DBUser = {
@@ -79,9 +77,12 @@ const DBUser = {
 
   // reset current user's password from db
   resetPassword: async (uid, newpassword) => {
-    const user = await db("users").where({ uid: uid }).update({
-      password: newpassword,
-    });
+    const user = await db("users")
+      .where({ uid: uid })
+      .update({
+        password: newpassword,
+      })
+      .returning("*");
     return user;
   },
 };
