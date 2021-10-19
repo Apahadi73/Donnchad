@@ -5,8 +5,8 @@ import {
   NotFoundError,
 } from "../types/Errors.js";
 
-export const createChatService = async (message, chatID) => {
-  const responseData = await DBChat.createChat(message, chatID);
+export const createChatService = async (message, cid) => {
+  const responseData = await DBChat.createChat(message, cid);
 
   if (responseData) {
     return responseData;
@@ -25,8 +25,8 @@ export const getChatsService = async () => {
   }
 };
 
-export const deleteChatbyIDService = async (chatID) => {
-  const responseData = await DBChat.deleteChatbyID(chatID);
+export const deleteChatbyIDService = async (cid) => {
+  const responseData = await DBChat.deleteChatbyID(cid);
 
   if (responseData) {
     return responseData;

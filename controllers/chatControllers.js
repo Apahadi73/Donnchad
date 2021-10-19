@@ -14,10 +14,10 @@ export const createChatController = asyncHandler(async (req, res) => {
   if (!message) {
     throw new BadRequestError("Message Missing");
   }
-  const chatID = parseInt(req.params.eid);
+  const cid = parseInt(req.params.eid);
   const responseData = await createChatService({
     message,
-    chatID,
+    cid,
   });
 
   res.status(201).json(responseData);
@@ -29,7 +29,7 @@ export const getChatsController = asyncHandler(async (req, res) => {
 });
 
 export const deleteChatbyIDController = asyncHandler(async (req, res) => {
-  const chatID = parseInt(req.params.eid);
-  const responseData = await deleteChatbyIDService(chatID);
+  const cid = parseInt(req.params.eid);
+  const responseData = await deleteChatbyIDService(cid);
   res.status(200).json({ responseData });
 });

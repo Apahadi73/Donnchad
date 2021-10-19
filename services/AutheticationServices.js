@@ -58,12 +58,12 @@ export const registerUserService = async ({
 // @return: uid, email, token
 export const authUserService = async ({ email, password }) => {
   // checks for the user in db using its email
-  const userInfo = await DBUser.checkEmailInDB(email);
+  const userInfo = await DBAuthentication.authUser(email);
 
   // if we find valid user info
-  if (userInfo.length > 0) {
-    const uid = userInfo[0].uid;
-    const hashedPassword = userInfo[0].password;
+  if (userInfo) {
+    const uid = userInfo.uid;
+    const hashedPassword = userInfo.password;
     // checks for password match
     const passwordMatched = await brcypt.compare(password, hashedPassword);
 
@@ -78,9 +78,9 @@ export const authUserService = async ({ email, password }) => {
         token,
       };
     } else {
-      throw new BadRequestError("Invalid Password. Please try again!");
+      throw new BadRequestError("Invalid Password. Please try again.");
     }
   } else {
-    throw new NotFoundError("User not found.");
+    throw new NotFoundError("Authentication Failed. Please try again.");
   }
 };

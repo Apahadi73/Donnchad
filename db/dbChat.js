@@ -1,15 +1,11 @@
-import pool from "../Configs/dbConfig.js";
 import db from "./db.js";
 
 const DBChat = {
   // gets required chat from the db
-  createChat: async (message, chatID) => {
-    const data = {
-      message,
-      chatID,
-    };
-
-    return data;
+  createChat: async () => {
+    const newChat = await db(tables.CHATS).insert({}).returning("*");
+    const { cid } = newChat[0];
+    return cid;
   },
 
   getChats: async () => {
@@ -17,9 +13,9 @@ const DBChat = {
     return data;
   },
 
-  deleteChatbyID: async (chatID) => {
-    const data = await db("chats").where({ chatID: chatID }).delete();
-    return "Chat successfully deleted";
+  deleteChatbyID: async (cid) => {
+    const user = await db(tables.CHATS).where({ cid: cid }).del();
+    return user;
   },
 };
 export default DBChat;

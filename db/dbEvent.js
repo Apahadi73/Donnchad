@@ -1,60 +1,51 @@
-import pool from "../Configs/dbConfig.js";
+import { tables } from "../types/Tables.js";
 import db from "./db.js";
 
 const DBEvent = {
-  // gets required user from the db
+  // gets required event from the db using eid
   getEvent: async (eid) => {
-    const event = await db("events").where({ eid: eid }).select();
+    const event = await db(tables.EVENTS).where({ eid: eid }).first();
     return event;
   },
 
-  createEvent: async ({
-    name,
-    description,
-    location,
-    phone,
-    startDate,
-    endDate,
-    host,
-    type,
-  }) => {
-    const data = {
-      name,
-      description,
-      location,
-      phone,
-      startDate,
-      endDate,
-      host,
-      type,
-      eid: 12,
-    };
+  // gets events from the db
+  getEvents: async () => {
+    const event = await db(tables.EVENTS).select();
+    return event;
+  },
 
-    return data;
+  createEvent: async (event) => {
+    const response = await db(tables.EVENTS).insert(event).returning("*");
+    return response;
   },
 
   // updates required event from the db
-  updateEvent: async ({
-    name,
-    description,
+  updateEvent: async (
+    eventname,
+    eventtype,
     location,
-    phone,
-    startDate,
-    endDate,
+    startdate,
+    enddate,
+    description,
+    contactnumber,
     host,
-    type,
-    eid,
-  }) => {
-    const event = await db("events").where({ eid: eid }).update({
-      name,
-      description,
-      location,
-      phone,
-      startDate,
-      endDate,
-      host,
-      type,
-    });
+    eid
+  ) => {
+    const event = await db(tables.EVENTS)
+      .where({ eid: eid })
+      .update({
+        eventname: eventname,
+        eventtype: eventtype,
+        location: location,
+        startdate: startdate,
+        enddate: enddate,
+        description: description,
+        contactnumber: contactnumber,
+        host: host,
+        eid: eid,
+        cid: cid,
+      })
+      .returning("*");
     return event;
   },
 
