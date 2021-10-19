@@ -8,7 +8,8 @@ import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import { eventRouter } from "./routes/eventRoutes.js";
 import { migrate } from "./scripts/migrate.js";
-import { seed } from './scripts/seed';
+import { seed } from "./scripts/seed";
+import { chatRouter } from "./routes/chatRoutes.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
@@ -26,6 +27,7 @@ app.use(morgan("dev"));
 // all routes
 app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
+app.use("/api/events-chats", chatRouter);
 
 app.get("/", async (req, res) => {
   try {

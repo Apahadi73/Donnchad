@@ -64,6 +64,10 @@ const DBEvent = {
     // );
     return `User ${uid} joined event ${eid}`;
   },
+  getEvents: async () => {
+    const events = await db("events").select();
+    return events;
+  },
 };
 
 export default DBEvent;
