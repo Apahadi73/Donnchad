@@ -1,4 +1,5 @@
 import { devConfig, proConfig } from "./dbConfigs";
+import dotenv from "dotenv";
 
 class Database {
   constructor() {
@@ -8,6 +9,9 @@ class Database {
 
   // returns database connection
   getConnection() {
+    // injects environment variables
+    dotenv.config();
+
     //   connects our repo manager with the database depending on the environment
     this.connection = knex(
       process.env.NODE_ENV == "production" ? proConfig : devConfig
