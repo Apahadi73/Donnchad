@@ -29,7 +29,7 @@ app.use(morgan("dev"));
 // all routes
 app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
-app.use("/api/events-chats", chatRouter);
+app.use("/api/chats", chatRouter);
 
 app.get("/", async (req, res) => {
   res.status(200).send("Welcome to the donnchad world.");

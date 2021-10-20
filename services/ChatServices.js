@@ -5,23 +5,23 @@ import {
   NotFoundError,
 } from "../types/Errors.js";
 
-export const createChatService = async (message, cid) => {
-  const responseData = await DBChat.createChat(message, cid);
+export const createChatService = async () => {
+  const responseData = await DBChat.createChat();
 
   if (responseData) {
-    return responseData;
+    return 'Chat created successfully';
   } else {
-    throw new InternalServerError("Something went wrong while creating the");
+    throw new InternalServerError("Something went wrong while creating the chat");
   }
 };
 
-export const getChatsService = async () => {
-  const responseData = await DBChat.getChats();
+export const getChatsService = async (cid) => {
+  const responseData = await DBChat.getChats(cid);
 
   if (responseData) {
     return responseData;
   } else {
-    throw new InternalServerError("Something went wrong while creating the");
+    throw new InternalServerError("Something went wrong while creating the chat");
   }
 };
 
@@ -31,6 +31,6 @@ export const deleteChatbyIDService = async (cid) => {
   if (responseData) {
     return responseData;
   } else {
-    throw new InternalServerError("Something went wrong while creating the");
+    throw new InternalServerError("Something went wrong while creating the chat");
   }
 };

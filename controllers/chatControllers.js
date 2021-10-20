@@ -10,21 +10,13 @@ import {
 } from "../services/ChatServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 export const createChatController = asyncHandler(async (req, res) => {
-  const { message } = req.body;
-  if (!message) {
-    throw new BadRequestError("Message Missing");
-  }
-  const cid = parseInt(req.params.eid);
-  const responseData = await createChatService({
-    message,
-    cid,
-  });
-
-  res.status(201).json(responseData);
+  const response = await createChatService();
+  res.status(201).json(response);
 });
 
 export const getChatsController = asyncHandler(async (req, res) => {
-  const responseData = await getChatsService();
+  const cid = req.params.cid;
+  const responseData = await getChatsService(cid);
   res.status(200).json({ responseData });
 });
 

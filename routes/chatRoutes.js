@@ -8,7 +8,7 @@ import {
 const Router = express.Router();
 
 Router.route("/").post(createChatController);
-Router.route("/").get(getChatsController);
-Router.route("/:chatID").put(deleteChatbyIDController);
+Router.route("/:cid").get(getChatsController);
+Router.route("/:cid").delete(deleteChatbyIDController);
 
 export { Router as chatRouter };

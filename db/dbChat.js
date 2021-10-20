@@ -8,7 +8,7 @@ const DBChat = {
     return cid;
   },
 
-  getChats: async () => {
+  getChats: async (cid) => {
     const data = await db("chats").select();
     return data;
   },
