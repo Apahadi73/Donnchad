@@ -16,27 +16,27 @@ const server = http.Server(app);
 const PORT = process.env.PORT || 5000;
 // only listen if not in test environment
 server.listen(PORT, async () => {
-  console.log(
-    chalk.blue.bold(
-      `------------------------Server is listening on port: ${process.env.PORT}!--------------------`
-    )
-  );
-  await appManager.Migrate;
-  await appManager.Seed;
+	console.log(
+		chalk.blue.bold(
+			`------------------------Server is listening on port: ${process.env.PORT}!--------------------`
+		)
+	);
 
-  if (process.env.NODE_ENV !== "test") {
-    const dateTime = new Date().toLocaleString().split("/");
-    const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
-      dateTime[1]
-    }`;
+	if (process.env.NODE_ENV !== "test") {
+		await appManager.Migrate;
+		await appManager.Seed;
+		const dateTime = new Date().toLocaleString().split("/");
+		const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
+			dateTime[1]
+		}`;
 
-    await appManager.EventScrapper;
+		await appManager.EventScrapper;
 
-    // const job = nodeCron.schedule("0 12 * * *", async () => {
-    //   await crawlEvents(scheduleTime);
-    // });
-    // job.start();
-  }
+		const job = nodeCron.schedule("0 12 * * *", async () => {
+			await crawlEvents(scheduleTime);
+		});
+		job.start();
+	}
 });
 
 export default app;
