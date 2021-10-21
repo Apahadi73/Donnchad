@@ -1,8 +1,8 @@
 import Container from "./Container.js";
-import AppProvider from "./providers/AppProvider.js";
-import DatabaseProvider from "./providers/DatabaseProvider.js";
-import EventProvider from "./providers/EventProvider.js";
-import UserProvider from "./providers/UserProvider.js";
+import DatabaseProvider from "../providers/DatabaseProvider.js";
+import AppProvider from "../providers/AppProvider.js";
+import UserProvider from "../providers/UserProvider.js";
+import EventProvider from "../providers/EventProvider.js";
 
 export default function () {
   let container = new Container();
@@ -10,7 +10,6 @@ export default function () {
   AppProvider(container);
   UserProvider(container);
   EventProvider(container);
-  // new UserP
 
   // require("./providers/DatabaseProvider")(container);
   // require("./providers/AppProvider")(container);

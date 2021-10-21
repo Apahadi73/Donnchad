@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 import http from "http";
 import colors from "colors";
+import AppManager from "./Container/AppManager.js";
 
 // routes import
-import AppManager from "./AppManager.js";
 
 dotenv.config();
 

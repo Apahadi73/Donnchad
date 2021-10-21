@@ -1,4 +1,4 @@
-import UserRepo from "../db/UserRepo.js";
+import UserRepo from "../database/UserRepo.js";
 import UserRoute from "../routes/UserRoute.js";
 
 export default function (container) {

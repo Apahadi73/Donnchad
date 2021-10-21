@@ -1,4 +1,4 @@
-import EventRepo from "../db/EventRepo.js";
+import EventRepo from "../database/EventRepo.js";
 import EventRoute from "../routes/EventRoute.js";
 
 export default function (container) {

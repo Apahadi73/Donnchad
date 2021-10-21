@@ -1,4 +1,3 @@
-import DBUser from "../db/dbUser.js";
 import {
   BadRequestError,
   InternalServerError,

@@ -1,9 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
-
-// routes import
-import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
+import { errorHandler } from "../middlewares/errorMiddleware.js";
 
 class ExpressApplication {
   constructor(container) {
@@ -32,7 +30,6 @@ class ExpressApplication {
     });
 
     // middlewares
-    this.app.use(notFound);
     this.app.use(errorHandler);
 
     return this.app;

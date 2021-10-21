@@ -1,4 +1,4 @@
-import Database from "../db/Database.js";
+import Database from "../database/Database.js";
 import { Migrate } from "../scripts/migrate.js";
 import { Seed } from "../scripts/seed.js";
 
