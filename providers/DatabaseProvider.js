@@ -7,7 +7,6 @@ export default function (container) {
   // creates database service which provides database connection
   container.service("Database", () => {
     const environment = process.env.NODE_ENV;
-    console.log(environment);
     if (environment == "test") {
       return new DatabaseMock().getConnection();
     } else {

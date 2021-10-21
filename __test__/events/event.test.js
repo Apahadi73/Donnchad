@@ -6,7 +6,7 @@ const app = AppManager().App;
 const request = supertest(app);
 
 describe("Tests all CRUD functions for user signup service ", () => {
-  it("GET /api/events -> get list of events ", async () => {
+  it("GET /api/events -> get list of valid events ", async () => {
     const response = await request
       .get("/api/events/")
       .expect("Content-Type", /json/)
