@@ -1,60 +1,19 @@
-import db from "../db/db.js";
-import { DBChats } from "../db/dbChats.js";
-import DBEvent from "../db/dbEvent.js";
-import DBEventChatRelation from "../db/dbEventChatRelation.js";
-import DBEventParticipant from "../db/dbParticipants.js";
 import {
   BadRequestError,
   InternalServerError,
   NotFoundError,
 } from "../types/Errors.js";
 
-export const createEventService = async (
-  name,
-  hostname,
-  eventtype,
-  location,
-  starttime,
-  endtime,
-  description,
-  contactnumber,
-  imageurl
-) => {
-  if (!name) {
+export const createEventService = async (eventInfo, eventRepo) => {
+  if (!eventInfo.name) {
     throw new BadRequestError("Event name missing");
   }
 
-  if (!hostname) {
+  if (!eventInfo.hostname) {
     throw new BadRequestError("Host name missing");
   }
 
-  let cid;
-  try {
-    cid = await DBChats.createChat();
-  } catch (e) {
-    console.log(e);
-    throw new InternalServerError(
-      "Something went wrong while creating the chat"
-    );
-  }
-
-  const event = {
-    name,
-    hostname,
-    eventtype,
-    location,
-    starttime,
-    endtime,
-    description,
-    contactnumber,
-    imageurl,
-    cid,
-  };
-
-  const createdEvent = await DBEvent.createEvent(event);
-  if (createdEvent && createdEvent.eid && cid) {
-    await DBEventChatRelation.addChat(createdEvent.eid, cid);
-  }
+  const createdEvent = await eventRepo.createEvent(eventInfo);
 
   if (createdEvent) {
     return createdEvent;
@@ -68,14 +27,10 @@ export const createEventService = async (
 // @desc    Get a list of events from the db
 // @input: nothing
 // @return: list of events
-export const getEventsService = async () => {
-  const responseData = await DBEvent.getEvents();
+export const getEventsService = async (eventRepo) => {
+  const responseData = await eventRepo.getEvents();
   if (responseData) {
-    if (responseData.length > 0) {
-      return responseData;
-    } else {
-      throw new NotFoundError("No events found!");
-    }
+    return responseData;
   } else {
     throw new InternalServerError(
       "Something went wrong while fetching the events from the db"
@@ -86,11 +41,11 @@ export const getEventsService = async () => {
 // @desc    Get a event by id from the db
 // @input:  Event id - eid
 // @return: return user in the db matching the unique user id
-export const getEventByIdService = async (eid) => {
+export const getEventByIdService = async (eid, eventRepo) => {
   if (!eid) {
     throw new BadRequestError("Invalid Event ID");
   }
-  const event = await DBEvent.getEvent(eid);
+  const event = await eventRepo.getEventbyId(eid);
 
   //if event does not exists
   if (!event) {
@@ -99,36 +54,17 @@ export const getEventByIdService = async (eid) => {
   return event;
 };
 
-export const updateEventService = async (
-  eventname,
-  eventtype,
-  location,
-  startdate,
-  enddate,
-  description,
-  contactnumber,
-  host,
-  eid
-) => {
+export const updateEventService = async (eid, eventInfo, eventRepo) => {
   // checks whether the event exists in the database
-  const eventExists = await DBEvent.getEvent(eid);
+  const eventExists = await eventRepo.checkEventbyId(eid);
 
   //if event does not exists
-  if (!eventExists.length > 0) {
+  if (!eventExists) {
     throw new NotFoundError("Event does not exist.");
   }
 
-  const responseData = await DBEvent.updateEvent(
-    eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host,
-    eid
-  );
+  const responseData = await eventRepo.updateEvent(eid, eventInfo);
+
   if (responseData) {
     return responseData;
   } else {
@@ -141,16 +77,45 @@ export const updateEventService = async (
 // @description: delete the event from the db
 // @input: eid - event id
 // @return: response object
-export const deleteEvent = async (eid) => {};
+export const deleteEventService = async (eid, eventRepo) => {
+  if (!eid) {
+    throw new BadRequestError("Invalid Event ID");
+  }
 
-export const jointEventService = async (uid, eid, accessRole) => {
+  // checks whether the event exists in the database
+  const eventExists = await eventRepo.checkEventbyId(eid);
+
+  //if event does not exists
+  if (!eventExists) {
+    throw new NotFoundError("Event does not exist.");
+  }
+  // deletes user from the db
+  const responseData = await eventRepo.deleteUser(eid);
+
+  if (responseData) {
+    return `Successfully deleted event ${eid}`;
+  } else {
+    throw new InternalServerError(
+      "Something went wrong while deleting the event in the database"
+    );
+  }
+};
+
+export const jointEventService = async (uid, eid, accessRole, eventRepo) => {
   if (!uid) {
     throw new BadRequestError("User ID Missing");
   }
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await DBEventParticipant.joinEvent(uid, eid, accessRole);
+
+  const participantExists = await eventRepo.checkEventParticipant(uid);
+
+  if (participantExists) {
+    throw new BadRequestError("Already joined the event");
+  }
+
+  const responseData = await eventRepo.joinEvent(uid, eid, accessRole);
 
   if (responseData) {
     return responseData;
@@ -159,11 +124,11 @@ export const jointEventService = async (uid, eid, accessRole) => {
   }
 };
 
-export const seeEventParticipantsService = async (eid) => {
+export const seeEventParticipantsService = async (eid, eventRepo) => {
   if (!eid) {
     throw new BadRequestError("Event ID Missing");
   }
-  const responseData = await DBEventParticipant.seeEventParticipants(eid);
+  const responseData = await eventRepo.seeEventParticipants(eid);
 
   if (responseData) {
     return responseData;

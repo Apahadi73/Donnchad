@@ -3,14 +3,15 @@ import {
   createEventController,
   deleteEventController,
   getEventByIdController,
+  getEventsController,
   jointEventController,
   seeEventParticipantsController,
   updateEventController,
 } from "../controllers/eventControllers.js";
 
 class EventRoute {
-  constructor(userRepo) {
-    this.userRepo = userRepo;
+  constructor(eventRepo) {
+    this.eventRepo = eventRepo;
     // creates express router
     this.router = express.Router();
   }
@@ -20,25 +21,27 @@ class EventRoute {
     this.router
       .route("/")
       .post(async (req, res, next) =>
-        createEventController(req, res, next, this.userRepo)
+        createEventController(req, res, next, this.eventRepo)
       );
     this.router
       .route("/")
-      .get(async (req, res, next) => getEvents(req, res, next, this.userRepo));
+      .get(async (req, res, next) =>
+        getEventsController(req, res, next, this.eventRepo)
+      );
     this.router
       .route("/:eid")
       .get(async (req, res, next) =>
-        getEventByIdController(req, res, next, this.userRepo)
+        getEventByIdController(req, res, next, this.eventRepo)
       );
     this.router
       .route("/:eid")
       .put(async (req, res, next) =>
-        updateEventController(req, res, next, this.userRepo)
+        updateEventController(req, res, next, this.eventRepo)
       );
     this.router
       .route("/:eid")
-      .put(async (req, res, next) =>
-        deleteEventController(req, res, next, this.userRepo)
+      .delete(async (req, res, next) =>
+        deleteEventController(req, res, next, this.eventRepo)
       );
 
     //-----------------------------------Event Chat related routes-------------------------------------------
@@ -46,12 +49,12 @@ class EventRoute {
     this.router
       .route("/:eid/join")
       .post(async (req, res, next) =>
-        jointEventController(req, res, next, this.userRepo)
+        jointEventController(req, res, next, this.eventRepo)
       );
     this.router
       .route("/:eid/participants")
       .get(async (req, res, next) =>
-        seeEventParticipantsController(req, res, next, this.userRepo)
+        seeEventParticipantsController(req, res, next, this.eventRepo)
       );
     return this.router;
   }

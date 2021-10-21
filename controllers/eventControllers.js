@@ -7,128 +7,143 @@ import {
   jointEventService,
   updateEventService,
   seeEventParticipantsService,
+  deleteEventService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import { EventAccessRoles } from "../types/EventAccessRoles.js";
+import ReqBodyPolisher from "../utilities/ReqBodyPolisher.js";
 
-export const createEventController = asyncHandler(async (req, res) => {
-  const {
-    name,
-    hostname,
-    eventtype,
-    location,
-    starttime,
-    endtime,
-    description,
-    contactnumber,
-    imageurl,
-  } = req.body;
+export const createEventController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const eventInfo = ReqBodyPolisher.polishEvent(req.body);
 
-  //Event name missing added
-  if (!name) {
-    throw new BadRequestError("Event Name Missing");
+      //Event name missing added
+      if (!eventInfo.name) {
+        throw new BadRequestError("Event Name Missing");
+      }
+
+      const responseData = await createEventService(eventInfo, eventRepo);
+
+      res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
-
-  const responseData = await createEventService(
-    name,
-    hostname,
-    eventtype,
-    location,
-    starttime,
-    endtime,
-    description,
-    contactnumber,
-    imageurl
-  );
-
-  res.status(200).json(responseData);
-});
+);
 
 // @desc    Get a list of events
 // @route   GET /api/events
 // @access  Public
-export const getEventsController = asyncHandler(async (req, res) => {
-  const responseData = await getEventsService();
-  res.status(200).json(responseData);
-});
+export const getEventsController = asyncHandler(
+  async (_req, res, next, eventRepo) => {
+    try {
+      const responseData = await getEventsService(eventRepo);
+      res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 // @desc    Get a event by id
 // @route   GET /api/events/:id
 // @access  Public
-export const getEventByIdController = asyncHandler(async (req, res) => {
-  const eid = parseInt(req.params.eid);
-  const responseData = await getEventByIdService(eid);
-  res.status(200).json(responseData);
-});
-
-export const updateEventController = asyncHandler(async (req, res) => {
-  const eid = parseInt(req.params.eid);
-  const {
-    eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host,
-  } = req.body;
-  //Event name missing added
-  if (!eventname) {
-    throw new BadRequestError("Event Name Missing");
+export const getEventByIdController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const eid = parseInt(req.params.eid);
+      const responseData = await getEventByIdService(eid, eventRepo);
+      res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
+);
 
-  const responseData = await updateEventService(
-    eventname,
-    eventtype,
-    location,
-    startdate,
-    enddate,
-    description,
-    contactnumber,
-    host,
-    eid
-  );
+export const updateEventController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const eid = parseInt(req.params.eid);
+      const eventInfo = ReqBodyPolisher.polishEvent(req.body);
+      //Event id missing added
+      if (!eid) {
+        throw new BadRequestError("Event ID Missing");
+      }
 
-  res.status(201).json(responseData);
-});
+      //Event name missing added
+      if (!eventInfo.name) {
+        throw new BadRequestError("Event Name Missing");
+      }
+
+      const responseData = await updateEventService(eid, eventInfo, eventRepo);
+
+      res.status(201).json(responseData);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
 
 // @desc    Delete event
 // @route   DELETE /api/events/:id
 // @access  Public
-export const deleteEventController = asyncHandler(async (req, res) => {
-  const eid = parseInt(req.params.eid);
+export const deleteEventController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const eid = parseInt(req.params.eid);
 
-  // deletes user from the db
-  const responseData = await deleteEventService(eid);
+      // deletes user from the db
+      const responseData = await deleteEventService(eid, eventRepo);
 
-  // response handling
-  res.status(200).json(responseData);
-});
-
-export const jointEventController = asyncHandler(async (req, res) => {
-  const { uid } = req.body;
-  const accessRole = EventAccessRoles.READ;
-  if (!uid) {
-    throw new BadRequestError("User ID Missing");
+      // response handling
+      res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
-  const eid = req.params.eid;
+);
 
-  if (!eid) {
-    throw new BadRequestError("Event ID Missing");
+export const jointEventController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const { uid } = req.body;
+      const accessRole = EventAccessRoles.READ;
+      if (!uid) {
+        throw new BadRequestError("User ID Missing");
+      }
+      const eid = req.params.eid;
+
+      if (!eid) {
+        throw new BadRequestError("Event ID Missing");
+      }
+      const responseData = await jointEventService(
+        uid,
+        eid,
+        accessRole,
+        eventRepo
+      );
+
+      res.status(201).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
-  const responseData = await jointEventService(uid, eid, accessRole);
+);
 
-  res.status(201).json(responseData);
-});
+export const seeEventParticipantsController = asyncHandler(
+  async (req, res, next, eventRepo) => {
+    try {
+      const eid = req.params.eid;
 
-export const seeEventParticipantsController = asyncHandler(async (req, res) => {
-  const eid = req.params.eid;
+      if (!eid) {
+        throw new BadRequestError("Event ID Missing");
+      }
+      const responseData = await seeEventParticipantsService(eid, eventRepo);
 
-  if (!eid) {
-    throw new BadRequestError("Event ID Missing");
+      res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
-  const responseData = await seeEventParticipantsService(eid);
-
-  res.status(200).json(responseData);
-});
+);
