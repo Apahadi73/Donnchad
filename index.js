@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import http from "http";
-import colors from "colors";
 import nodeCron from "node-cron";
 import AppManager from "./Container/AppManager.js";
 import chalk from "chalk";

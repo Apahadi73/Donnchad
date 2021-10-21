@@ -4,9 +4,10 @@ This project contains the backend for our social management app (https://github.
 
 # Description
 
-- This project consists of a monolithic express server with PostgreSQL as its database server and Redis as its caching layer and frontend session manager.
-- Link to learn more about express and Nodejs (https://www.youtube.com/watch?v=Oe421EPjeBE).
-- Link to learn more about postgresql (https://www.youtube.com/watch?v=-VO7YjQeG6Y).
+-   This project consists of a monolithic express server with PostgreSQL as its database server and Redis as its caching layer and frontend session manager.
+-   Link to learn more about express and Nodejs (https://www.youtube.com/watch?v=Oe421EPjeBE).
+-   Link to learn more about postgresql (https://www.youtube.com/watch?v=-VO7YjQeG6Y).
+-   Web Socket reference link: https://cheatcode.co/tutorials/how-to-set-up-a-websocket-server-with-node-js-and-express
 
 # Setup procedue:
 
@@ -17,22 +18,22 @@ This project contains the backend for our social management app (https://github.
 
 # Description
 
-- Users:
+-   Users:
 
-  - Register new user: `POST /api/users/signup`
-  - Login existing user: `POST /api/users/login`
-  - Get a list of users: `GET /api/users`
-  - Get an user by id: `GET /api/users/:uid`
-  - Update user info: `PUT /api/users/:uid`
-  - Delete a user: `DELETE /api/users/:uid`
-  - Reset Password: `POST /api/users/:uid/forgot-password`
+    -   Register new user: `POST /api/users/signup`
+    -   Login existing user: `POST /api/users/login`
+    -   Get a list of users: `GET /api/users`
+    -   Get an user by id: `GET /api/users/:uid`
+    -   Update user info: `PUT /api/users/:uid`
+    -   Delete a user: `DELETE /api/users/:uid`
+    -   Reset Password: `POST /api/users/:uid/forgot-password`
 
-- Events:
+-   Events:
 
-  - Create a new event: `POST /api/events/`
-  - Get a list of evenets: `GET /api/events`
-  - Get an event by id: `GET /api/events/:eid`
-  - Update user info: `PUT /api/events/:eid`
-  - Delete a user: `DELETE /api/events/:eid`
+    -   Create a new event: `POST /api/events/`
+    -   Get a list of evenets: `GET /api/events`
+    -   Get an event by id: `GET /api/events/:eid`
+    -   Update user info: `PUT /api/events/:eid`
+    -   Delete a user: `DELETE /api/events/:eid`
 
 # Tools used: Express, Nodejs, Postgresql, Docker, and Redis
