@@ -76,20 +76,19 @@ export const migrate = async () => {
       .createTable(`${tables.MESSAGE}`, (table) => {
         table.increments("mid").primary();
         table
-        .integer("eid")
-        .references("eid")
-        .inTable(tables.EVENTS)
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+          .integer("eid")
+          .references("eid")
+          .inTable(tables.EVENTS)
+          .onUpdate("CASCADE")
+          .onDelete("CASCADE");
         table.string("senderid", 100);
-        table.string("receiverid", 100);
         table.string("text", 100);
         table.timestamp("createdAt").defaultTo(db.fn.now());
       });
     console.log(`Created ${tables.MESSAGE} relation.`);
 
-    await db.raw(`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid)`)
-    console.log(`index eid created for ${tables.MESSAGE}` )
+    await db.raw(`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid)`);
+    console.log(`index eid created for ${tables.MESSAGE}`);
   } catch (err) {
     console.log(err);
   }

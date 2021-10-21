@@ -7,6 +7,7 @@ This project contains the backend for our social management app (https://github.
 - This project consists of a monolithic express server with PostgreSQL as its database server and Redis as its caching layer and frontend session manager.
 - Link to learn more about express and Nodejs (https://www.youtube.com/watch?v=Oe421EPjeBE).
 - Link to learn more about postgresql (https://www.youtube.com/watch?v=-VO7YjQeG6Y).
+- Web Socket reference link: https://cheatcode.co/tutorials/how-to-set-up-a-websocket-server-with-node-js-and-express
 
 # Setup procedue:
 

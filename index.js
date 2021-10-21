@@ -13,16 +13,12 @@ import { migrate } from "./scripts/migrate.js";
 import { chatRouter } from "./routes/chatRoutes.js";
 import { seed } from "./scripts/seed.js";
 import crawlEvents from "./scripts/crawlEvent.js";
+import websocket from "./websockets/websocket.js";
+import app from "./app.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
 dotenv.config();
-
-// creates a server application
-const app = express();
-
-// json body parser middleware
-app.use(express.json());
 
 const server = http.Server(app);
 // sets port and listener
@@ -33,19 +29,26 @@ if (process.env.NODE_ENV !== "test") {
     console.log(
       `Server is listening on port: ${process.env.PORT}!`.yellow.bold
     );
-    // await migrate();
-    // await seed();
-    // const dateTime = new Date().toLocaleString().split("/");
-    // const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
-    //   dateTime[1]
-    // }`;
-    // await crawlEvents(scheduleTime);
+    await migrate();
+    await seed();
+    const dateTime = new Date().toLocaleString().split("/");
+    const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
+      dateTime[1]
+    }`;
+    await crawlEvents(scheduleTime);
 
-    // const job = nodeCron.schedule("30 20 * * * *", async () => {
-    //   await crawlEvents(scheduleTime);
-    // });
-    // job.start();
+    const job = nodeCron.schedule("30 20 * * * *", async () => {
+      await crawlEvents(scheduleTime);
+    });
+    job.start();
   });
 }
+
+// wraps our server application
+websocket(server);
+
+process.on("message", (message) => {
+  console.log(message);
+});
 
 export default server;
