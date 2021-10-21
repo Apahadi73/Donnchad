@@ -85,6 +85,14 @@ class EventRepo {
       .select();
     return event;
   }
+
+  // fetches recent 20 messages by event id
+  async getChatMessages(eid) {
+    const chats = await this.dbConnection(tables.MESSAGE)
+      .where({ eid })
+      .limit(10);
+    return chats;
+  }
 }
 
 export default EventRepo;

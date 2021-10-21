@@ -8,6 +8,7 @@ import {
   updateEventService,
   seeEventParticipantsService,
   deleteEventService,
+  getChatMessagesService,
 } from "../services/EventServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import { EventAccessRoles } from "../types/EventAccessRoles.js";
@@ -142,6 +143,18 @@ export const seeEventParticipantsController = asyncHandler(
       const responseData = await seeEventParticipantsService(eid, eventRepo);
 
       res.status(200).json(responseData);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+export const getChatsController = asyncHandler(
+  async (req, res, next, messageRepo) => {
+    try {
+      const cid = req.params.cid;
+      const responseData = await getChatMessagesService(cid, messageRepo);
+      res.status(200).json({ responseData });
     } catch (e) {
       next(e);
     }

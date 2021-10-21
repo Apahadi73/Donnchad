@@ -138,3 +138,17 @@ export const seeEventParticipantsService = async (eid, eventRepo) => {
     );
   }
 };
+
+// fetches all the messages of the event from db
+export const getChatMessagesService = async (eid, eventRepo) => {
+  if (!eid) {
+    throw new BadRequestError("No event id found. Please try again.");
+  }
+
+  const response = await eventRepo.getChatMessages(eid);
+  if (response) {
+    return response;
+  }
+
+  throw new NotFoundError("No chat history found.");
+};

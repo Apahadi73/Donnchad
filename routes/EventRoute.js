@@ -2,6 +2,7 @@ import express from "express";
 import {
   createEventController,
   deleteEventController,
+  getChatsController,
   getEventByIdController,
   getEventsController,
   jointEventController,
@@ -55,6 +56,12 @@ class EventRoute {
       .route("/:eid/participants")
       .get(async (req, res, next) =>
         seeEventParticipantsController(req, res, next, this.eventRepo)
+      );
+
+    this.router
+      .route("/:eid/chats")
+      .get(async (req, res, next) =>
+        getChatsController(req, res, next, this.eventRepo)
       );
     return this.router;
   }

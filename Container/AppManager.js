@@ -4,6 +4,7 @@ import AppProvider from "../providers/AppProvider.js";
 import UserProvider from "../providers/UserProvider.js";
 import EventProvider from "../providers/EventProvider.js";
 import ScrapperProvider from "../providers/ScrapperProvider.js";
+import MessageProvider from "../providers/MessageProvider.js";
 
 export default function () {
   let container = new Container();
@@ -12,6 +13,7 @@ export default function () {
   UserProvider(container);
   EventProvider(container);
   ScrapperProvider(container);
+  MessageProvider(container);
 
   return container;
 }
