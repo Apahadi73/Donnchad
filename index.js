@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 import http from "http";
 import colors from "colors";
+import nodeCron from "node-cron";
 import AppManager from "./Container/AppManager.js";
-
-// routes import
 
 dotenv.config();
 
@@ -19,21 +18,20 @@ server.listen(PORT, async () => {
   console.log(`Server is listening on port: ${process.env.PORT}!`.yellow.bold);
   await appManager.Migrate;
   await appManager.Seed;
-  // await migrate();
-  // await seed();
-  // if (process.env.NODE_ENV !== "test") {
-  //   const dateTime = new Date().toLocaleString().split("/");
-  //   const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
-  //     dateTime[1]
-  //   }`;
 
-  //   await crawlEvents(scheduleTime);
+  if (process.env.NODE_ENV !== "test") {
+    const dateTime = new Date().toLocaleString().split("/");
+    const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
+      dateTime[1]
+    }`;
 
-  //   const job = nodeCron.schedule("0 12 * * *", async () => {
-  //     await crawlEvents(scheduleTime);
-  //   });
-  //   job.start();
-  // }
+    await appManager.EventScrapper;
+
+    // const job = nodeCron.schedule("0 12 * * *", async () => {
+    //   await crawlEvents(scheduleTime);
+    // });
+    // job.start();
+  }
 });
 
 export default app;

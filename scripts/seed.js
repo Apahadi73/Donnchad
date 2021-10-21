@@ -22,7 +22,6 @@ export const Seed = async (dbConnection) => {
       password: "password",
     });
 
-    console.log("Added dummy users");
     console.log(
       "------------------------------------------------------------------------------"
     );

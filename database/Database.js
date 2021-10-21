@@ -17,6 +17,9 @@ class Database {
     this.connection = knex(
       process.env.NODE_ENV == "production" ? proConfig : devConfig
     );
+    console.log(
+      "----------------------- Database Connection Created---------------------------"
+    );
     return this.connection;
   }
 }
