@@ -17,6 +17,8 @@ const PORT = process.env.PORT || 5000;
 // only listen if not in test environment
 server.listen(PORT, async () => {
   console.log(`Server is listening on port: ${process.env.PORT}!`.yellow.bold);
+  await appManager.Migrate;
+  await appManager.Seed;
   // await migrate();
   // await seed();
   // if (process.env.NODE_ENV !== "test") {

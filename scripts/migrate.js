@@ -1,6 +1,5 @@
-import db from "../db/db.js";
 import { tables } from "../types/Tables.js";
-export const migrate = async () => {
+export const Migrate = async (dbConnection) => {
   try {
     console.log(
       "------------------------------------------------------------------------------"
@@ -12,9 +11,9 @@ export const migrate = async () => {
       "------------------------------------------------------------------------------"
     );
     // User Table
-    await db.raw(`DROP TABLE IF EXISTS ${tables.USERS} CASCADE;`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.USERS} CASCADE;`);
     // console.log("Table users dropped if it existed before");
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.USERS}`, (table) => {
         table.increments("uid").primary();
@@ -27,9 +26,9 @@ export const migrate = async () => {
       });
     // console.log("Created users relation.");
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.EVENTS} CASCADE;`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.EVENTS} CASCADE;`);
     // console.log("Table events dropped if it existed before");
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.EVENTS}`, (table) => {
         table.increments("eid").primary();
@@ -47,9 +46,9 @@ export const migrate = async () => {
       });
     // console.log("Created events relation.");
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.PARTICIPANTS}`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.PARTICIPANTS}`);
     // console.log(`Table ${tables.PARTICIPANTS} dropped if existed`);
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.PARTICIPANTS}`, (table) => {
         table
@@ -69,31 +68,31 @@ export const migrate = async () => {
       });
     // console.log(`Created ${tables.PARTICIPANTS} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.CHATS} CASCADE`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.CHATS} CASCADE`);
     // console.log(`Table ${tables.CHATS} dropped if existed`);
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.CHATS}`, (table) => {
         table.increments("cid").primary();
       });
     // console.log(`Created ${tables.CHATS} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`);
     // console.log(`Table ${tables.MESSAGE} dropped if existed`);
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.MESSAGE}`, (table) => {
         table.increments("mid").primary();
         table.string("senderid", 100);
         table.string("receiverid", 100);
         table.string("text", 100);
-        table.timestamp("createdAt").defaultTo(db.fn.now());
+        table.timestamp("createdAt").defaultTo(dbConnection.fn.now());
       });
     // console.log(`Created ${tables.MESSAGE} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.EVENTCHATRELATION}`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.EVENTCHATRELATION}`);
     // console.log(`Table ${tables.EVENTCHATRELATION} dropped if existed`);
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.EVENTCHATRELATION}`, (table) => {
         table
@@ -112,9 +111,9 @@ export const migrate = async () => {
       });
     // console.log(`Created ${tables.EVENTCHATRELATION} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.CHATROOM}`);
+    await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.CHATROOM}`);
     // console.log(`Table ${tables.CHATROOM} dropped if existed`);
-    await db.schema
+    await dbConnection.schema
       .withSchema("public")
       .createTable(`${tables.CHATROOM}`, (table) => {
         table
