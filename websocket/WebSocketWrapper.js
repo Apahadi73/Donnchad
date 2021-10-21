@@ -13,42 +13,40 @@ The advantage to doing this is that we can share a single HTTP server (i.e., our
 We also pass a path option to specify the path on our HTTP server where our websocket server will be accessible
  */
 export default async (expressServer) => {
-	const websocketServer = new WebSocketServer({
-		noServer: true,
-		path: "/websockets",
-	});
+  const websocketServer = new WebSocketServer({
+    noServer: true,
+    path: "/websockets",
+  });
 
-	expressServer.on("upgrade", (request, socket, head) => {
-		websocketServer.handleUpgrade(request, socket, head, (websocket) => {
-			websocketServer.emit("connection", websocket, request);
-		});
-	});
+  expressServer.on("upgrade", (request, socket, head) => {
+    websocketServer.handleUpgrade(request, socket, head, (websocket) => {
+      websocketServer.emit("connection", websocket, request);
+    });
+  });
 
-	/*
+  /*
   To clarify, the difference between the websocketConnection and 
   the connectionRequest is that the former represents the open, long-running network connection between the browser and the server, 
   while the connectionRequest represents the original request to open that connection.
   */
-	websocketServer.on(
-		"connection",
-		function connection(websocketConnection, connectionRequest) {
-			const [_path, params] = connectionRequest?.url?.split("?");
-			const connectionParams = queryString.parse(params);
+  websocketServer.on(
+    "connection",
+    function connection(websocketConnection, connectionRequest) {
+      const [_path, params] = connectionRequest?.url?.split("?");
+      const connectionParams = queryString.parse(params);
 
-			const { eid } = connectionParams;
+      const { eid } = connectionParams;
 
-			websocketConnection.on("message", async (message) => {
-				const parsedMessage = JSON.parse(message);
-				const newMessage = await addMessageToEventService(
-					parsedMessage
-				);
-				if (newMessage) {
-					console.log(newMessage);
-					websocketConnection.send(JSON.stringify(newMessage));
-				}
-			});
-		}
-	);
+      websocketConnection.on("message", async (message) => {
+        const parsedMessage = JSON.parse(message);
+        const newMessage = await addMessageToEventService(parsedMessage);
+        if (newMessage) {
+          console.log(newMessage);
+          websocketConnection.send(JSON.stringify(newMessage));
+        }
+      });
+    }
+  );
 
-	return websocketServer;
+  return websocketServer;
 };

@@ -1,13 +1,13 @@
 import express from "express";
 import {
-  createEventController,
-  deleteEvent,
-  fetchAllChatMessages,
-  getEventById,
-  getEvents,
-  jointEventController,
-  seeEventParticipantsController,
-  updateEventController,
+	createEventController,
+	deleteEvent,
+	fetchAllChatMessages,
+	getEventById,
+	getEvents,
+	jointEventController,
+	seeEventParticipantsController,
+	updateEventController,
 } from "../controllers/eventControllers.js";
 const Router = express.Router();
 

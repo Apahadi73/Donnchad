@@ -1,8 +1,3 @@
-import knex from "knex";
-import dotenv from "dotenv";
-
-dotenv.config();
-
 const devConfig = {
   client: "postgres",
   connection: {
@@ -30,5 +25,4 @@ const proConfig = {
   }, // heroku add ons
 };
 
-const db = knex(process.env.NODE_ENV == "production" ? proConfig : devConfig);
-export default db;
+export { proConfig, devConfig };

@@ -1,14 +1,23 @@
-import express from "express";
-import {
-  createChatController,
-  getChatsController,
-  deleteChatbyIDController,
-} from "../controllers/chatControllers.js";
+class ChatRoute {
+	constructor(messageRepo) {
+		this.messageRepo = messageRepo;
+		// creates express router
+		this.router = express.Router();
+	}
 
-const Router = express.Router();
+	createMessageRoutes() {
+		this.router
+			.route("/")
+			.post(async (req, res, next) =>
+				createChatController(req, res, next, this.messageRepo)
+			);
 
-Router.route("/").post(createChatController);
-Router.route("/:cid").get(getChatsController);
-Router.route("/:cid").delete(deleteChatbyIDController);
+		this.router
+			.route("/:cid")
+			.delete(async (req, res, next) =>
+				deleteChatbyIDController(req, res, next, this.messageRepo)
+			);
+	}
+}
 
-export { Router as chatRouter };
+export default ChatRoute;

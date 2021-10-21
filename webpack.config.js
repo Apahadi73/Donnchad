@@ -1,7 +1,7 @@
 module.exports = {
-  configureWebpack: {
-    resolve: {
-      mainFields: ["main", "browser"],
-    },
-  },
+	configureWebpack: {
+		resolve: {
+			mainFields: ["main", "browser"],
+		},
+	},
 };
