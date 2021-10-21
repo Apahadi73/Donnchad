@@ -37,6 +37,7 @@
     "node-cron": "^3.0.0",
     "nodemon": "^2.0.12",
     "pg": "^8.7.1",
+    "pg-mem": "^2.1.7",
     "query-string": "^7.0.1",
     "redis": "^3.1.2",
     "ts-jest": "^27.0.5",
@@ -47,7 +48,7 @@
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "faker": "^5.5.3",
-    "jest": "^27.0.5",
+    "jest": "^27.3.1",
     "supertest": "^6.1.3"
   }
 }

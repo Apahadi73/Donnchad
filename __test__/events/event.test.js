@@ -1,7 +1,8 @@
 import supertest from "supertest";
 import faker from "faker";
-import app from "../../app.js";
+import AppManager from "../../Container/AppManager.js";
 
+const app = AppManager().App;
 const request = supertest(app);
 
 describe("Tests all CRUD functions for user signup service ", () => {
