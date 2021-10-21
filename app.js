@@ -6,11 +6,12 @@ import morgan from "morgan";
 import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
 import { eventRouter } from "./routes/eventRoutes.js";
-import { chatRouter } from "./routes/chatRoutes.js";
 
 // configures environment variables
 // we use this to inject the environment variables into our application
 dotenv.config();
+
+// creates a server application
 const app = express();
 
 // json body parser middleware
@@ -22,7 +23,6 @@ app.use(morgan("dev"));
 // all routes
 app.use("/api/users", userRouter);
 app.use("/api/events", eventRouter);
-app.use("/api/chats", chatRouter);
 
 app.get("/", async (req, res) => {
   res.status(200).send("Welcome to the donnchad world.");

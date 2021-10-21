@@ -11,7 +11,7 @@ if (workerData.scheduleTime) {
   dateTime = workerData.scheduleTime;
 }
 if (dateTime) {
-  const event_url = `https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=${dateTime}&orderByField=endsOn&orderByDirection=descending&status=Approved&take=100&query=`;
+  const event_url = `https://uttyler.campuslabs.com/engage/api/discovery/event/search?endsAfter=${dateTime}&orderByField=endsOn&orderByDirection=ascending&status=Approved&take=100&query=`;
 
   const response = await axios.get(event_url);
   let responseData;
@@ -42,9 +42,20 @@ if (dateTime) {
     return events;
   };
 
+  // updates event db with the latest scraped data
   const updateEventDB = async (events) => {
     for (let event of events) {
-      await DBEvent.createEvent(event);
+      const eventExists = await DBEvent.checkEvent(
+        event.name,
+        event.hostname,
+        event.starttime,
+        event.endtime
+      );
+
+      // only add newly added events
+      if (!eventExists) {
+        await DBEvent.createEvent(event);
+      }
     }
   };
 

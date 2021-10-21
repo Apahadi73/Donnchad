@@ -16,31 +16,6 @@ const DBAuthentication = {
     return user;
   },
 
-  // // register new event
-  // createEvent: async (
-  //   name,
-  //   description,
-  //   location,
-  //   phone,
-  //   startDate,
-  //   endDate,
-  //   host,
-  //   type
-  // ) => {
-  //   await db("events").insert({
-  //     name: name,
-  //     description: description,
-  //     location: location,
-  //     phone: phone,
-  //     startDate: startDate,
-  //     endDate: endDate,
-  //     host: host,
-  //     type: type,
-  //   });
-
-  //   const event = db("events").where({ name: name }).select();
-  //   return event;
-  // },
   //  authenticates the user
   authUser: async (email) => {
     const foundUser = await db(tables.USERS).where({ email: email }).first();

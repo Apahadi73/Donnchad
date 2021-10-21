@@ -109,10 +109,9 @@ export const resetPassword = asyncHandler(async (req, res) => {
   const { uid, email } = req.userInfo;
 
   if (paramId == uid) {
-    const { newpassword } = req.body;
-
+    const { newPassword } = req.body;
     // reset password for the current user
-    const responseData = await resetPasswordService(uid, newpassword);
+    const responseData = await resetPasswordService(uid, newPassword);
 
     // response handling
     res.status(200).json(responseData);
