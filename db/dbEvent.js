@@ -56,6 +56,17 @@ const DBEvent = {
       .returning("*");
     return event;
   },
+
+  joinEvent: async (uid, eid) => {
+    // const event = await db("events").where({ eid: eid }).update(
+    //   uid,eid
+    // );
+    return `User ${uid} joined event ${eid}`;
+  },
+  getEvents: async () => {
+    const events = await db("events").select();
+    return events;
+  },
 };
 
 export default DBEvent;

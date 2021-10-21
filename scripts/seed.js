@@ -38,7 +38,7 @@ export const seed = async () => {
 
     // console.log("Added dummy participants for event!");
 
-    await db(tables.CHATS).insert({});
+    // await db(tables.CHATS).insert({});
 
     // console.log("Added dummy chats!");
   } catch (err) {

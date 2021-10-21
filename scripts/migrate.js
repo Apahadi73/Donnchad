@@ -69,69 +69,26 @@ export const migrate = async () => {
       });
     console.log(`Created ${tables.PARTICIPANTS} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.CHATS} CASCADE`);
-    console.log(`Table ${tables.CHATS} dropped if existed`);
-    await db.schema
-      .withSchema("public")
-      .createTable(`${tables.CHATS}`, (table) => {
-        table.increments("cid").primary();
-      });
-    console.log(`Created ${tables.CHATS} relation.`);
-
     await db.raw(`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`);
     console.log(`Table ${tables.MESSAGE} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.MESSAGE}`, (table) => {
         table.increments("mid").primary();
+        table
+          .integer("eid")
+          .references("eid")
+          .inTable(tables.EVENTS)
+          .onUpdate("CASCADE")
+          .onDelete("CASCADE");
         table.string("senderid", 100);
-        table.string("receiverid", 100);
         table.string("text", 100);
         table.timestamp("createdAt").defaultTo(db.fn.now());
       });
     console.log(`Created ${tables.MESSAGE} relation.`);
 
-    await db.raw(`DROP TABLE IF EXISTS ${tables.EVENTCHATRELATION}`);
-    console.log(`Table ${tables.EVENTCHATRELATION} dropped if existed`);
-    await db.schema
-      .withSchema("public")
-      .createTable(`${tables.EVENTCHATRELATION}`, (table) => {
-        table
-          .integer("cid")
-          .references("cid")
-          .inTable(`${tables.CHATS}`)
-          .onUpdate("CASCADE")
-          .onDelete("CASCADE");
-        table
-          .integer("eid")
-          .references("eid")
-          .inTable(`${tables.EVENTS}`)
-          .onUpdate("CASCADE")
-          .onDelete("CASCADE");
-        table.primary(["cid", "eid"]);
-      });
-    console.log(`Created ${tables.EVENTCHATRELATION} relation.`);
-
-    await db.raw(`DROP TABLE IF EXISTS ${tables.CHATROOM}`);
-    console.log(`Table ${tables.CHATROOM} dropped if existed`);
-    await db.schema
-      .withSchema("public")
-      .createTable(`${tables.CHATROOM}`, (table) => {
-        table
-          .integer("mid")
-          .references("mid")
-          .inTable(`${tables.MESSAGE}`)
-          .onUpdate("CASCADE")
-          .onDelete("CASCADE");
-        table
-          .integer("cid")
-          .references("cid")
-          .inTable(`${tables.CHATS}`)
-          .onUpdate("CASCADE")
-          .onDelete("CASCADE");
-        table.primary(["mid", "cid"]);
-      });
-    console.log(`Created ${tables.CHATROOM} relation.`);
+    await db.raw(`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid DESC)`);
+    console.log(`index eid created for ${tables.MESSAGE}`);
   } catch (err) {
     console.log(err);
   }

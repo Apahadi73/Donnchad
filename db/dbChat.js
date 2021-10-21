@@ -1,16 +1,21 @@
-import { tables } from "../types/Tables.js";
 import db from "./db.js";
 
-export const DBChats = {
-  // create chat object in the chats relation
+const DBChat = {
+  // gets required chat from the db
   createChat: async () => {
     const newChat = await db(tables.CHATS).insert({}).returning("*");
     const { cid } = newChat[0];
     return cid;
   },
 
-  deleteChat: async () => {
+  getChats: async (cid) => {
+    const data = await db("chats").select();
+    return data;
+  },
+
+  deleteChatbyID: async (cid) => {
     const user = await db(tables.CHATS).where({ cid: cid }).del();
     return user;
   },
 };
+export default DBChat;

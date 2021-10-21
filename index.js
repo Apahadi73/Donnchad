@@ -1,15 +1,10 @@
-import express from "express";
 import dotenv from "dotenv";
-import colors from "colors";
-import morgan from "morgan";
 import nodeCron from "node-cron";
 import crawlEvents from "./scripts/crawlEvent.js";
 import http from "http";
+import colors from "colors";
 
 // routes import
-import { userRouter } from "./routes/userRoutes.js";
-import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
-import { eventRouter } from "./routes/eventRoutes.js";
 import { migrate } from "./scripts/migrate.js";
 import { seed } from "./scripts/seed.js";
 import app from "./app.js";
@@ -41,4 +36,11 @@ server.listen(PORT, async () => {
   }
 });
 
-export default app;
+// wraps our server application
+websocket(server);
+
+process.on("message", (message) => {
+  console.log(message);
+});
+
+export default server;

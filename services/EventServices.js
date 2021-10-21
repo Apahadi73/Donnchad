@@ -1,5 +1,5 @@
 import db from "../db/db.js";
-import { DBChats } from "../db/dbChats.js";
+import DBChat from "../db/dbChat.js";
 import DBEvent from "../db/dbEvent.js";
 import DBEventChatRelation from "../db/dbEventChatRelation.js";
 import DBEventParticipant from "../db/dbParticipants.js";
@@ -30,7 +30,7 @@ export const createEventService = async (
 
   let cid;
   try {
-    cid = await DBChats.createChat();
+    cid = await DBChat.createChat();
   } catch (e) {
     console.log(e);
     throw new InternalServerError(
