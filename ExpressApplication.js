@@ -8,36 +8,35 @@ import { eventRouter } from "./routes/eventRoutes.js";
 
 class ExpressApplication {
   constructor(container) {
-    this.app = {};
+    // creates a server application
+    this.app = express();
     this.container = container;
   }
 
+  // creates and returns a new express application
   createExpressApp() {
     // injects environment variables into our application
     dotenv.config();
 
-    // creates a server application
-    this.app = express();
-
     // json body parser middleware
-    app.use(express.json());
+    this.app.use(express.json());
 
     // we use morgan to log all the incoming request
-    app.use(morgan("dev"));
+    this.app.use(morgan("dev"));
 
     // all routes
-    app.use("/api/users", this.container.UserRoute);
-    app.use("/api/events", eventRouter);
+    this.app.use("/api/users", this.container.UserRoute);
+    // this.app.use("/api/events", eventRouter);
 
-    app.get("/", async (req, res) => {
-      res.status(200).send("Welcome to the donnchad world.");
-    });
+    // this.app.get("/", async (req, res) => {
+    //   res.status(200).send("Welcome to the donnchad world.");
+    // });
 
     // middlewares
-    app.use(notFound);
-    app.use(errorHandler);
+    this.app.use(notFound);
+    this.app.use(errorHandler);
 
-    return app;
+    return this.app;
   }
 }
 

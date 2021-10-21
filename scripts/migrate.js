@@ -13,7 +13,7 @@ export const migrate = async () => {
     );
     // User Table
     await db.raw(`DROP TABLE IF EXISTS ${tables.USERS} CASCADE;`);
-    console.log("Table users dropped if it existed before");
+    // console.log("Table users dropped if it existed before");
     await db.schema
       .withSchema("public")
       .createTable(`${tables.USERS}`, (table) => {
@@ -25,10 +25,10 @@ export const migrate = async () => {
         table.string("phonenumber", 100);
         table.timestamps(true, true);
       });
-    console.log("Created users relation.");
+    // console.log("Created users relation.");
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.EVENTS} CASCADE;`);
-    console.log("Table events dropped if it existed before");
+    // console.log("Table events dropped if it existed before");
     await db.schema
       .withSchema("public")
       .createTable(`${tables.EVENTS}`, (table) => {
@@ -45,10 +45,10 @@ export const migrate = async () => {
         table.integer("cid");
         table.timestamps(true, true);
       });
-    console.log("Created events relation.");
+    // console.log("Created events relation.");
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.PARTICIPANTS}`);
-    console.log(`Table ${tables.PARTICIPANTS} dropped if existed`);
+    // console.log(`Table ${tables.PARTICIPANTS} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.PARTICIPANTS}`, (table) => {
@@ -67,19 +67,19 @@ export const migrate = async () => {
         table.string("accessrole", 100);
         table.primary(["uid", "eid"]);
       });
-    console.log(`Created ${tables.PARTICIPANTS} relation.`);
+    // console.log(`Created ${tables.PARTICIPANTS} relation.`);
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.CHATS} CASCADE`);
-    console.log(`Table ${tables.CHATS} dropped if existed`);
+    // console.log(`Table ${tables.CHATS} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.CHATS}`, (table) => {
         table.increments("cid").primary();
       });
-    console.log(`Created ${tables.CHATS} relation.`);
+    // console.log(`Created ${tables.CHATS} relation.`);
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`);
-    console.log(`Table ${tables.MESSAGE} dropped if existed`);
+    // console.log(`Table ${tables.MESSAGE} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.MESSAGE}`, (table) => {
@@ -89,10 +89,10 @@ export const migrate = async () => {
         table.string("text", 100);
         table.timestamp("createdAt").defaultTo(db.fn.now());
       });
-    console.log(`Created ${tables.MESSAGE} relation.`);
+    // console.log(`Created ${tables.MESSAGE} relation.`);
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.EVENTCHATRELATION}`);
-    console.log(`Table ${tables.EVENTCHATRELATION} dropped if existed`);
+    // console.log(`Table ${tables.EVENTCHATRELATION} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.EVENTCHATRELATION}`, (table) => {
@@ -110,10 +110,10 @@ export const migrate = async () => {
           .onDelete("CASCADE");
         table.primary(["cid", "eid"]);
       });
-    console.log(`Created ${tables.EVENTCHATRELATION} relation.`);
+    // console.log(`Created ${tables.EVENTCHATRELATION} relation.`);
 
     await db.raw(`DROP TABLE IF EXISTS ${tables.CHATROOM}`);
-    console.log(`Table ${tables.CHATROOM} dropped if existed`);
+    // console.log(`Table ${tables.CHATROOM} dropped if existed`);
     await db.schema
       .withSchema("public")
       .createTable(`${tables.CHATROOM}`, (table) => {
@@ -131,8 +131,19 @@ export const migrate = async () => {
           .onDelete("CASCADE");
         table.primary(["mid", "cid"]);
       });
-    console.log(`Created ${tables.CHATROOM} relation.`);
+
+    // console.log(`Created ${tables.CHATROOM} relation.`);
+
+    console.log(
+      "------------------------------------------------------------------------------"
+    );
+    console.log(
+      "------------------------Database Bootstrapped---------------------------------"
+    );
+    console.log(
+      "------------------------------------------------------------------------------"
+    );
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };

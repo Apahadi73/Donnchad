@@ -14,12 +14,14 @@ class UserRepo {
   // check whether user already exists in the database or not using uid
   async checkUserInDB(uid) {
     const user = await this.dbConnection("users").where({ uid: uid }).select();
-    return user;
+    return user.length > 0;
   }
 
   // register new user in the db
-  async registerUser(event) {
-    const user = await this.dbConnection("users").insert(event).returning("*");
+  async registerUser(userInfo) {
+    const user = await this.dbConnection("users")
+      .insert(userInfo)
+      .returning("*");
     return user;
   }
 
@@ -44,11 +46,12 @@ class UserRepo {
   }
 
   // updates the user info in the db
-  async updateUser(event) {
+  async updateUser(userInfo, uid) {
     const user = await this.dbConnection("users")
       .where({ uid: uid })
-      .update(event)
+      .update(userInfo)
       .returning("*");
+    console.log(user);
     return user;
   }
 
@@ -60,7 +63,7 @@ class UserRepo {
 
   // reset current user's password int the db
   async resetPassword(uid, newpassword) {
-    const user = await dbConnection("users")
+    const user = await this.dbConnection("users")
       .where({ uid: uid })
       .update({
         password: newpassword,

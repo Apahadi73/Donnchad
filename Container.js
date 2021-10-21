@@ -19,3 +19,5 @@ class Container {
     return this;
   }
 }
+
+export default Container;

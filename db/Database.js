@@ -1,5 +1,6 @@
-import { devConfig, proConfig } from "./dbConfigs";
+import { devConfig, proConfig } from "./dbConfigs.js";
 import dotenv from "dotenv";
+import knex from "knex";
 
 class Database {
   constructor() {
