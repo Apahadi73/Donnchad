@@ -4,7 +4,6 @@ import morgan from "morgan";
 
 // routes import
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
-import { eventRouter } from "./routes/eventRoutes.js";
 
 class ExpressApplication {
   constructor(container) {
@@ -26,11 +25,11 @@ class ExpressApplication {
 
     // all routes
     this.app.use("/api/users", this.container.UserRoute);
-    // this.app.use("/api/events", eventRouter);
+    this.app.use("/api/events", this.container.EventRoute);
 
-    // this.app.get("/", async (req, res) => {
-    //   res.status(200).send("Welcome to the donnchad world.");
-    // });
+    this.app.get("/", async (req, res) => {
+      res.status(200).send("Welcome to the Yapey.");
+    });
 
     // middlewares
     this.app.use(notFound);

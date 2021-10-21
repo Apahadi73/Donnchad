@@ -47,7 +47,7 @@ export const createEventController = asyncHandler(async (req, res) => {
 // @desc    Get a list of events
 // @route   GET /api/events
 // @access  Public
-export const getEvents = asyncHandler(async (req, res) => {
+export const getEventsController = asyncHandler(async (req, res) => {
   const responseData = await getEventsService();
   res.status(200).json(responseData);
 });
@@ -55,7 +55,7 @@ export const getEvents = asyncHandler(async (req, res) => {
 // @desc    Get a event by id
 // @route   GET /api/events/:id
 // @access  Public
-export const getEventById = asyncHandler(async (req, res) => {
+export const getEventByIdController = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
   const responseData = await getEventByIdService(eid);
   res.status(200).json(responseData);
@@ -96,7 +96,7 @@ export const updateEventController = asyncHandler(async (req, res) => {
 // @desc    Delete event
 // @route   DELETE /api/events/:id
 // @access  Public
-export const deleteEvent = asyncHandler(async (req, res) => {
+export const deleteEventController = asyncHandler(async (req, res) => {
   const eid = parseInt(req.params.eid);
 
   // deletes user from the db

@@ -1,3 +1,13 @@
+import express from "express";
+import {
+  createEventController,
+  deleteEventController,
+  getEventByIdController,
+  jointEventController,
+  seeEventParticipantsController,
+  updateEventController,
+} from "../controllers/eventControllers.js";
+
 class EventRoute {
   constructor(userRepo) {
     this.userRepo = userRepo;
@@ -6,6 +16,7 @@ class EventRoute {
   }
 
   createEventRoutes() {
+    //-----------------------------------Events related routes----------------------------------------------
     this.router
       .route("/")
       .post(async (req, res, next) =>
@@ -17,7 +28,7 @@ class EventRoute {
     this.router
       .route("/:eid")
       .get(async (req, res, next) =>
-        getEventById(req, res, next, this.userRepo)
+        getEventByIdController(req, res, next, this.userRepo)
       );
     this.router
       .route("/:eid")
@@ -27,8 +38,11 @@ class EventRoute {
     this.router
       .route("/:eid")
       .put(async (req, res, next) =>
-        deleteEvent(req, res, next, this.userRepo)
+        deleteEventController(req, res, next, this.userRepo)
       );
+
+    //-----------------------------------Event Chat related routes-------------------------------------------
+
     this.router
       .route("/:eid/join")
       .post(async (req, res, next) =>
