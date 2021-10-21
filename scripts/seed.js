@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { EventAccessRoles } from "../types/EventAccessRoles.js";
 import { tables } from "../types/Tables.js";
 
@@ -23,13 +24,9 @@ export const Seed = async (dbConnection) => {
     });
 
     console.log(
-      "------------------------------------------------------------------------------"
-    );
-    console.log(
-      "------------------------Dummy Seeder Data Added-------------------------------"
-    );
-    console.log(
-      "------------------------------------------------------------------------------"
+      chalk.green.bold(
+        "------------------------Dummy Seeder Data Added-------------------------------"
+      )
     );
   } catch (err) {
     console.log(err);

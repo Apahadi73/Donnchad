@@ -1,6 +1,7 @@
 import { devConfig, proConfig } from "./dbConfigs.js";
 import dotenv from "dotenv";
 import knex from "knex";
+import chalk from "chalk";
 
 class Database {
   constructor() {
@@ -18,7 +19,9 @@ class Database {
       process.env.NODE_ENV == "production" ? proConfig : devConfig
     );
     console.log(
-      "----------------------- Database Connection Created---------------------------"
+      chalk.magenta.bold(
+        "----------------------- Database Connection Created---------------------------"
+      )
     );
     return this.connection;
   }

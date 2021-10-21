@@ -1,15 +1,13 @@
+import chalk from "chalk";
 import { tables } from "../types/Tables.js";
 export const Migrate = async (dbConnection) => {
   try {
     console.log(
-      "------------------------------------------------------------------------------"
+      chalk.yellow.bold(
+        "------------------------Bootstrapping Database--------------------------------"
+      )
     );
-    console.log(
-      "------------------------Bootstrapping Database--------------------------------"
-    );
-    console.log(
-      "------------------------------------------------------------------------------"
-    );
+
     // User Table
     await dbConnection.raw(`DROP TABLE IF EXISTS ${tables.USERS} CASCADE;`);
     // console.log("Table users dropped if it existed before");
@@ -134,13 +132,9 @@ export const Migrate = async (dbConnection) => {
     // console.log(`Created ${tables.CHATROOM} relation.`);
 
     console.log(
-      "------------------------------------------------------------------------------"
-    );
-    console.log(
-      "------------------------Database Bootstrapped---------------------------------"
-    );
-    console.log(
-      "------------------------------------------------------------------------------"
+      chalk.green.bold(
+        "------------------------Database Bootstrapped---------------------------------"
+      )
     );
   } catch (err) {
     // console.log(err);

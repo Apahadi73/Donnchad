@@ -1,4 +1,5 @@
 import axios from "axios";
+import chalk from "chalk";
 import { Worker } from "worker_threads";
 
 class EventScrapper {
@@ -28,13 +29,9 @@ class EventScrapper {
 
   async spawnWorkerThread() {
     console.log(
-      "------------------------------------------------------------------------------"
-    );
-    console.log(
-      "------------------------Crawler Worker Started--------------------------------"
-    );
-    console.log(
-      "------------------------------------------------------------------------------"
+      chalk.yellow.bold(
+        "------------------------Crawler Worker Started--------------------------------"
+      )
     );
 
     //Create new worker
@@ -55,14 +52,11 @@ class EventScrapper {
 
     worker.on("exit", (exitCode) => {
       console.log(
-        "------------------------------------------------------------------------------"
+        chalk.green.bold(
+          "------------------------Worker Job Finished-----------------------------------"
+        )
       );
-      console.log(
-        "------------------------Worker Job Finished-----------------------------------"
-      );
-      console.log(
-        "------------------------------------------------------------------------------"
-      );
+
       console.log(`worker thread exited with code ${exitCode}`);
     });
   }
