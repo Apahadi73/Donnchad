@@ -7,7 +7,12 @@ export const DBMessage = {
     const newChat = await db(tables.MESSAGE)
       .insert({ eid, senderid, text })
       .returning("*");
-    const { text: mText } = newChat[0];
-    return mText;
+    return newChat[0];
+  },
+
+  // fetches recent 20 messages by event id
+  getChatMessages: async (eid) => {
+    const chats = await db(tables.MESSAGE).where({ eid }).limit(10);
+    return chats;
   },
 };

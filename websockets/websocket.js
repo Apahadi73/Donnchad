@@ -1,6 +1,6 @@
 import { WebSocketServer } from "ws";
 import queryString from "query-string";
-import { addMessageToEvent } from "../services/MessageService.js";
+import { addMessageToEventService } from "../services/MessageService.js";
 
 // sockets
 let sockets = [];
@@ -36,15 +36,13 @@ export default async (expressServer) => {
       const connectionParams = queryString.parse(params);
 
       const { eid } = connectionParams;
-      console.log({ eid });
-      let counter = 0;
 
       websocketConnection.on("message", async (message) => {
-        counter += 1;
         const parsedMessage = JSON.parse(message);
-        const newMessage = await addMessageToEvent(parsedMessage);
+        const newMessage = await addMessageToEventService(parsedMessage);
         if (newMessage) {
-          websocketConnection.send(newMessage);
+          console.log(newMessage);
+          websocketConnection.send(JSON.stringify(newMessage));
         }
       });
     }

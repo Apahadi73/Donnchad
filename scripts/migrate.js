@@ -87,7 +87,7 @@ export const migrate = async () => {
       });
     console.log(`Created ${tables.MESSAGE} relation.`);
 
-    await db.raw(`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid)`);
+    await db.raw(`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid DESC)`);
     console.log(`index eid created for ${tables.MESSAGE}`);
   } catch (err) {
     console.log(err);

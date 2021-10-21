@@ -8,6 +8,7 @@ import {
   updateEventService,
   seeEventParticipantsService,
 } from "../services/EventServices.js";
+import { getMessagesService } from "../services/MessageService.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import { EventAccessRoles } from "../types/EventAccessRoles.js";
 
@@ -130,5 +131,16 @@ export const seeEventParticipantsController = asyncHandler(async (req, res) => {
   }
   const responseData = await seeEventParticipantsService(eid);
 
+  res.status(200).json(responseData);
+});
+
+export const fetchAllChatMessages = asyncHandler(async (req, res) => {
+  const eid = req.params.eid;
+
+  if (!eid) {
+    throw new BadRequestError("Event ID Missing");
+  }
+
+  const responseData = await getMessagesService(eid);
   res.status(200).json(responseData);
 });
