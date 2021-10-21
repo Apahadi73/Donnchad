@@ -1,5 +1,5 @@
-import MessageRepo from "../database/MessageRepo";
-import ChatRoute from "../routes/chatRoutes";
+import MessageRepo from "../database/MessageRepo.js";
+import ChatRoute from "../routes/chatRoutes.js";
 
 export default function (container) {
   container.service(

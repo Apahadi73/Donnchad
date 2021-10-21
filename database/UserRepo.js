@@ -10,7 +10,7 @@ class UserRepo {
     const user = await this.dbConnection(tables.USERS)
       .where({ email: email })
       .select();
-    return user;
+    return user.length > 0;
   }
 
   // check whether user already exists in the database or not using uid

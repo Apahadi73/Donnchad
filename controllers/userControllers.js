@@ -18,44 +18,42 @@ import ReqBodyPolisher from "../utilities/ReqBodyPolisher.js";
 // @desc    Register a new user
 // @route   POST /api/users/signup
 // @access  Public
-export const registerUser = asyncHandler(async (req, res, next, userRepo) => {
-  const { firstname, lastname, email, phoneNumber, password } = req.body;
-  try {
-    if (!email) {
-      throw new BadRequestError("Email Missing");
+export const registerUserController = asyncHandler(
+  async (req, res, next, userRepo) => {
+    try {
+      const userInfo = ReqBodyPolisher.polishUser(req.body);
+      if (!userInfo.email) {
+        throw new BadRequestError("Email Missing");
+      }
+
+      const responseData = await registerUserService(userInfo, userRepo);
+
+      res.status(201).json(responseData);
+    } catch (e) {
+      next(e);
     }
-
-    const isValidCollegeEmail = checkCollegeEmail(email);
-    if (!isValidCollegeEmail) {
-      throw new BadRequestError("Invalid College Email Address!");
-    }
-
-    const responseData = await registerUserService({
-      firstname,
-      lastname,
-      email,
-      phoneNumber,
-      password,
-    });
-
-    res.status(201).json(responseData);
-  } catch (e) {
-    next(e);
   }
-});
+);
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
-export const authUser = asyncHandler(async (req, res, next, userRepo) => {
-  const { email, password } = req.body;
-  try {
-    const responseData = await authUserService(email, password, userRepo);
-    res.status(201).json(responseData);
-  } catch (e) {
-    next(e);
+export const authUserController = asyncHandler(
+  async (req, res, next, userRepo) => {
+    try {
+      const { email, password } = ReqBodyPolisher.polishUser(req.body);
+      if (!email) {
+        throw new BadRequestError("Email Missing");
+      }
+      console.log(email, password);
+
+      const responseData = await authUserService(email, password, userRepo);
+      res.status(201).json(responseData);
+    } catch (e) {
+      next(e);
+    }
   }
-});
+);
 
 // @desc    Get a list of users
 // @route   GET /api/users

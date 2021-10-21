@@ -1,9 +1,11 @@
 import express from "express";
 import { body } from "express-validator";
 import {
+  authUserController,
   deleteUser,
   getUserById,
   getUsers,
+  registerUserController,
   resetPassword,
   updateUser,
 } from "../controllers/userControllers.js";
@@ -29,7 +31,7 @@ class UserRoute {
             "Password must be between 4  to 20 character in length."
           ),
       ],
-      (req, res, next) => registerUser(req, res, next, this.userRepo)
+      (req, res, next) => registerUserController(req, res, next, this.userRepo)
     );
 
     this.router.route("/login").post(
@@ -43,7 +45,7 @@ class UserRoute {
             "Password must be between 4  to 20 character in length."
           ),
       ],
-      (req, res, next) => authUser(req, res, next, this.userRepo)
+      (req, res, next) => authUserController(req, res, next, this.userRepo)
     );
 
     this.router

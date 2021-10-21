@@ -6,41 +6,42 @@ import {
 import brcypt from "bcrypt";
 import { Constants } from "../utilities/Constants.js";
 import generateToken from "../utilities/generateToken.js";
+import { checkCollegeEmail } from "../utilities/emailValidators.js";
 // import redisClient from "../Configs/redisConfig.js";
 
 // @description: register new user
 // @input: firstName, lastName, email,  phoneNumber,  password,
 // @access  public
 // @return: uid, email, token
-export const registerUserService = async ({
-  firstname,
-  lastname,
-  email,
-  phoneNumber,
-  password,
-}) => {
+export const registerUserService = async (userInfo, userRepo) => {
+  if (!userInfo.email) {
+    throw new BadRequestError("Email Missing");
+  }
+
+  const isValidCollegeEmail = checkCollegeEmail(userInfo.email);
+  if (!isValidCollegeEmail) {
+    throw new BadRequestError("Invalid College Email Address!");
+  }
   // checks whether the user exists in the db or not
-  const user = await DBUser.checkEmailInDB(email);
-  // if user exists in the db
-  if (user.length > 0) {
+  const userExists = await userRepo.checkEmailInDB(userInfo.email);
+
+  // if userExists exists in the db
+  if (userExists) {
     throw new BadRequestError(
       "Account with this email already exists. Please try to login instead!"
     );
   }
 
-  const hashedPassword = await brcypt.hash(password, Constants.saltRounds);
-
-  // registers new user in the database
-  const responseData = await DBAuthentication.registerUser(
-    firstname,
-    lastname,
-    email,
-    hashedPassword,
-    phoneNumber
+  userInfo.password = await brcypt.hash(
+    userInfo.password,
+    Constants.saltRounds
   );
 
+  // registers new user in the database
+  const responseData = await userRepo.registerUser(userInfo);
+
   if (responseData) {
-    const { uid } = responseData[0];
+    const { uid, email } = responseData[0];
     const token = generateToken(uid, email);
     return { uid, email, token };
   } else {
@@ -54,9 +55,19 @@ export const registerUserService = async ({
 // @input: firstName, lastName, email,  phoneNumber,  password,
 // @access  public
 // @return: uid, email, token
-export const authUserService = async ({ email, password }) => {
+export const authUserService = async (email, password, userRepo) => {
+  if (!email) {
+    throw new BadRequestError("Email Missing");
+  }
+
+  const isValidCollegeEmail = checkCollegeEmail(email);
+  if (!isValidCollegeEmail) {
+    throw new BadRequestError("Invalid College Email Address!");
+  }
+
   // checks for the user in db using its email
-  const userInfo = await DBAuthentication.authUser(email);
+  // checks whether the user exists in the db or not
+  const userInfo = await userRepo.authUser(email);
 
   // if we find valid user info
   if (userInfo) {
