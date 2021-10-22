@@ -29,12 +29,10 @@ export const createEventService = async (eventInfo, eventRepo) => {
 // @return: list of events
 export const getEventsService = async (eventRepo) => {
 	const responseData = await eventRepo.getEvents();
-	if (responseData) {
+	if (responseData.length > 0) {
 		return responseData;
 	} else {
-		throw new InternalServerError(
-			"Something went wrong while fetching the events from the db"
-		);
+		throw new NotFoundError("No Events found");
 	}
 };
 
