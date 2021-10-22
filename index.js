@@ -3,6 +3,7 @@ import http from "http";
 import nodeCron from "node-cron";
 import AppManager from "./Container/AppManager.js";
 import chalk from "chalk";
+import WebSocketWrapper from "./websocket/WebSocketWrapper.js";
 
 dotenv.config();
 
@@ -36,6 +37,13 @@ server.listen(PORT, async () => {
 		});
 		job.start();
 	}
+});
+
+// wraps our server application
+WebSocketWrapper(server);
+
+process.on("message", (message) => {
+	console.log(message);
 });
 
 export default app;

@@ -41,7 +41,6 @@ export const Migrate = async (dbConnection) => {
 				table.string("description", 10000);
 				table.string("contactnumber", 100);
 				table.string("imageurl", 200);
-				table.integer("cid");
 				table.timestamps(true, true);
 			});
 		// console.log("Created events relation.");
@@ -68,9 +67,11 @@ export const Migrate = async (dbConnection) => {
 			});
 		// console.log(`Created ${tables.PARTICIPANTS} relation.`);
 
-		await db.raw(`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`);
+		await dbConnection.raw(
+			`DROP TABLE IF EXISTS ${tables.MESSAGE} CASCADE`
+		);
 		console.log(`Table ${tables.MESSAGE} dropped if existed`);
-		await db.schema
+		await dbConnection.schema
 			.withSchema("public")
 			.createTable(`${tables.MESSAGE}`, (table) => {
 				table.increments("mid").primary();
@@ -82,11 +83,11 @@ export const Migrate = async (dbConnection) => {
 					.onDelete("CASCADE");
 				table.string("senderid", 100);
 				table.string("text", 100);
-				table.timestamp("createdAt").defaultTo(db.fn.now());
+				table.timestamp("createdAt").defaultTo(dbConnection.fn.now());
 			});
 		console.log(`Created ${tables.MESSAGE} relation.`);
 
-		await db.raw(
+		await dbConnection.raw(
 			`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid DESC)`
 		);
 		// console.log(`index eid created for ${tables.MESSAGE}`);

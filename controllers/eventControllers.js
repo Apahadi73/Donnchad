@@ -10,7 +10,6 @@ import {
 	deleteEventService,
 	getChatMessagesService,
 } from "../services/EventServices.js";
-import { getMessagesService } from "../services/MessageService.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
 import { EventAccessRoles } from "../types/EventAccessRoles.js";
 import ReqBodyPolisher from "../utilities/ReqBodyPolisher.js";
