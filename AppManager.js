@@ -12,6 +12,5 @@ export default function () {
 	UserProvider(container);
 	EventProvider(container);
 	MessageProvider(container);
-
 	return container;
 }
