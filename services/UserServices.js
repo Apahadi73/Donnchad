@@ -90,27 +90,3 @@ export const deleteUserService = async (uid, userRepo) => {
 		);
 	}
 };
-
-// @description: reset current user's password
-// @input: uid - user id, email - user email
-// @return: `password changed successfully`
-export const resetPasswordService = async (uid, newPassword, userRepo) => {
-	// checks whether the user exists in the db or not
-	const userExists = await userRepo.checkUserInDB(uid);
-
-	// if user does not exists in the db
-	if (!userExists) {
-		throw new BadRequestError("Account does not exist.");
-	}
-
-	// deletes user from the db
-	const responseData = await userRepo.resetPassword(uid, newPassword);
-
-	if (responseData) {
-		return `Password changed successfully for user ${uid}.`;
-	} else {
-		throw new InternalServerError(
-			"Something went wrong while reseting the user's password from the db"
-		);
-	}
-};

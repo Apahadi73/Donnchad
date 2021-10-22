@@ -1,11 +1,9 @@
 import asyncHandler from "express-async-handler";
 
-import { checkCollegeEmail } from "../utilities/emailValidators.js";
 import {
 	deleteUserService,
 	getUsersService,
 	updateUserService,
-	resetPasswordService,
 	getUserByIdService,
 } from "../services/UserServices.js";
 import { BadRequestError, NotAuthorizedError } from "../types/Errors.js";
@@ -13,6 +11,7 @@ import {
 	authUserService,
 	forgotPasswordService,
 	registerUserService,
+	resetPasswordService,
 } from "../services/AutheticationServices.js";
 import ReqBodyPolisher from "../utilities/ReqBodyPolisher.js";
 
@@ -120,37 +119,6 @@ export const deleteUser = asyncHandler(async (req, res, next, userRepo) => {
 	}
 });
 
-// @desc    reset password for the current user
-// @route   POST /api/users/:uid/reset-password
-// @access  Public
-export const resetPasswordController = asyncHandler(
-	async (req, res, next, userRepo) => {
-		const paramId = parseInt(req.params.uid);
-
-		const { uid, email } = req.userInfo;
-		try {
-			if (paramId == uid) {
-				const { newPassword } = req.body;
-				// reset password for the current user
-				const responseData = await resetPasswordControllerService(
-					uid,
-					newPassword,
-					userRepo
-				);
-
-				// response handling
-				res.status(200).json(responseData);
-			} else {
-				throw new NotAuthorizedError(
-					"Account not authorized to change password"
-				);
-			}
-		} catch (e) {
-			next(e);
-		}
-	}
-);
-
 // @desc    handles forgot password operation
 // @route   POST /api/users/:uid/forgot-password
 // @access  Public
@@ -163,6 +131,30 @@ export const forgotPasswordController = asyncHandler(
 			}
 			const response = await forgotPasswordService(email, userRepo);
 			res.status(200).json(response);
+		} catch (e) {
+			next(e);
+		}
+	}
+);
+
+// @desc    reset password for the current user
+// @route   POST /api/users/reset-password/:"token
+// @access  Public
+export const resetPasswordController = asyncHandler(
+	async (req, res, next, userRepo) => {
+		const token = req.params.token;
+
+		try {
+			const { newPassword } = req.body;
+			// reset password for the current user
+			const responseData = await resetPasswordService(
+				token,
+				newPassword,
+				userRepo
+			);
+
+			// response handling
+			res.status(200).json(responseData);
 		} catch (e) {
 			next(e);
 		}

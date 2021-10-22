@@ -72,12 +72,12 @@ class UserRoute {
 			.delete(async (req, res, next) =>
 				deleteUser(req, res, next, this.userRepo)
 			);
+
 		this.router
-			.route("/:uid/reset-password")
+			.route("/reset-password/:token")
 			.post([protect], async (req, res, next) =>
 				resetPasswordController(req, res, next, this.userRepo)
 			);
-
 		this.router
 			.route("/forgot-password")
 			.post(async (req, res, next) =>

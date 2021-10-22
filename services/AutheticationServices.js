@@ -4,10 +4,16 @@ import {
 	InternalServerError,
 } from "../types/Errors.js";
 import brcypt from "bcrypt";
-import { Constants } from "../utilities/Constants.js";
+import {
+	appDomain,
+	Constants,
+	tokenExpirationTime,
+} from "../utilities/Constants.js";
 import generateToken from "../utilities/generateToken.js";
 import { checkCollegeEmail } from "../utilities/emailValidators.js";
+import sendEmail from "../utilities/email/sendEmail.js";
 // import redisClient from "../Configs/redisConfig.js";
+import jwt from "jsonwebtoken";
 
 // @description: register new user
 // @input: firstName, lastName, email,  phoneNumber,  password,
@@ -42,7 +48,7 @@ export const registerUserService = async (userInfo, userRepo) => {
 
 	if (responseData) {
 		const { uid, email } = responseData[0];
-		const token = generateToken(uid, email);
+		const token = generateToken(uid, email, tokenExpirationTime.SIXTY_DAYS);
 		return { uid, email, token };
 	} else {
 		throw InternalServerError(
@@ -79,7 +85,11 @@ export const authUserService = async (email, password, userRepo) => {
 		// if password matches
 		if (passwordMatched) {
 			// generates token for the frontend
-			const token = generateToken(uid, email);
+			const token = generateToken(
+				uid,
+				email,
+				tokenExpirationTime.SIXTY_DAYS
+			);
 
 			return {
 				uid,
@@ -102,6 +112,39 @@ export const forgotPasswordService = async (email, userRepo) => {
 	if (!email) {
 		throw new BadRequestError("Email Missing.");
 	}
-	const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-	return "Password reset complete";
+	const resetToken = generateToken("-1", email, tokenExpirationTime.ONE_HOUR);
+	const link = `${appDomain.url}}/api/users/forgot-password/${resetToken}`;
+	await sendEmail(
+		email,
+		"Password Reset Request",
+		{ link: link },
+		"./template/requestResetPassword.handlebars"
+	);
+	// return "Password reset complete";
+};
+
+// @description: reset current user's password
+// @input: uid - user id, email - user email
+// @return: `password changed successfully`
+export const resetPasswordService = async (token, newPassword, userRepo) => {
+	const verified = jwt.verify(token, process.env.JWT_SECRET);
+	console.log({ verified, newPassword });
+	// // checks whether the user exists in the db or not
+	// const userExists = await userRepo.checkUserInDB(uid);
+
+	// // if user does not exists in the db
+	// if (!userExists) {
+	// 	throw new BadRequestError("Account does not exist.");
+	// }
+
+	// // deletes user from the db
+	// const responseData = await userRepo.resetPassword(uid, newPassword);
+
+	if (responseData) {
+		return `Password changed successfully for user ${uid}.`;
+	} else {
+		throw new InternalServerError(
+			"Something went wrong while reseting the user's password from the db"
+		);
+	}
 };

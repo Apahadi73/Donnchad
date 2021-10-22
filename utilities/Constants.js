@@ -10,5 +10,17 @@ export const Result = {
 };
 
 export const appDomain = {
-	// console.log()
+	get url() {
+		if (process.env.NODE_ENV == "production") {
+			return "https://donnchad-server.herokuapp.com/";
+		} else {
+			return `http://localhost:${process.env.PORT}`;
+		}
+	},
+};
+
+export const tokenExpirationTime = {
+	SIXTY_DAYS: "60d",
+	ONE_WEEK: "7d",
+	ONE_HOUR: "1h",
 };
