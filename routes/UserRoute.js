@@ -75,7 +75,7 @@ class UserRoute {
 
 		this.router
 			.route("/reset-password/:token")
-			.post([protect], async (req, res, next) =>
+			.post(async (req, res, next) =>
 				resetPasswordController(req, res, next, this.userRepo)
 			);
 		this.router

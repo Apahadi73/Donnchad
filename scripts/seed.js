@@ -23,6 +23,13 @@ export const Seed = async (dbConnection) => {
 			password: "password",
 		});
 
+		await dbConnection(tables.USERS).insert({
+			firstname: "John Jr.",
+			lastname: "Doe",
+			email: "simedid556@forfity.com",
+			password: "password",
+		});
+
 		console.log(
 			chalk.green.bold(
 				"------------------------Dummy Seeder Data Added-------------------------------"

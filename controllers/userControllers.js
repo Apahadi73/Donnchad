@@ -145,11 +145,11 @@ export const resetPasswordController = asyncHandler(
 		const token = req.params.token;
 
 		try {
-			const { newPassword } = req.body;
+			const { password } = req.body;
 			// reset password for the current user
 			const responseData = await resetPasswordService(
 				token,
-				newPassword,
+				password,
 				userRepo
 			);
 

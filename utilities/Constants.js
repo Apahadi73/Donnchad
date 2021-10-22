@@ -14,7 +14,7 @@ export const appDomain = {
 		if (process.env.NODE_ENV == "production") {
 			return "https://donnchad-server.herokuapp.com/";
 		} else {
-			return `http://localhost:${process.env.PORT}`;
+			return `localhost:${process.env.PORT}`;
 		}
 	},
 };

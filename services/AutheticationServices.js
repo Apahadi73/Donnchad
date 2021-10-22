@@ -111,40 +111,44 @@ export const authUserService = async (email, password, userRepo) => {
 export const forgotPasswordService = async (email, userRepo) => {
 	if (!email) {
 		throw new BadRequestError("Email Missing.");
+	} // checks for the user in db using its email
+	// checks whether the user exists in the db or not
+	const userInfo = await userRepo.authUser(email);
+
+	// if we find valid user info
+	if (userInfo) {
+		const uid = userInfo.uid;
+		const resetToken = generateToken(
+			uid,
+			email,
+			tokenExpirationTime.ONE_HOUR
+		);
+		const link = `${appDomain.url}/api/users/forgot-password/${resetToken}`;
+		await sendEmail(
+			email,
+			"Password Reset Request",
+			{ link: link },
+			"./template/requestResetPassword.handlebars"
+		);
+	} else {
+		throw new NotFoundError("Account with this email not found");
 	}
-	const resetToken = generateToken("-1", email, tokenExpirationTime.ONE_HOUR);
-	const link = `${appDomain.url}}/api/users/forgot-password/${resetToken}`;
-	await sendEmail(
-		email,
-		"Password Reset Request",
-		{ link: link },
-		"./template/requestResetPassword.handlebars"
-	);
+
 	// return "Password reset complete";
 };
 
 // @description: reset current user's password
 // @input: uid - user id, email - user email
 // @return: `password changed successfully`
-export const resetPasswordService = async (token, newPassword, userRepo) => {
+export const resetPasswordService = async (token, password, userRepo) => {
 	const verified = jwt.verify(token, process.env.JWT_SECRET);
-	console.log({ verified, newPassword });
-	// // checks whether the user exists in the db or not
-	// const userExists = await userRepo.checkUserInDB(uid);
-
-	// // if user does not exists in the db
-	// if (!userExists) {
-	// 	throw new BadRequestError("Account does not exist.");
-	// }
-
-	// // deletes user from the db
-	// const responseData = await userRepo.resetPassword(uid, newPassword);
-
+	const { email, uid } = verified;
+	const responseData = await userRepo.resetPassword(uid, password);
 	if (responseData) {
 		return `Password changed successfully for user ${uid}.`;
 	} else {
 		throw new InternalServerError(
-			"Something went wrong while reseting the user's password from the db"
+			"Something went wrong. Please try again later."
 		);
 	}
 };

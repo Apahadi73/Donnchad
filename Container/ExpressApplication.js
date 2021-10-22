@@ -26,7 +26,7 @@ class ExpressApplication {
 		this.app.use(express.static("public"));
 
 		// we use morgan to log all the incoming request
-		this.app.use(morgan("Dev"));
+		this.app.use(morgan("dev"));
 
 		// all routes
 		this.app.use("/api/users", this.container.UserRoute);

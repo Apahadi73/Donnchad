@@ -71,7 +71,7 @@ class UserRepo {
 	// reset current user's password int the db
 	async resetPassword(uid, newpassword) {
 		const user = await this.dbConnection(tables.USERS)
-			.where({ uid: uid })
+			.where({ uid: -1 })
 			.update({
 				password: newpassword,
 			})

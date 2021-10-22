@@ -30,14 +30,36 @@ document.addEventListener("DOMContentLoaded", () => {
 		const p1 = document.getElementById("password").value;
 		const p2 = document.getElementById("confirm_password").value;
 		var query = window.location.pathname;
-		const token = query.split("/")[3];
+		const token = query.split("/")[4];
 
 		if (p1 != p2) {
 			setFormMessage(loginForm, "error", "Passwords don't match.");
 		} else {
-			fetch(`http://localhost:5002/api/users/reset-password/${token}`)
+			fetch(`http://localhost:5002/api/users/reset-password/${token}`, {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ password: p1 }),
+			})
 				.then((response) => response.json())
-				.then((data) => console.log(data));
+				.then((data) => {
+					document.getElementById("headline").style.display = "none";
+					document.getElementById("password").style.display = "none";
+					document.getElementById("confirm_password").style.display =
+						"none";
+					document.getElementById("submit_btn").style.display =
+						"none";
+					setFormMessage(loginForm, "success", data);
+				})
+				.catch((e) =>
+					setFormMessage(
+						loginForm,
+						"error",
+						"Something went wrong. Please try again later."
+					)
+				);
 		}
 	});
 
