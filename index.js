@@ -40,11 +40,6 @@ server.listen(PORT, async () => {
 });
 
 // wraps our server application
-WebSocketWrapper(server);
-
-process.on("message", (message) => {
-	console.log("reached here");
-	console.log(message);
-});
+WebSocketWrapper(server, appManager.MessageRepo);
 
 export default app;
