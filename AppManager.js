@@ -5,11 +5,11 @@ import EventProvider from "./providers/EventProvider.js";
 import UserProvider from "./providers/UserProvider.js";
 
 export default function () {
-  let container = new Container();
-  DatabaseProvider(container);
-  AppProvider(container);
-  UserProvider(container);
-  EventProvider(container);
+	let container = new Container();
+	DatabaseProvider(container);
+	AppProvider(container);
+	UserProvider(container);
+	EventProvider(container);
 
-  return container;
+	return container;
 }

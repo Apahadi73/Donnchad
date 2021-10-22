@@ -30,6 +30,7 @@
 		"express": "^4.17.1",
 		"express-async-handler": "^1.1.4",
 		"express-validator": "^6.12.1",
+		"handlebars": "^4.7.7",
 		"html-to-text": "^8.0.0",
 		"jsonwebtoken": "^8.5.1",
 		"knex": "^0.95.11",
