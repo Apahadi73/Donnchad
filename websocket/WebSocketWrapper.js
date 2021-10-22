@@ -42,6 +42,7 @@ export default async (expressServer) => {
 			);
 
 			const { eid } = connectionParams;
+			console.log({ eid });
 
 			websocketConnection.on("message", async (message) => {
 				const parsedMessage = JSON.parse(message);
@@ -60,3 +61,6 @@ export default async (expressServer) => {
 
 	return websocketServer;
 };
+
+// websocket link
+// ws://localhost:5002/websockets?eid=1

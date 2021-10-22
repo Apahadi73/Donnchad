@@ -43,6 +43,7 @@ server.listen(PORT, async () => {
 WebSocketWrapper(server);
 
 process.on("message", (message) => {
+	console.log("reached here");
 	console.log(message);
 });
 
