@@ -12,7 +12,7 @@ To that constructor, we pass the noServer option as true to say "do not set up a
 The advantage to doing this is that we can share a single HTTP server (i.e., our Express server) across multiple websocket connections.
 We also pass a path option to specify the path on our HTTP server where our websocket server will be accessible
  */
-export default async (expressServer) => {
+export default async (expressServer, messageRepo) => {
 	const websocketServer = new WebSocketServer({
 		noServer: true,
 		path: "/websockets",
@@ -36,8 +36,8 @@ export default async (expressServer) => {
 			const connectionParams = queryString.parse(params);
 
 			console.log(
-				chalk.cyan.bold(
-					"---------------------------------Web Socket Connection established------------------------------"
+				chalk.magenta.bold(
+					"------------------------Web Socket Connection established---------------------"
 				)
 			);
 
@@ -46,15 +46,22 @@ export default async (expressServer) => {
 
 			websocketConnection.on("message", async (message) => {
 				const parsedMessage = JSON.parse(message);
-				console.log(parsedMessage);
-				// const newMessage = await addMessageToEventService(
-				// 	parsedMessage
-				// );
-				// if (newMessage) {
-				// 	console.log(newMessage);
-				// 	websocketConnection.send(JSON.stringify(newMessage));
-				// }
-				websocketConnection.send(JSON.stringify(parsedMessage));
+				const { eid, senderid, text } = parsedMessage;
+				if (eid && senderid && text) {
+					const newMessage = await messageRepo.addMessage(
+						eid,
+						senderid,
+						text
+					);
+					if (newMessage) {
+						console.log(newMessage);
+						websocketConnection.send(JSON.stringify(newMessage));
+					}
+				} else {
+					websocketConnection.send(
+						"Sorry could not add message to the event chat."
+					);
+				}
 			});
 		}
 	);
@@ -64,3 +71,6 @@ export default async (expressServer) => {
 
 // websocket link
 // ws://localhost:5002/websockets?eid=1
+
+// payload
+// {"eid":"1","senderid":"1","message":"Hello there"}
