@@ -156,6 +156,43 @@ export const seeEventParticipantsController = asyncHandler(
 	}
 );
 
+export const uploadImageController = asyncHandler(
+	async (req, res, next, dirname, eventRepo) => {
+		const eid = req.params.eid;
+		let imageFile;
+		let uploadPath;
+
+		if (!req.files || Object.keys(req.files).length === 0) {
+			return res.status(400).send("No files were uploaded.");
+		}
+
+		// name of the input is imageFile
+		imageFile = req.files.imageFile;
+		uploadPath = dirname + "/upload/" + eid;
+
+		console.log(imageFile);
+
+		// Use mv() to place file on the server
+		imageFile.mv(uploadPath, function (err) {
+			if (err) return res.status(500).send(err);
+
+			// connection.query(
+			// 	'UPDATE user SET profile_image = ? WHERE id ="1"',
+			// 	[imageFile.name],
+			// 	(err, rows) => {
+			// 		if (!err) {
+			// 			res.redirect("/");
+			// 		} else {
+			// 			console.log(err);
+			// 		}
+			// 	}
+			// );
+			console.log("File uploaded");
+			res.send("File uploaded!");
+		});
+	}
+);
+
 export const getChatsController = asyncHandler(
 	async (req, res, next, messageRepo) => {
 		try {
