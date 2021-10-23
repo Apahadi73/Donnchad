@@ -51,7 +51,7 @@ class EventRepo {
 			.where({ eid })
 			.update(eventInfo)
 			.returning("*");
-		return event;
+		return event[0];
 	}
 
 	// deletes the event in the db

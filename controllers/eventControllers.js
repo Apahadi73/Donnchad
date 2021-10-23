@@ -26,7 +26,7 @@ export const createEventController = asyncHandler(
 
 			const responseData = await createEventService(eventInfo, eventRepo);
 
-			res.status(200).json(responseData);
+			res.status(201).json(responseData);
 		} catch (e) {
 			next(e);
 		}

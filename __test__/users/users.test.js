@@ -4,7 +4,8 @@ import sinon from "sinon";
 import bcrypt from "bcrypt";
 import AppManager from "../../Container/AppManager.js";
 
-const app = AppManager().App;
+let am = AppManager();
+const app = am.App;
 const request = supertest(app);
 
 describe("Tests all CRUD functions for USER Service ", () => {

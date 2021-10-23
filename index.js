@@ -13,7 +13,7 @@ let app = appManager.App;
 
 const server = http.Server(app);
 // sets port and listener
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 // only listen if not in test environment
 server.listen(PORT, async () => {
 	console.log(
