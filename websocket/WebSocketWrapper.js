@@ -2,9 +2,6 @@ import { WebSocketServer } from "ws";
 import queryString from "query-string";
 import chalk from "chalk";
 
-// sockets
-let sockets = [];
-
 /*
 Just inside that function, we create our websocket server using the Websocket.
 Server constructor from the ws package that we installed above. 
@@ -13,6 +10,8 @@ The advantage to doing this is that we can share a single HTTP server (i.e., our
 We also pass a path option to specify the path on our HTTP server where our websocket server will be accessible
  */
 export default async (expressServer, messageRepo) => {
+	// sockets
+	let sockets = [];
 	const websocketServer = new WebSocketServer({
 		noServer: true,
 		path: "/websockets",
@@ -43,6 +42,7 @@ export default async (expressServer, messageRepo) => {
 
 			const { eid } = connectionParams;
 			console.log({ eid });
+			sockets.push(websocketConnection);
 
 			websocketConnection.on("message", async (message) => {
 				const parsedMessage = JSON.parse(message);
@@ -54,8 +54,10 @@ export default async (expressServer, messageRepo) => {
 						text
 					);
 					if (newMessage) {
-						console.log(newMessage);
-						websocketConnection.send(JSON.stringify(newMessage));
+						websocketServer.emit(
+							"newMessageAdded",
+							JSON.stringify(newMessage)
+						);
 					}
 				} else {
 					websocketConnection.send(
@@ -65,6 +67,12 @@ export default async (expressServer, messageRepo) => {
 			});
 		}
 	);
+	websocketServer.on("newMessageAdded", function newMessageAdded(message) {
+		console.log(message);
+		for (let socketConn of sockets) {
+			socketConn.send(JSON.stringify(message));
+		}
+	});
 
 	return websocketServer;
 };
