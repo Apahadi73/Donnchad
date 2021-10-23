@@ -59,7 +59,7 @@ class EventRoute {
 			.get(async (req, res, next) => res.render("upload_image"));
 
 		this.router
-			.route("/:eid/event-image")
+			.route("/:eid/image")
 			.post(async (req, res, next) =>
 				uploadImageController(
 					req,

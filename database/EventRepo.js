@@ -45,8 +45,6 @@ class EventRepo {
 
 	// updates required event from the db
 	async updateEvent(eid, eventInfo) {
-		console.log(eventInfo);
-		console.log(eid);
 		const event = await this.dbConnection(tables.EVENTS)
 			.where({ eid })
 			.update(eventInfo)
