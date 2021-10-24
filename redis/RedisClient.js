@@ -1,15 +1,15 @@
 import chalk from "chalk";
 import redis from "redis";
 
-const RedisClient = async () => {
+const RedisClient = () => {
 	const PORT = 6379;
-	//   instantiates the redisConnection with null value
-	const redisConnection = redis.createClient({
+	//   instantiates the redisClient with null value
+	const redisClient = redis.createClient({
 		port: PORT,
 		host: "localhost",
 	});
 
-	redisConnection.on("connect", function () {
+	redisClient.on("connect", function () {
 		console.log(
 			chalk.yellow.bold(
 				`------------------------Redis client connected on port: ${PORT}------------------`
@@ -17,10 +17,11 @@ const RedisClient = async () => {
 		);
 	});
 
-	redisConnection.on("error", (err) => {
+	redisClient.on("error", (err) => {
 		console.log(chalk.yellow.bold(err));
 	});
-	return redisConnection;
+
+	return redisClient;
 };
 
 export default RedisClient;
