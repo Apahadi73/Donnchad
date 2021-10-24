@@ -1,18 +1,23 @@
-import redis from "redis";
 import chalk from "chalk";
+import redis from "redis";
 
-const redisClient = redis.createClient(6379, "redis");
+// const PORT = 6379;
+// const redisClient = redis.createClient({
+// 	port: PORT,
+// 	host: "localhost",
+// });
 
-redisClient.on("connect", function () {
-	console.log(chalk.yellow.bold("Redis client connected!"));
-});
+// redisClient.on("connect", function () {
+// 	console.log(
+// 		chalk.yellow.bold(
+// 			`------------------------Redis client connected on port: ${PORT}------------------`
+// 		)
+// 	);
+// });
 
-redisClient.on("error", (err) => {
-	console.log(
-		chalk.yellow.bold(
-			"Error occurred while connecting or accessing redis server"
-		)
-	);
-});
+// redisClient.on("error", (err) => {
+// 	console.log(chalk.yellow.bold(err));
+// });
+const redisClient2 = 0;
 
-export default redisClient;
+export default redisClient2;

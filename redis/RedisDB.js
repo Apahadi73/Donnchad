@@ -1,15 +1,26 @@
-import redisClient from "../Configs/redisConfig.js";
+import chalk from "chalk";
+import redis from "redis";
 
-class RedisDB {
-	constructor() {
-		//   instantiates the connection with null value
-		this.connection = redisClient;
-	}
+const RedisClient = async () => {
+	const PORT = 6379;
+	//   instantiates the redisConnection with null value
+	const redisConnection = redis.createClient({
+		port: PORT,
+		host: "localhost",
+	});
 
-	// returns RedisDB connection
-	getConnection() {
-		return this.connection;
-	}
-}
+	redisConnection.on("connect", function () {
+		console.log(
+			chalk.yellow.bold(
+				`------------------------Redis client connected on port: ${PORT}------------------`
+			)
+		);
+	});
 
-export default RedisDB;
+	redisConnection.on("error", (err) => {
+		console.log(chalk.yellow.bold(err));
+	});
+	return redisConnection;
+};
+
+export default RedisClient;

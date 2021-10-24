@@ -79,6 +79,7 @@ export default async (expressServer, messageRepo) => {
 
 // websocket link
 // ws://localhost:5002/websockets?eid=1
+// wss://donnchad-server.herokuapp.com/websockets
 
 // payload
 // {"eid":"1","senderid":"1","message":"Hello there"}

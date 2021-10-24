@@ -9,6 +9,10 @@ services:
             POSTGRES_USER: "postgres"
             POSTGRES_PASSWORD: "password"
             POSTGRES_DATABASE: "postgres"
+    redis:
+        image: "redis:latest"
+        ports:
+            - "6379:6379"
 
     # server:
     #   build: .
@@ -18,14 +22,3 @@ services:
     #     POSTGRES_PASSWORD: "password"
     #     POSTGRES_USER: "donnchad"
     #     JWT_SECRET: "SanskarRandiHo"
-    # db:
-    #   image: "postgres"
-    #   ports:
-    #     - "4321:5431"
-    #   environment:
-    #     POSTGRES_PASSWORD: "password"
-    #     POSTGRES_USER: "donnchad"
-    redis:
-        image: "redis"
-        ports:
-            - "6379:6379"
