@@ -7,14 +7,27 @@ class TokenRedisRepo {
 		this.redisClient = RedisClient();
 	}
 
-	async addForgotPasswordToken(uid) {
-		this.redisClient.set(RedisKeys.USER_SESSION_TOKEN + uid, uid);
+	async addForgotPasswordToken(uid, value) {
+		this.redisClient.set(RedisKeys.USER_SESSION_TOKEN + uid, value);
 	}
 
 	async getForgotPasswordToken(uid) {
 		this.redisClient.get(
 			RedisKeys.USER_SESSION_TOKEN + uid,
 			(error, value) => {}
+		);
+	}
+
+	async checkTokenInRedis(uid) {
+		this.redisClient.get(
+			RedisKeys.USER_SESSION_TOKEN + uid,
+			async (error, value) => {
+				if (value) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		);
 	}
 

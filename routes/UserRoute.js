@@ -12,9 +12,9 @@ import {
 } from "../controllers/userControllers.js";
 
 class UserRoute {
-	constructor(userRepo) {
+	constructor(userRepo, TokenRedisRepo) {
 		this.userRepo = userRepo;
-		// creates express router
+		this.tokenRedisRepo = TokenRedisRepo;
 		this.router = express.Router();
 	}
 
@@ -74,12 +74,26 @@ class UserRoute {
 		this.router
 			.route("/reset-password/:token")
 			.post(async (req, res, next) =>
-				resetPasswordController(req, res, next, this.userRepo)
+				resetPasswordController(
+					req,
+					res,
+					next,
+					this.userRepo,
+					this.tokenRedisRepo
+				)
 			);
 		this.router
 			.route("/forgot-password")
-			.post(async (req, res, next) =>
-				forgotPasswordController(req, res, next, this.userRepo)
+			.post(
+				async (req, res, next) =>
+					forgotPasswordController(
+						req,
+						res,
+						next,
+						this.userRepo,
+						this.tokenRedisRepo
+					),
+				this.tokenRedisRepo
 			);
 
 		return this.router;
