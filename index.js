@@ -28,8 +28,8 @@ server.listen(PORT, async () => {
 	);
 
 	if (process.env.NODE_ENV !== "test") {
-		// await appManager.Migrate;
-		// await appManager.Seed;
+		await appManager.Migrate;
+		await appManager.Seed;
 		// const dateTime = new Date().toLocaleString().split("/");
 		// const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
 		// 	dateTime[1]

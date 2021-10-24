@@ -26,7 +26,7 @@ export const Seed = async (dbConnection) => {
 		await dbConnection(tables.USERS).insert({
 			firstname: "John Jr.",
 			lastname: "Doe",
-			email: "simedid556@forfity.com",
+			email: "sidoho3089@d3bb.com",
 			password: "password",
 		});
 
