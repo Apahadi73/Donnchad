@@ -10,8 +10,6 @@ import {
 	resetPasswordController,
 	updateUser,
 } from "../controllers/userControllers.js";
-import { protect } from "../middlewares/authMiddleware.js";
-import { forgotPasswordService } from "../services/AutheticationServices.js";
 
 class UserRoute {
 	constructor(userRepo) {
