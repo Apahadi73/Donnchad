@@ -1,84 +1,73 @@
-import { WebSocketServer } from "ws";
-import queryString from "query-string";
-import chalk from "chalk";
+import { Server } from "socket.io";
+import formatMessage from "./utils/messages.js";
+import {
+	userJoin,
+	getCurrentUser,
+	userLeave,
+	getRoomUsers,
+} from "./utils/users.js";
 
-/*
-Just inside that function, we create our websocket server using the Websocket.
-Server constructor from the ws package that we installed above. 
-To that constructor, we pass the noServer option as true to say "do not set up an HTTP server alongside this websocket server." 
-The advantage to doing this is that we can share a single HTTP server (i.e., our Express server) across multiple websocket connections.
-We also pass a path option to specify the path on our HTTP server where our websocket server will be accessible
- */
-export default async (expressServer, messageRepo) => {
-	// sockets
-	let sockets = [];
-	const websocketServer = new WebSocketServer({
-		noServer: true,
-		path: "/websockets",
+export default async (server, messageRepo) => {
+	const io = new Server(server, {
+		cors: { origin: "*", methods: ["GET", "POST"] },
 	});
 
-	expressServer.on("upgrade", (request, socket, head) => {
-		websocketServer.handleUpgrade(request, socket, head, (websocket) => {
-			websocketServer.emit("connection", websocket, request);
+	//Set static folder
+
+	const botName = "Event Bot";
+	//Run when client connects
+	io.on("connection", (socket) => {
+		console.log("hello-world");
+		socket.on("joinRoom", ({ username, room }) => {
+			const user = userJoin(socket.id, username, room);
+			socket.join(user.room);
+
+			// Welcome current user
+			socket.emit(
+				"message",
+				formatMessage(botName, "Welcome to Chatcord")
+			);
+
+			// Broadcasts when user connects
+			socket.broadcast
+				.to(user.room)
+				.emit(
+					"message",
+					formatMessage(
+						botName,
+						`${user.username} has joined the chat`
+					)
+				);
+
+			// Send user and room info
+			io.to(user.room).emit("roomUsers", {
+				room: user.room,
+				users: getRoomUsers(user.room),
+			});
+		});
+
+		//Listen for chatMessage
+		socket.on("chatMessage", (msg) => {
+			const user = getCurrentUser(socket.id);
+			io.to(user.room).emit("message", formatMessage(user.username, msg));
+		});
+
+		// Runs when client disconnects
+		socket.on("disconnect", () => {
+			const user = userLeave(socket.id);
+			if (user) {
+				io.to(user.room).emit(
+					"message",
+					formatMessage(botName, `${user.username} has left the chat`)
+				);
+
+				io.to(user.room).emit("roomUsers", {
+					room: user.room,
+					users: getRoomUsers(user.room),
+				});
+			}
 		});
 	});
 
-	/*
-  To clarify, the difference between the websocketConnection and 
-  the connectionRequest is that the former represents the open, long-running network connection between the browser and the server, 
-  while the connectionRequest represents the original request to open that connection.
-  */
-	websocketServer.on(
-		"connection",
-		function connection(websocketConnection, connectionRequest) {
-			const [_path, params] = connectionRequest?.url?.split("?");
-			const connectionParams = queryString.parse(params);
-
-			console.log(
-				chalk.magenta.bold(
-					"------------------------Web Socket Connection established---------------------"
-				)
-			);
-
-			const { eid } = connectionParams;
-			console.log({ eid });
-			sockets.push(websocketConnection);
-
-			websocketConnection.on("message", async (message) => {
-				const parsedMessage = JSON.parse(message);
-				const { eid, senderid, text } = parsedMessage;
-				if (eid && senderid && text) {
-					const newMessage = await messageRepo.addMessage(
-						eid,
-						senderid,
-						text
-					);
-					if (newMessage) {
-						websocketServer.emit(
-							"newMessageAdded",
-							JSON.stringify(newMessage)
-						);
-					}
-				} else {
-					websocketConnection.send(
-						"Sorry could not add message to the event chat."
-					);
-				}
-			});
-		}
-	);
-	websocketServer.on("newMessageAdded", function newMessageAdded(message) {
-		console.log(message);
-		for (let socketConn of sockets) {
-			socketConn.send(JSON.stringify(message));
-		}
-	});
-
-	return websocketServer;
+	return io;
 };
-
-// websocket link
-// ws://localhost:5002/websockets?eid=1
-
-// payload
-// {"eid":"1","senderid":"1","message":"Hello there"}
