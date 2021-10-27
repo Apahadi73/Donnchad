@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset="utf-8" />
+	<title>Upload Image</title>
+	<link rel="stylesheet" href="/stylesheets/main.css" />
+</head>
+<body>
+	<div class="container">
+		<form class="form" id="file_upload">
+			<h3>Upload Profile Photo</h3>
+
+			<div class="form__input-group">
+				<img id="output" style="height: 300px; width: 300px" />
+				<div class="form__input-error-message"></div>
+			</div>
+			<div class="form__input-group">
+				<input
+					id="event_image"
+					type="file"
+					accept="image/*"
+					onchange="openFile(event)"
+				/>
+			</div>
+			<br />
+			<button id="submit_btn" class="form__button" type="submit">
+				Upload Image
+			</button>
+		</form>
+	</div>
+	<script src="/fileupload.js"></script>
+</body>

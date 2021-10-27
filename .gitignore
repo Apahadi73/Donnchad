@@ -16,6 +16,9 @@ package-lock.json
 # misc
 .DS_Store
 
+
+firebase
+
 .env
 env
 .env.test.local

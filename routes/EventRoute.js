@@ -8,6 +8,7 @@ import {
 	jointEventController,
 	seeEventParticipantsController,
 	updateEventController,
+	uploadImageController,
 } from "../controllers/eventControllers.js";
 
 class EventRoute {
@@ -51,6 +52,22 @@ class EventRoute {
 			.route("/:eid/join")
 			.post(async (req, res, next) =>
 				jointEventController(req, res, next, this.eventRepo)
+			);
+
+		this.router
+			.route("/:eid/event-image/dummy")
+			.get(async (req, res, next) => res.render("upload_image"));
+
+		this.router
+			.route("/:eid/image")
+			.post(async (req, res, next) =>
+				uploadImageController(
+					req,
+					res,
+					next,
+					process.cwd(),
+					this.eventRepo
+				)
 			);
 		this.router
 			.route("/:eid/participants")
