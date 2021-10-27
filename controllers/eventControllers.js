@@ -159,8 +159,9 @@ export const seeEventParticipantsController = asyncHandler(
 export const getChatsController = asyncHandler(
 	async (req, res, next, messageRepo) => {
 		try {
-			const cid = req.params.cid;
-			const responseData = await getChatMessagesService(cid, messageRepo);
+			const eid = req.params.eid;
+			console.log(eid);
+			const responseData = await getChatMessagesService(eid, messageRepo);
 			res.status(200).json({ responseData });
 		} catch (e) {
 			next(e);

@@ -84,16 +84,14 @@ class UserRoute {
 			);
 		this.router
 			.route("/forgot-password")
-			.post(
-				async (req, res, next) =>
-					forgotPasswordController(
-						req,
-						res,
-						next,
-						this.userRepo,
-						this.tokenRedisRepo
-					),
-				this.tokenRedisRepo
+			.post(async (req, res, next) =>
+				forgotPasswordController(
+					req,
+					res,
+					next,
+					this.userRepo,
+					this.tokenRedisRepo
+				)
 			);
 
 		return this.router;

@@ -58,11 +58,12 @@ class EventRoute {
 				seeEventParticipantsController(req, res, next, this.eventRepo)
 			);
 
-		this.router
-			.route("/:eid/chats")
-			.get(async (req, res, next) =>
-				getChatsController(req, res, next, this.eventRepo)
-			);
+		this.router.route("/:eid/chats").get(async (req, res, next) => {
+			const eid = req.params.eid;
+			console.log(eid);
+			console.log("reached here");
+			getChatsController(req, res, next, this.eventRepo);
+		});
 		return this.router;
 	}
 }

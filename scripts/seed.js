@@ -30,6 +30,23 @@ export const Seed = async (dbConnection) => {
 			password: "password",
 		});
 
+		await dbConnection(tables.EVENTS).insert({
+			name: "asdgasd",
+			hostname: "amir",
+		});
+
+		await dbConnection(tables.PARTICIPANTS).insert({
+			uid: "1",
+			eid: "1",
+			accessrole: "READ",
+		});
+
+		await dbConnection(tables.PARTICIPANTS).insert({
+			uid: "2",
+			eid: "1",
+			accessrole: "READ",
+		});
+
 		console.log(
 			chalk.green.bold(
 				"------------------------Dummy Seeder Data Added-------------------------------"
