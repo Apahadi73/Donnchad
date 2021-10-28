@@ -1,8 +1,6 @@
-import { newDb } from "pg-mem";
-
 class DatabaseMock {
 	constructor() {
-		this.dbConnection = newDb();
+		this.dbConnection = {};
 	}
 	// returns database connection
 	getConnection() {
