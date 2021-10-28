@@ -6,7 +6,10 @@ const RedisClient = () => {
 	//   instantiates the redisClient with null value
 	const redisClient = redis.createClient({
 		port: PORT,
-		host: "localhost",
+		host:
+			process.env.NODE_ENV == "production"
+				? process.send.REDIS_URL
+				: "localhost",
 	});
 
 	redisClient.on("connect", function () {
