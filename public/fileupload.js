@@ -19,7 +19,7 @@ uploadBtn.addEventListener("click", (event) => {
 	event.preventDefault();
 	const formData = new FormData();
 	formData.append("imageFile", image.files[0]);
-	fetch(`http://localhost:5002/api/events/1/image`, {
+	fetch(`http://localhost:5002/api/user/1/image`, {
 		method: "POST",
 		body: formData,
 	})

@@ -55,7 +55,7 @@ class EventRoute {
 			);
 
 		this.router
-			.route("/:eid/event-image/dummy")
+			.route("/:eid/image/dummy")
 			.get(async (req, res, next) => res.render("upload_image"));
 
 		this.router
