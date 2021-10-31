@@ -18,8 +18,9 @@ export default async (server, messageRepo) => {
 	//Run when client connects
 	io.on("connection", (socket) => {
 		console.log("hello-world");
-		socket.on("joinRoom", ({ username, room }) => {
-			console.log(`joinRoom: ${username} ${room}`);
+		socket.on("joinRoom", (content) => {
+			const { username, room } = content;
+			console.log(`joinRoom: ${content}`);
 			const user = userJoin(socket.id, username, room);
 			socket.join(user.room);
 
