@@ -23,8 +23,8 @@ class ExpressApplication {
 		// json body parser middleware
 		this.app.use(express.json());
 
-		this.app.use(express.static("public"));
-		// this.app.use(express.static("public_dummy"));
+		// this.app.use(express.static("public"));
+		this.app.use(express.static("public_dummy"));
 
 		// we use morgan to log all the incoming request
 		this.app.use(morgan("dev"));
