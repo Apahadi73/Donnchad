@@ -12,8 +12,6 @@ export default async (server, messageRepo) => {
 		cors: { origin: "*", methods: ["GET", "POST"] },
 	});
 
-	//Set static folder
-
 	const botName = "Event Bot";
 	//Run when client connects
 	io.on("connection", (socket) => {
