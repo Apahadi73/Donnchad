@@ -123,13 +123,17 @@ export const deleteUser = asyncHandler(async (req, res, next, userRepo) => {
 // @route   POST /api/users/:uid/forgot-password
 // @access  Public
 export const forgotPasswordController = asyncHandler(
-	async (req, res, next, userRepo) => {
+	async (req, res, next, userRepo, tokenRedisRepo) => {
 		const { email } = req.body;
 		try {
 			if (!email) {
 				throw new BadRequestError("Email Missing.");
 			}
-			const response = await forgotPasswordService(email, userRepo);
+			const response = await forgotPasswordService(
+				email,
+				userRepo,
+				tokenRedisRepo
+			);
 			res.status(200).json(response);
 		} catch (e) {
 			next(e);
@@ -141,7 +145,7 @@ export const forgotPasswordController = asyncHandler(
 // @route   POST /api/users/reset-password/:"token
 // @access  Public
 export const resetPasswordController = asyncHandler(
-	async (req, res, next, userRepo) => {
+	async (req, res, next, userRepo, tokenRedisRepo) => {
 		const token = req.params.token;
 
 		try {
@@ -150,7 +154,8 @@ export const resetPasswordController = asyncHandler(
 			const responseData = await resetPasswordService(
 				token,
 				password,
-				userRepo
+				userRepo,
+				tokenRedisRepo
 			);
 
 			// response handling

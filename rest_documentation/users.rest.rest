@@ -1,0 +1,11 @@
+# const url = "http://localhost:5002"
+
+
+# fetches all the user from the backend
+# GET http://127.0.0.1:5002/api/users
+
+
+# fetch a single user from the backend
+# GET http://127.0.0.1:5002/api/users/1
+
+

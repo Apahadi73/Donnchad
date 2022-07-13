@@ -12,6 +12,9 @@ export default function (container) {
 		}
 	});
 	container.service("UserRoute", (container) =>
-		new UserRoute(container.UserRepo).createUserRoute()
+		new UserRoute(
+			container.UserRepo,
+			container.TokenRedisRepo
+		).createUserRoute()
 	);
 }

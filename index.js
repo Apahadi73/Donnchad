@@ -12,8 +12,10 @@ let appManager = AppManager();
 let app = appManager.App;
 
 const server = http.Server(app);
+
 // sets port and listener
 const PORT = process.env.PORT || 5001;
+
 // only listen if not in test environment
 server.listen(PORT, async () => {
 	console.log(
@@ -25,17 +27,6 @@ server.listen(PORT, async () => {
 	if (process.env.NODE_ENV !== "test") {
 		await appManager.Migrate;
 		await appManager.Seed;
-		const dateTime = new Date().toLocaleString().split("/");
-		const scheduleTime = `${dateTime[2].split(",")[0]}-${dateTime[0]}-${
-			dateTime[1]
-		}`;
-
-		await appManager.EventScrapper;
-
-		const job = nodeCron.schedule("0 12 * * *", async () => {
-			await crawlEvents(scheduleTime);
-		});
-		job.start();
 	}
 });
 

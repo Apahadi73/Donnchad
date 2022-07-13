@@ -1,0 +1,89 @@
+
+# const url = "http://localhost:5002"
+
+
+# -------------------------------------CRUD-------------------------------
+
+# -------------------------------------CREATE-----------------------------
+
+# Create a new event
+# name and hostname is required. 
+# Rest of the fields are optional
+
+# Uncomment line below
+# POST http://localhost:5002/api/events HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "asdgasd",
+#     "hostname": "amir"x
+# }
+
+
+# Join/Attend an event
+# POST http://localhost:5002/api/events/:eid/join 
+# Uncomment line below
+# POST http://localhost:5002/api/events/1/join HTTP/1.1
+# content-type: application/json
+
+# {
+#     "uid": "3",
+#     "eid": "1"
+# }
+
+
+# ------------------------------------GET-------------------------------
+
+# fetches all the events from the backend
+# Endpoint format: base_url/api/events
+
+# Uncomment line below
+# GET http://localhost:5002/api/events
+
+
+# fetch a single event by id 
+# Endpoint format: base_url/api/events/:eid/
+# Uncomment line below
+# GET http://localhost:5002/api/events/1
+
+# fetches participants of the event
+# Endpoint format: base_url/api/events/:eid/participants
+# Uncomment line below
+# GET http://localhost:5002/api/events/1/participants
+
+
+# fetches chat of the event
+# Endpoint format: base_url/api/events/:eid/chats
+# Uncomment line below
+# GET http://localhost:5002/api/events/1/chats
+
+
+# ----------------------------------UPDATE-----------------------------
+# Update a new event
+# Uncomment line below
+# PUT http://localhost:5002/api/events/1   HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "asdgasd",
+#     "contactnumber":"9032139876"
+# }
+
+
+
+# -----------------------------------DELETE----------------------------
+
+# Delete the event
+# Endpoint format: base_url/api/events/:eid
+# Uncomment line below
+# DELETE http://localhost:5002/api/events/1
+
+
+
+
+
+
+
+
+
+

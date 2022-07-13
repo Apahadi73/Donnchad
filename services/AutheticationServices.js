@@ -108,7 +108,11 @@ export const authUserService = async (email, password, userRepo) => {
 // @input: email
 // @access  public
 // @return: uid, email, token
-export const forgotPasswordService = async (email, userRepo) => {
+export const forgotPasswordService = async (
+	email,
+	userRepo,
+	tokenRedisRepo
+) => {
 	if (!email) {
 		throw new BadRequestError("Email Missing.");
 	} // checks for the user in db using its email
@@ -123,6 +127,8 @@ export const forgotPasswordService = async (email, userRepo) => {
 			email,
 			tokenExpirationTime.ONE_HOUR
 		);
+		// add reset token to the token redis repo
+		await tokenRedisRepo.addForgotPasswordToken(uid, resetToken);
 		const link = `${appDomain.url}/api/users/forgot-password/${resetToken}`;
 		await sendEmail(
 			email,
@@ -140,15 +146,29 @@ export const forgotPasswordService = async (email, userRepo) => {
 // @description: reset current user's password
 // @input: uid - user id, email - user email
 // @return: `password changed successfully`
-export const resetPasswordService = async (token, password, userRepo) => {
+export const resetPasswordService = async (
+	token,
+	password,
+	userRepo,
+	tokenRedisRepo
+) => {
+	// check for token in redis
 	const verified = jwt.verify(token, process.env.JWT_SECRET);
 	const { email, uid } = verified;
-	const responseData = await userRepo.resetPassword(uid, password);
-	if (responseData) {
-		return `Password changed successfully for user ${uid}.`;
+	const tokenExists = await tokenRedisRepo.getForgotPasswordToken(uid);
+	if (tokenExists && uid) {
+		// update password in db
+		const responseData = await userRepo.resetPassword(uid, password);
+		if (responseData) {
+			// delete reset token from redis
+			await tokenRedisRepo.deleteForgotPasswordToken(uid);
+			return `Password changed successfully for user ${uid}.`;
+		} else {
+			throw new InternalServerError(
+				"Something went wrong. Please try again later."
+			);
+		}
 	} else {
-		throw new InternalServerError(
-			"Something went wrong. Please try again later."
-		);
+		throw new BadRequestError("Invalid token found.");
 	}
 };

@@ -8,6 +8,7 @@ import {
 	jointEventController,
 	seeEventParticipantsController,
 	updateEventController,
+	uploadImageController,
 } from "../controllers/eventControllers.js";
 
 class EventRoute {
@@ -52,17 +53,34 @@ class EventRoute {
 			.post(async (req, res, next) =>
 				jointEventController(req, res, next, this.eventRepo)
 			);
+
+		this.router
+			.route("/:eid/image/dummy")
+			.get(async (req, res, next) => res.render("upload_image"));
+
+		this.router
+			.route("/:eid/image")
+			.post(async (req, res, next) =>
+				uploadImageController(
+					req,
+					res,
+					next,
+					process.cwd(),
+					this.eventRepo
+				)
+			);
 		this.router
 			.route("/:eid/participants")
 			.get(async (req, res, next) =>
 				seeEventParticipantsController(req, res, next, this.eventRepo)
 			);
 
-		this.router
-			.route("/:eid/chats")
-			.get(async (req, res, next) =>
-				getChatsController(req, res, next, this.eventRepo)
-			);
+		this.router.route("/:eid/chats").get(async (req, res, next) => {
+			const eid = req.params.eid;
+			console.log(eid);
+			console.log("reached here");
+			getChatsController(req, res, next, this.eventRepo);
+		});
 		return this.router;
 	}
 }

@@ -90,7 +90,6 @@ export const Migrate = async (dbConnection) => {
 		await dbConnection.raw(
 			`CREATE UNIQUE INDEX cmi ON ${tables.MESSAGE} (eid,mid DESC)`
 		);
-		// console.log(`index eid created for ${tables.MESSAGE}`);
 	} catch (err) {
 		console.log(err);
 	}
